@@ -48,7 +48,7 @@ def rank(population, outputs_def):
     for i, des in enumerate(population):
         designs.append({'id': i, 'scores': des.get_objectives()})
 
-    objectiveGoals = [x["Goal"] for x in outputs_def if x["type"] == "Objective"]
+    objectiveGoals = [x["goal"] for x in outputs_def if x["type"] == "Objective"]
 
     print("objective goals: " + ",".join(objectiveGoals), file=sys.stderr)
 

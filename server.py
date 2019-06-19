@@ -2,12 +2,11 @@
 from flask import Flask, jsonify, request, Response, render_template, send_from_directory#, send_file
 from flask_socketio import SocketIO, emit
 
-# from queue import Queue
 import urllib, os, sys, random, math, json
 from time import localtime, strftime
-from pathlib import Path#, PureWindowsPath
+from pathlib import Path
 
-from src.objects import Input, GHClient, Context, Logger
+from src.objects import Input, GHClient, Logger
 from src.job import Job
 from src.utils import remap
 
@@ -16,93 +15,51 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'key1234'
 socketio = SocketIO(app)
 
-# context = Context(os.path.dirname(os.path.abspath(__file__)), sys.platform)
-context = Context()
 gh = GHClient()
 logger = Logger()
 
 job = None
-# des = Design(None, None, None, logger)
-
 
 @app.route("/")
 def index():
 	return render_template("index.html")
 
-
-@app.route('/api/v1.0/connect/<string:fileName>', methods=['GET'])
-def connect(fileName):
-	local_file = urllib.parse.unquote(fileName)
+@app.route('/api/v1.0/connect/', methods=['GET', 'POST'])
+def connect():
+	local_file = request.json
 
 	file_path = local_file.split("\\")
 	file_dir = "\\".join(file_path[:-1])
+	local_dir = Path(file_dir) / "discover"
 	file_name = file_path[-1].split(".")[0]
 
-	# lp = "\\".join(fn.split("\\")[:-1])
-
-	local_dir = Path(file_dir) / "discover"
-
-	# ping_file_names = ["0", "1"]
-
-	# print(fn)
-
-	context.connect(local_dir)
-	# gh.connect(fn, ping_file_names, context.get_server_path([]))
 	gh.connect(local_dir, file_name)
-	# gh.ping(0)
-
-	gather_inputs()
 
 	logger.init(local_dir)
 	message = "Connected to Grasshopper file: {}".format(file_name)
 	socketio.emit('server message', {"message": message})
 	logger.log(message)
 
-	# local_ping_paths = ["\\".join([context.get_local_path([]), "data", "temp", fn]) for fn in gh.ping_file_names]
+	return jsonify({'status': 'Server connected'})
 
-	return jsonify({'status': 'Server connected'})#, 'connections': gh.get_local_pingPaths(context.get_local_path([]))})
-
-# @app.route("/api/v1.0/test/", methods=['GET', 'POST'])
-def gather_inputs():
-	if not gh.is_connected():
-		return jsonify({"status": "fail"})
-
-	# job_spec = request.json
-	# options = job_spec["options"]
-
-	gh.clear_inputs()
-
-	d = gh.get_dir(["temp"])
-	files = [file for file in os.listdir(d) if file.split(".")[0] == gh.get_name()]
-	for file in files:
-		gh.ping(file)
-
-	# des.generate_random(job_spec["inputs"])
-	# gh.ping(0)
-
-	message = "Generated test inputs"
-	# message = str("_".join(files))
-	socketio.emit('server message', {"message": message})
-
-	return jsonify({"status": "success"})
 
 @app.route("/api/v1.0/start/", methods=['GET', 'POST'])
-def start_optimization():
+def start():
 	global job
 
 	if not gh.is_connected():
 		return jsonify({"status": "fail"})
 
 	job_spec = request.json
-	print(job_spec)
 	options = job_spec["options"]
 
-	job = Job(options, gh.get_name(), gh.get_dir([]), logger)
-	job.init_inputs(gh.get_inputs())
-	job.init_outputs(gh.get_outputs())
-	job.init_data_file()
-	job.init_first_gen()
+	job = Job(options, gh, logger)
+	# job.init_inputs(gh.get_inputs())
+	# job.init_outputs(gh.get_outputs())
+	# job.init_data_file()
+	# job.init_first_gen()
 
+	logger.log("Job started, connected to inputs: {}".format(gh.get_input_ids()))
 	gh.ping_inputs()
 
 	message = "Optimization started: {} designs / {} generations".format(job.num_designs, job.max_gen)
@@ -111,7 +68,7 @@ def start_optimization():
 	return jsonify({"status": "success", "job_id": job.job_id})
 
 @app.route("/api/v1.0/stop/", methods=['GET'])
-def stop_optimization():
+def stop():
 	global job
 
 	if job is None or not job.is_running():
@@ -144,40 +101,39 @@ def job_running():
 	else:
 		return jsonify(False)
 
-@app.route("/api/v1.0/get_input/", methods=['GET', 'POST'])
-def get_input():
+# @app.route("/api/v1.0/get_input/", methods=['GET', 'POST'])
+# def get_input():
 
-	json_in = request.json
-	input_id = json_in["id"]
-	input_def = json.loads(json_in["input_def"])
+# 	json_in = request.json
+# 	input_id = json_in["id"]
+# 	input_def = json.loads(json_in["input_def"])
 
-	if job is not None and job.is_running():
-		return jsonify({"status": "Received design input from server", "vals": job.get_next(input_id)})
-		# return jsonify(job.get_next())
-	else:
-		new_input = Input(input_id, input_def)
-		return jsonify({"status": "Received random input from server", "vals": new_input.generate_random()})
+# 	if job is not None and job.is_running():
+# 		return jsonify({"status": "Received design input from server", "vals": job.get_next(input_id)})
+# 		# return jsonify(job.get_next())
+# 	else:
+# 		new_input = Input(input_id, input_def)
+# 		return jsonify({"status": "Received random input from server", "vals": new_input.generate_random()})
 
-@app.route("/api/v1.0/ack_input/", methods=['GET', 'POST'])
-def ack_input():
+@app.route("/api/v1.0/input_ack/", methods=['GET', 'POST'])
+def input_ack():
 	json_in = request.json
 	input_id = json_in["id"]
 	input_def = json.loads(json_in["input_def"])
 
 	if job is None or not job.is_running():
-		new_input = Input(input_id, input_def)
-		gh.add_input(input_id, new_input)
-		return jsonify({'status': 'registered input {} with Discover'.format(input_id)})
+		input_object = gh.add_input(input_id, input_def)
 
-	gh.lift_block(input_id)
-	return jsonify({'status': 'success - lifted block on input {}'.format(input_id)})
+		status = "Success: registered input {} with Discover".format(input_object.get_id())
+		input_vals = input_object.generate_random()
+		return jsonify({'status': status, 'input_vals': input_vals})
 
-# @app.route("/api/v1.0/get_inputs/", methods=['GET'])
-# def get_inputs():
-# 	if job is not None and job.is_running():
-# 		return jsonify(job.get_next())
-# 	else:
-# 		return jsonify(des.get_inputs())
+	else:
+		gh.lift_block(input_id)
+
+		status = "Success: lifted block on input {}".format(input_id)
+		input_vals = job.get_design_input(input_id)
+		return jsonify({'status': status, 'input_vals': input_vals})
 
 @app.route('/api/v1.0/set_outputs/', methods=['GET', 'POST'])
 def set_outputs():

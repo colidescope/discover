@@ -5,14 +5,15 @@ from src.utils import remap, rank, permutation2inversion, inversion2permutation
 
 class Design:
 
-	def __init__(self, _id, des, gen, inputs_def, outputs_def, logger):
+	def __init__(self, _id, des, gen, gh, logger):
 		self.logger = logger
 		self.id = _id
 		self.desNum = des
 		self.genNum = gen
 		self.parents = [None, None]
 
-		self.inputs_def = inputs_def
+		self.gh = gh
+		# self.inputs_def = inputs_def
 		# self.outputs_def = outputs_def
 
 		self.inputs = []
@@ -23,29 +24,23 @@ class Design:
 		self.rank = 0
 		self.elite = 0
 
-	def generate_random(self):
+		for _input in gh.get_inputs():
+			self.inputs.append(_input.generate_random())
 
-		self.inputs = []
+		self.logger.log("Created design [{}] with random inputs".format(str(self.id)))#, self.get_inputs_string()))
 
-		for _i in self.inputs_def:
-			self.inputs.append(_i.generate_random())
-			# if _i["type"] == "Continuous":
-			# 	p = [remap(random.random(), 0, 1, _i["Min"], _i["Max"]) for i in range(int(_i["Set length"]))]
-			# 	self.inputs.append(p)
 
-			# elif _i["type"] == "Categorical":
-			# 	p = [int(math.floor(random.random() * 0.9999 * float(_i["Num options"]))) for i in range(int(_i["Set length"]))]
-			# 	self.inputs.append(p)
+	# def generate_random(self):
 
-			# elif _i["type"] == "Sequence":
-			# 	seq = list(range(int(_i["Num options"])))
-			# 	random.shuffle(seq)
-			# 	self.inputs.append(seq)
+	# 	self.inputs = []
 
-		self.logger.log("Generated random inputs for design [{}]".format(str(self.id)))#, self.get_inputs_string()))
+	# 	for _i in self.inputs_def:
+	# 		self.inputs.append(_i.generate_random())
+
+	# 	self.logger.log("Generated random inputs for design [{}]".format(str(self.id)))#, self.get_inputs_string()))
 
 	def crossover(self, partner, inputs_def, genNum, desNum, idNum):
-		child = Design(idNum, desNum, genNum, inputs_def, None, self.logger)
+		child = Design(idNum, desNum, genNum, self.gh, self.logger)
 
 		child_inputs = []
 
@@ -167,7 +162,7 @@ class Design:
 		self.inputs = inputs
 
 	def get_input(self, input_id):
-		input_names = [i.get_id() for i in self.inputs_def]
+		input_names = [i.get_id() for i in self.gh.get_inputs()]
 		return self.inputs[input_names.index(input_id)]
 
 	def get_inputs(self):

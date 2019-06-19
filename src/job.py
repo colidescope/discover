@@ -6,10 +6,11 @@ from src.design import Design
 
 class Job:
 
-	def __init__(self, options, job_name, local_path, logger):
+	def __init__(self, options, gh, logger):
 		# self.options = options
-		self.logger = logger
+		self.gh = gh
 
+		self.logger = logger
 		self.des_count = 0
 		self.num_designs = int(options["Designs per generation"])
 
@@ -19,8 +20,8 @@ class Job:
 		self.save_elites = int(options["Elites"])
 		self.mutation_rate = float(options["Mutation rate"])
 
-		self.job_id = "_" + job_name + "_" + strftime("%y%m%d_%H%M%S", localtime())
-		self.path = local_path / self.job_id
+		self.job_id = "_" + gh.get_file_name() + "_" + strftime("%y%m%d_%H%M%S", localtime())
+		self.path = gh.get_dir(["jobs"]) / self.job_id
 
 		os.makedirs(self.path)
 
@@ -28,45 +29,48 @@ class Job:
 			os.makedirs(self.path / "images")
 
 		self.logger.log("-----")
-		self.logger.log("Job start: {}, {} Designs / {} Generations".format(self.job_id, self.num_designs, self.max_gen))
+		self.logger.log("Job created: {}, {} Designs / {} Generations".format(self.job_id, self.num_designs, self.max_gen))
 
-		self.design_queue = []
-		self.design_log = []
+		# self.design_queue = []
+		# self.design_log = []
 
-		# self.initialized = True
+		self.init_data_file(self.gh)
 
-	def init_first_gen(self):
-		self.design_queue = self.init_designs()
-		des = self.design_queue.pop(0)
-		self.design_log.append(des)
+		self.design_queue = self.init_designs(self.gh)
+		self.design_log = [self.design_queue.pop(0)]
+		# self.design_log.append(des)
 
 		self.running = True
+		# self.init_first_gen(gh)
 
-	def init_inputs(self, inputs):
-		self.inputs = inputs
-	def get_inputs(self):
-		return self.inputs
+	# def init_first_gen(self, gh):
+	# 	self.design_queue = self.init_designs()
+	# 	des = self.design_queue.pop(0)
+	# 	self.design_log.append(des)
+	# 	self.running = True
 
-	def init_outputs(self, outputs):
-		self.outputs = outputs
-	def get_outputs(self):
-		return self.outputs
+	# def init_inputs(self, inputs):
+		# self.inputs = inputs
+	# def get_inputs(self):
+		# return self.inputs
+
+	# def init_outputs(self, outputs):
+	# 	self.outputs = outputs
+	# def get_outputs(self):
+		# return self.outputs
 
 	# def run(self):
-
-		
 		# self.design_log = [des]
-
 		# self.running = True
 
-	def init_designs(self):
+	def init_designs(self, gh):
 		self.logger.log("-----")
 		self.logger.log("Initializing random designs")
 		designs = []
 
 		for i in range(self.num_designs):
-			des = Design(self.des_count, i, self.gen, self.get_inputs(), self.get_outputs(), self.logger)
-			des.generate_random()
+			des = Design(self.des_count, i, self.gen, gh, self.logger)
+			# des.generate_random()
 			self.des_count += 1
 			designs.append(des)
 
@@ -75,7 +79,7 @@ class Job:
 	def next_generation(self, population):
 		children = []
 
-		ranking, crowding, penalties = rank(population, self.get_outputs())
+		ranking, crowding, penalties = rank(population, self.gh.get_outputs())
 		stats = [ [penalties[i], ranking[i], crowding[i]] for i in range(len(ranking))]
 
 		self.logger.log("Rank {}".format([str(x) for x in ranking]))
@@ -93,7 +97,7 @@ class Job:
 
 			# add elites to next generation
 			for i, eliteNum in enumerate(elites):
-				child = Design(self.des_count, i, self.gen, self.get_inputs(), None, self.logger)
+				child = Design(self.des_count, i, self.gen, self.gh, self.logger)
 				child.set_inputs(population[eliteNum].get_inputs())
 				child.set_elite()
 				child.set_parents(population[eliteNum].get_id(), None)
@@ -124,8 +128,8 @@ class Job:
 				# add loser back to pool
 				pool.append(standings[1][0])
 
-			child = population[parents[0]].crossover(population[parents[1]], self.get_inputs(), self.gen, childNum, self.des_count)
-			child.mutate(self.get_inputs(), self.mutation_rate)
+			child = population[parents[0]].crossover(population[parents[1]], self.gh.get_inputs(), self.gen, childNum, self.des_count)
+			child.mutate(self.gh.get_inputs(), self.mutation_rate)
 			child.set_parents(population[parents[0]].get_id(), population[parents[1]].get_id())
 
 			if not child.check_duplicates(children):
@@ -155,11 +159,8 @@ class Job:
 	def get_latest_des(self):
 		return self.design_log[-1]
 
-	def get_next(self, input_id):
-		# des = self.design_queue.pop(0)
-		# self.design_log.append(des)
+	def get_design_input(self, input_id):
 		des = self.design_log[-1]
-
 		return des.get_input(input_id)
 
 	def set_outputs(self, outputs):
@@ -186,7 +187,7 @@ class Job:
 			else:
 				return False, "Job finished."
 
-	def init_data_file(self):
+	def init_data_file(self, gh):
 
 		# types = [x["type"] for x in self.spec["outputs"]]
 		# usingConstraints = "Constraint" in types
@@ -200,10 +201,10 @@ class Job:
 		# if usingConstraints:
 		header.append("feasible")
 
-		for _i in self.inputs:
+		for _i in gh.get_inputs():
 			header.append("[{}] {}".format(_i.get_type(), _i.get_id()) )
-		print(self.outputs)
-		for _o in self.outputs:
+		
+		for _o in gh.get_outputs():
 			if _o["type"] == "Objective":
 				header.append("[{}] {}".format(_o["goal"], _o["name"]) )
 			elif _o["type"] == "Constraint":

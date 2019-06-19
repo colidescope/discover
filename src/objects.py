@@ -50,29 +50,39 @@ class GHClient:
 		return self.connected
 
 	def connect(self, local_dir, file_name):
-		self.connected = True
-		# self.id = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(8))
 		self.local_dir = local_dir
 		self.file_name = file_name
-		# self.ping_file_names = ["{}.{}".format(self.id,fn) for fn in ping_file_names]
-		# self.ping_paths = [server_path / ("data/temp/" + fn) for fn in self.ping_file_names]
+		self.gather_inputs()
+		self.connected = True
 
-	def get_name(self):
+	def get_file_name(self):
 		return self.file_name
-
 	def get_dir(self, paths):
 		path_out = self.local_dir
 		for p in paths:
 			path_out = path_out / p
 		return path_out
 
-	def clear_inputs(self):
+	def gather_inputs(self):
 		self.inputs = []
-	def add_input(self, id, _i):
-		if id not in [i.get_id() for i in self.get_inputs()]:
-			self.inputs.append(_i)
+
+		d = self.get_dir(["temp"])
+		files = [file for file in os.listdir(d) if file.split(".")[0] == self.get_file_name()]
+		for file in files:
+			self.ping(file)
+
+	def add_input(self, input_id, input_def):
+		if input_id in self.get_input_ids():
+			return self.get_inputs()[self.get_input_ids().index(input_id)]
+		else:
+			new_input = Input(input_id, input_def)
+			self.inputs.append(new_input)
+			return new_input
+
 	def get_inputs(self):
 		return self.inputs
+	def get_input_ids(self):
+		return [i.get_id() for i in self.get_inputs()]
 
 	def set_outputs(self, outputs):
 		self.outputs = outputs
@@ -103,45 +113,11 @@ class GHClient:
 			with open(self.get_dir(["temp"]) / ".".join([self.file_name, _i.get_id()]), 'w') as f:
 				f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
 
-	def get_server_pingPaths(self):
-		return self.ping_paths
+	# def get_server_pingPaths(self):
+	# 	return self.ping_paths
 
-	def get_local_pingPaths(self, local_path):
-		return ["\\".join([local_path, "data", "temp", fn]) for fn in self.ping_file_names]
-
-class Context:
-
-	def __init__(self):
-		# if "linux" in platform:
-			# self.server_path = Path("/")
-		# else:
-			# self.server_path = Path(server_path)
-
-		# self.server_path = 
-
-		# with open(self.server_path / "data/temp/local_path.txt", 'r') as f:
-		# 	path = f.read().strip()
-		# 	self.local_path = "\\".join(path.split("\\")[:-2])
-		self.connected = False
-		self.path = ""
-
-	def connect(self, path):
-		self.connected = True
-
-		self.path = Path(path)
-		print(self.path)
-
-	def get_server_path(self, paths):
-		# path_out = self.server_path
-		path_out = self.path
-		for p in paths:
-			path_out = path_out / p
-		return path_out
-
-	def get_local_path(self, paths):
-		# path_out = self.local_path
-		path_out = self.path
-		return "\\".join([path_out] + paths)
+	# def get_local_pingPaths(self, local_path):
+	# 	return ["\\".join([local_path, "data", "temp", fn]) for fn in self.ping_file_names]
 
 class Logger:
 

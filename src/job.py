@@ -31,37 +31,13 @@ class Job:
 		self.logger.log("-----")
 		self.logger.log("Job created: {}, {} Designs / {} Generations".format(self.job_id, self.num_designs, self.max_gen))
 
-		# self.design_queue = []
-		# self.design_log = []
-
 		self.init_data_file(self.gh)
 
 		self.design_queue = self.init_designs(self.gh)
 		self.design_log = [self.design_queue.pop(0)]
-		# self.design_log.append(des)
 
 		self.running = True
-		# self.init_first_gen(gh)
 
-	# def init_first_gen(self, gh):
-	# 	self.design_queue = self.init_designs()
-	# 	des = self.design_queue.pop(0)
-	# 	self.design_log.append(des)
-	# 	self.running = True
-
-	# def init_inputs(self, inputs):
-		# self.inputs = inputs
-	# def get_inputs(self):
-		# return self.inputs
-
-	# def init_outputs(self, outputs):
-	# 	self.outputs = outputs
-	# def get_outputs(self):
-		# return self.outputs
-
-	# def run(self):
-		# self.design_log = [des]
-		# self.running = True
 
 	def init_designs(self, gh):
 		self.logger.log("-----")
@@ -69,10 +45,8 @@ class Job:
 		designs = []
 
 		for i in range(self.num_designs):
-			des = Design(self.des_count, i, self.gen, gh, self.logger)
-			# des.generate_random()
+			designs.append(Design(self.des_count, i, self.gen, gh, self.logger))
 			self.des_count += 1
-			designs.append(des)
 
 		return designs
 
@@ -153,9 +127,6 @@ class Job:
 	def get_path(self):
 		return self.path
 
-	# def get_spec(self):
-		# return self.spec
-
 	def get_latest_des(self):
 		return self.design_log[-1]
 
@@ -188,9 +159,6 @@ class Job:
 				return False, "Job finished."
 
 	def init_data_file(self, gh):
-
-		# types = [x["type"] for x in self.spec["outputs"]]
-		# usingConstraints = "Constraint" in types
 
 		header = []
 		header.append("id")

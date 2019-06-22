@@ -5,8 +5,8 @@ from src.utils import remap, rank, permutation2inversion, inversion2permutation
 
 class Input:
 
-	def __init__(self, _id, input_def):
-		self.id = _id
+	def __init__(self, input_def):
+		self.id = input_def["id"]
 		self.type = int(input_def["type"])
 		self.min = float(input_def["min"])
 		self.max = float(input_def["max"])
@@ -34,6 +34,22 @@ class Input:
 			random_params = seq
 		return random_params
 
+class Output:
+
+	def __init__(self, output_def):
+		self.id = output_def["id"]
+		self.name = output_def["name"]
+		self.type = output_def["type"]
+		self.goal = output_def["goal"]
+
+	def get_id(self):
+		return self.id
+	def get_name(self):
+		return self.name
+	def get_type(self):
+		return self.type
+	def get_goal(self):
+		return self.goal
 
 
 class GHClient:
@@ -42,17 +58,22 @@ class GHClient:
 		self.connected = False
 		self.local_dir = None
 		self.file_name = ""
+		self.connection_id = None
 		self.inputs = []
-		self.block = []
+		# self.block = []
 		self.outputs = []
 
 	def is_connected(self):
 		return self.connected
 
-	def connect(self, local_dir, file_name):
+	def connect(self, local_dir, file_name, _id):
 		self.local_dir = local_dir
 		self.file_name = file_name
-		self.gather_inputs()
+		# self.connections = []
+		self.connection_id = _id
+		self.inputs = []
+		self.outputs = []
+		# self.gather_inputs()
 		self.connected = True
 
 	def get_file_name(self):
@@ -63,19 +84,26 @@ class GHClient:
 			path_out = path_out / p
 		return path_out
 
-	def gather_inputs(self):
-		self.inputs = []
+	# def register_connections(self, connection_id):
+	# 	self.connections.append(connection_id)
+	def get_connection(self):
+		return self.connection_id
 
-		d = self.get_dir(["temp"])
-		files = [file for file in os.listdir(d) if file.split(".")[0] == self.get_file_name()]
-		for file in files:
-			self.ping(file)
+	# def gather_inputs(self):
+	# 	self.inputs = []
 
-	def add_input(self, input_id, input_def):
+	# 	d = self.get_dir(["temp"])
+	# 	files = [file for file in os.listdir(d) if file.split(".")[0] == self.get_file_name()]
+	# 	for file in files:
+	# 		self.ping(file)
+
+	def add_input(self, input_def):
+		input_id = input_def["id"]
+
 		if input_id in self.get_input_ids():
 			return self.get_inputs()[self.get_input_ids().index(input_id)]
 		else:
-			new_input = Input(input_id, input_def)
+			new_input = Input(input_def)
 			self.inputs.append(new_input)
 			return new_input
 
@@ -84,40 +112,56 @@ class GHClient:
 	def get_input_ids(self):
 		return [i.get_id() for i in self.get_inputs()]
 
-	def set_outputs(self, outputs):
-		self.outputs = outputs
+	def add_output(self, output_def):
+
+		output_id = output_def["id"]
+
+		if output_id in self.get_output_ids():
+			return self.get_outputs()[self.get_output_ids().index(output_id)]
+		else:
+			new_output = Output(output_def)
+			self.outputs.append(new_output)
+			return new_output
+		# self.outputs.append(output)
+
 	def get_outputs(self):
 		return self.outputs
+	def get_output_ids(self):
+		return [o.get_id() for o in self.get_outputs()]
 
 	def set_block(self):
-		self.block = [0 for i in self.get_inputs()]
-		# self.block = bool
-	def lift_block(self, input_id):
-		input_ids = [i.get_id() for i in self.get_inputs()]
-		self.block[input_ids.index(input_id)] = 1
+		self.block = [0 for i in self.get_outputs()]
+	def lift_block(self, _id):
+		_ids = self.get_output_ids()
+		pos = _ids.index(_id)
+		self.block[pos] = 1
+		return pos
 	def check_block(self):
-		return not sum(self.block) == len(self.block)
+		return sum(self.block) == len(self.block)
 
-	# def ping(self, ping_id):
-		# with open(self.ping_paths[ping_id], 'w') as f:
-			# f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
-	def ping(self, file_name):
-		with open(self.get_dir(["temp"]) / file_name, 'w') as f:
-			f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
-	# def ping_ack(self, file_name):
+	# def ping(self, file_name):
 	# 	with open(self.get_dir(["temp"]) / file_name, 'w') as f:
-	# 		f.write("ack")
+	# 		f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
+
 	def ping_inputs(self):
-		self.set_block()
-		for _i in self.get_inputs():
-			with open(self.get_dir(["temp"]) / ".".join([self.file_name, _i.get_id()]), 'w') as f:
-				f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
+		# self.set_block()
+		with open(self.get_dir(["temp"]) / ".".join([self.file_name, self.get_connection()]), 'w') as f:
+			f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
 
-	# def get_server_pingPaths(self):
-	# 	return self.ping_paths
+	# def ping_inputs(self):
+	# 	self.set_block()
+	# 	for _i in self.get_inputs():
+	# 		with open(self.get_dir(["temp"]) / ".".join([self.file_name, _i.get_id()]), 'w') as f:
+	# 			f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
 
-	# def get_local_pingPaths(self, local_path):
-	# 	return ["\\".join([local_path, "data", "temp", fn]) for fn in self.ping_file_names]
+class PYClient:
+
+	def __init__(self):
+		self.connected = False
+		self.local_dir = None
+		self.file_name = ""
+		self.connection_id = None
+
 
 class Logger:
 

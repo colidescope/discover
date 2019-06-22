@@ -45,7 +45,9 @@ class Job:
 		designs = []
 
 		for i in range(self.num_designs):
-			designs.append(Design(self.des_count, i, self.gen, gh, self.logger))
+			des = Design(self.des_count, i, self.gen, gh, self.logger)
+			des.generate_random_inputs()
+			designs.append(des)
 			self.des_count += 1
 
 		return designs
@@ -134,10 +136,13 @@ class Job:
 		des = self.design_log[-1]
 		return des.get_input(input_id)
 
-	def set_outputs(self, outputs):
+	def set_output(self, output_def):
 		des = self.design_log[-1]
-		des.set_outputs(outputs)
+		des.set_output(output_def)
 
+	def write_des_data(self):
+		des = self.design_log[-1]
+		des.log_outputs()
 		self.write_to_data_file(des.get_data())
 
 	def run_next(self):
@@ -173,8 +178,8 @@ class Job:
 			header.append("[{}] {}".format(_i.get_type(), _i.get_id()) )
 		
 		for _o in gh.get_outputs():
-			if _o["type"] == "Objective":
-				header.append("[{}] {}".format(_o["goal"], _o["name"]) )
+			if _o.get_type() == "Objective":
+				header.append("[{}] {}".format(_o.get_goal(), _o.get_name()) )
 			elif _o["type"] == "Constraint":
 				header.append("[{}] {}".format(_o["requirement"], _o["name"]) )
 

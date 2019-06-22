@@ -42,13 +42,13 @@ def inversion2permutation(inversion):
     return permutation
 
 
-def rank(population, outputs_def):
+def rank(population, outputs):
 
     designs = []
     for i, des in enumerate(population):
         designs.append({'id': i, 'scores': des.get_objectives()})
 
-    objectiveGoals = [x["goal"] for x in outputs_def if x["type"] == "Objective"]
+    objectiveGoals = [o.get_goal() for o in outputs if o.get_type() == "Objective"]
 
     print("objective goals: " + ",".join(objectiveGoals), file=sys.stderr)
 

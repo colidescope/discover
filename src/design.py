@@ -24,12 +24,11 @@ class Design:
 		self.rank = 0
 		self.elite = 0
 
-		for _input in gh.get_inputs():
+	def generate_random_inputs(self):
+		for _input in self.gh.get_inputs():
 			self.inputs.append(_input.generate_random())
 
 		self.logger.log("Created design [{}] with random inputs".format(str(self.id)))#, self.get_inputs_string()))
-
-
 	# def generate_random(self):
 
 	# 	self.inputs = []
@@ -171,38 +170,39 @@ class Design:
 	def get_inputs_string(self):
 		return ",".join(["[{}]".format(",".join([str(_i) for _i in _input])) for _input in self.inputs])
 
-	def set_outputs(self, outputs):
+	def set_output(self, _o):
 
-		for _o in outputs:
+		# for _o in outputs:
 
-			if _o is None:
-				self.penalty += 1
-				self.feasible = False
-				continue
+		# if _o is None:
+		# 	self.penalty += 1
+		# 	self.feasible = False
+		# 	continue
 
-			value = float(_o["value"])
+		value = float(_o["value"])
 
-			if _o["type"] == "Objective":
-				self.objectives.append(value)
+		if _o["type"] == "Objective":
+			self.objectives.append(value)
 
-			elif _o["type"] == "Constraint":
-				goal = _o["goal"]
-				goal_val = float(_o["val"])
+		elif _o["type"] == "Constraint":
+			goal = _o["goal"]
+			goal_val = float(_o["val"])
 
-				if goal == "Less than":
-					if value >= goal_val:
-						self.penalty += 1
-						self.feasible = False
-				elif goal == "Greater than":
-					if value <= goal_val:
-						self.penalty += 1
-						self.feasible = False
-				elif goal == "Equals":
-					if value != goal_val:
-						self.penalty += 1
-						self.feasible = False
+			if goal == "Less than":
+				if value >= goal_val:
+					self.penalty += 1
+					self.feasible = False
+			elif goal == "Greater than":
+				if value <= goal_val:
+					self.penalty += 1
+					self.feasible = False
+			elif goal == "Equals":
+				if value != goal_val:
+					self.penalty += 1
+					self.feasible = False
 
-		self.logger.log("[{}] --> Outputs [{}], Penalty: {}".format(self.get_id(), ",".join([str(o) for o in outputs]), self.penalty))#, child.get_inputs_string()))
+	def log_outputs(self):
+		self.logger.log("[{}] --> Outputs [{}], Penalty: {}".format(self.get_id(), ",".join([str(o) for o in self.objectives]), self.penalty))#, child.get_inputs_string()))
 
 	def check_duplicate(self, des):
 		# return False if any inputs different, True if all are same

@@ -9,6 +9,7 @@ from pathlib import Path
 from src.objects import Input, GHClient, Logger
 from src.job import Job
 from src.utils import remap
+# from src.test import Test
 
 
 app = Flask(__name__)
@@ -16,6 +17,9 @@ app.config['SECRET_KEY'] = 'key1234'
 socketio = SocketIO(app)
 
 gh = GHClient()
+# client = PYClient()
+# test = Test()
+
 logger = Logger()
 
 job = None
@@ -24,23 +28,34 @@ job = None
 def index():
 	return render_template("index.html")
 
+def connect_PY():
+	local_path = os.path.dirname(os.path.abspath(__file__))
+
+
 @app.route('/api/v1.0/connect/', methods=['GET', 'POST'])
 def connect():
-	local_file = request.json
+	data = request.json
 
-	file_path = local_file.split("\\")
+	gh_path = data["path"]
+	connection_id = data["id"]
+
+	# if not gh.is_connected():
+
+	file_path = gh_path.split("\\")
 	file_dir = "\\".join(file_path[:-1])
 	local_dir = Path(file_dir) / "discover"
 	file_name = file_path[-1].split(".")[0]
 
-	gh.connect(local_dir, file_name)
+	gh.connect(local_dir, file_name, connection_id)
 
 	logger.init(local_dir)
 	message = "Connected to Grasshopper file: {}".format(file_name)
 	socketio.emit('server message', {"message": message})
 	logger.log(message)
 
-	return jsonify({'status': 'Server connected'})
+	# gh.register_connections(connection_id)
+
+	return jsonify({'status': 'Connected to server with id {}'.format(gh.get_connection())})
 
 
 @app.route("/api/v1.0/start/", methods=['GET', 'POST'])
@@ -54,12 +69,10 @@ def start():
 	options = job_spec["options"]
 
 	job = Job(options, gh, logger)
-	# job.init_inputs(gh.get_inputs())
-	# job.init_outputs(gh.get_outputs())
-	# job.init_data_file()
-	# job.init_first_gen()
 
-	logger.log("Job started, connected to inputs: {}".format(gh.get_input_ids()))
+	logger.log("Job started, connected to inputs {} and outputs {}".format(gh.get_input_ids(), gh.get_input_ids()))
+	
+	gh.set_block()
 	gh.ping_inputs()
 
 	message = "Optimization started: {} designs / {} generations".format(job.num_designs, job.max_gen)
@@ -81,6 +94,7 @@ def stop():
 
 	return jsonify({"status": "success", "job_id": job.job_id})
 
+
 @app.route("/api/v1.0/get_ss_path/", methods=['GET'])
 def get_ss_path():
 	if job is not None and job.is_running():
@@ -101,69 +115,44 @@ def job_running():
 	else:
 		return jsonify(False)
 
-# @app.route("/api/v1.0/get_input/", methods=['GET', 'POST'])
-# def get_input():
-
-# 	json_in = request.json
-# 	input_id = json_in["id"]
-# 	input_def = json.loads(json_in["input_def"])
-
-# 	if job is not None and job.is_running():
-# 		return jsonify({"status": "Received design input from server", "vals": job.get_next(input_id)})
-# 		# return jsonify(job.get_next())
-# 	else:
-# 		new_input = Input(input_id, input_def)
-# 		return jsonify({"status": "Received random input from server", "vals": new_input.generate_random()})
 
 @app.route("/api/v1.0/input_ack/", methods=['GET', 'POST'])
 def input_ack():
-	json_in = request.json
-	input_id = json_in["id"]
-	input_def = json.loads(json_in["input_def"])
+	input_def = json.loads(request.json)
 
 	if job is None or not job.is_running():
-		input_object = gh.add_input(input_id, input_def)
+		input_object = gh.add_input(input_def)
 
 		status = "Success: registered input {} with Discover".format(input_object.get_id())
 		input_vals = input_object.generate_random()
 		return jsonify({'status': status, 'input_vals': input_vals})
 
 	else:
-		gh.lift_block(input_id)
-
-		status = "Success: lifted block on input {}".format(input_id)
-		input_vals = job.get_design_input(input_id)
+		input_vals = job.get_design_input(input_def["id"])
+		status = "Success: values for input {}".format(input_def["id"])
 		return jsonify({'status': status, 'input_vals': input_vals})
 
-@app.route('/api/v1.0/set_outputs/', methods=['GET', 'POST'])
-def set_outputs():
-
-	outputs = request.json
+@app.route('/api/v1.0/send_output/', methods=['GET', 'POST'])
+def send_output():
+	output_def = request.json
 
 	if job is None or not job.is_running():
-		gh.set_outputs(outputs)
-		return jsonify({'status': 'No job running'})
+		output_object = gh.add_output(output_def)
+		
+		status = "Success: registered output {} with Discover".format(output_object.get_id())
+		return jsonify({'status': status})
 
-	if gh.check_block():
-		return jsonify({'status': 'Process blocked'})
+	else:
+		pos = gh.lift_block(output_def["id"])
+		job.set_output(output_def)
 
-	
+		if gh.check_block():
+			job.write_des_data()
+			return do_next()
+		else:
+			return jsonify({'status': 'Process blocked'})
 
-	# if job.is_running():
-	job.set_outputs(outputs)
-	
-		# if job.get_spec()["options"]["Save screenshot"]:
-			# gh.ping(1)
-			# return jsonify({'status': 'Waiting for screenshot...'})
-		# else:
-	return do_next()
 
-	# else:
-		# job.init_inputs(gh.get_inputs())
-		# job.init_outputs(outputs)
-		# job.run()
-		# gh.ping_inputs()
-		# return jsonify({'status': 'Gathered inputs.'})
 
 @app.route('/api/v1.0/ss_done/', methods=['GET'])
 def ss_done():
@@ -178,6 +167,7 @@ def do_next():
 		socketio.emit('server message', {"message": message})
 
 	if run:
+		gh.set_block()
 		gh.ping_inputs()
 		return jsonify({'status': 'Job running...'})
 	else:

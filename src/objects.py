@@ -143,11 +143,11 @@ class Client:
 		return sum(self.block) == len(self.block)
 
 	def ping_model(self):
-		if self.model is not None:
-			return self.model.run_design()
-		else:
-			with open(self.get_dir(["temp"]) / ".".join([self.file_name, self.get_connection()]), 'w') as f:
-				f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
+		# if self.model is not None:
+		# 	return self.model.run_design()
+		# else:
+		with open(self.get_dir(["temp"]) / ".".join([self.file_name, self.get_connection()]), 'w') as f:
+			f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
 
 
 class Logger:

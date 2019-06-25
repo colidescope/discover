@@ -71,11 +71,11 @@ def start():
 
 	logger.log("Job started, connected to inputs {} and outputs {}".format(client.get_input_ids(), client.get_output_ids()))
 	
-	if client.get_connnection() is None:
+	if client.get_connection() is None:
 		run_local()
-
-	client.set_block()
-	client.ping_model()
+	else:
+		client.set_block()
+		client.ping_model()
 
 	message = "Optimization started: {} designs / {} generations".format(job.num_designs, job.max_gen)
 	socketio.emit('server message', {"message": message})
@@ -259,6 +259,10 @@ def ack():
 def handle_my_custom_event(json):
 	print('received json: ' + str(json), file=sys.stderr)
 	emit('server message', json, callback=ack)
+
+
+def run_local():
+	self.model.run_design()
 
 if __name__ == '__main__':
 

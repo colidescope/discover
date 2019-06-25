@@ -2,6 +2,7 @@ import urllib, os, sys, random, math, json, string
 from time import localtime, strftime
 from pathlib import Path
 from src.utils import remap, rank, permutation2inversion, inversion2permutation
+from src.model import Model
 
 class Input:
 
@@ -52,7 +53,7 @@ class Output:
 		return self.goal
 
 
-class GHClient:
+class Client:
 
 	def __init__(self):
 		self.connected = False
@@ -62,6 +63,11 @@ class GHClient:
 		self.inputs = []
 		# self.block = []
 		self.outputs = []
+		self.model = None
+
+	def set_job(self, job):
+		if self.model is not None:
+			self.model.set_job(job)
 
 	def is_connected(self):
 		return self.connected
@@ -76,6 +82,15 @@ class GHClient:
 		# self.gather_inputs()
 		self.connected = True
 
+		if self.connection_id is None:
+			# initialize model with inputs and outputs
+			self.model = Model(self)
+			# set inputs and outputs from model
+			for input_def in self.model.get_inputs():
+				self.add_input(input_def)
+			for output_def in self.model.get_outputs():
+				self.add_output(output_def)
+
 	def get_file_name(self):
 		return self.file_name
 	def get_dir(self, paths):
@@ -84,18 +99,8 @@ class GHClient:
 			path_out = path_out / p
 		return path_out
 
-	# def register_connections(self, connection_id):
-	# 	self.connections.append(connection_id)
 	def get_connection(self):
 		return self.connection_id
-
-	# def gather_inputs(self):
-	# 	self.inputs = []
-
-	# 	d = self.get_dir(["temp"])
-	# 	files = [file for file in os.listdir(d) if file.split(".")[0] == self.get_file_name()]
-	# 	for file in files:
-	# 		self.ping(file)
 
 	def add_input(self, input_def):
 		input_id = input_def["id"]
@@ -113,7 +118,6 @@ class GHClient:
 		return [i.get_id() for i in self.get_inputs()]
 
 	def add_output(self, output_def):
-
 		output_id = output_def["id"]
 
 		if output_id in self.get_output_ids():
@@ -122,7 +126,6 @@ class GHClient:
 			new_output = Output(output_def)
 			self.outputs.append(new_output)
 			return new_output
-		# self.outputs.append(output)
 
 	def get_outputs(self):
 		return self.outputs
@@ -139,34 +142,23 @@ class GHClient:
 	def check_block(self):
 		return sum(self.block) == len(self.block)
 
-	# def ping(self, file_name):
-	# 	with open(self.get_dir(["temp"]) / file_name, 'w') as f:
-	# 		f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
-
-	def ping_inputs(self):
-		# self.set_block()
-		with open(self.get_dir(["temp"]) / ".".join([self.file_name, self.get_connection()]), 'w') as f:
-			f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
-
-	# def ping_inputs(self):
-	# 	self.set_block()
-	# 	for _i in self.get_inputs():
-	# 		with open(self.get_dir(["temp"]) / ".".join([self.file_name, _i.get_id()]), 'w') as f:
-	# 			f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
-
-class PYClient:
-
-	def __init__(self):
-		self.connected = False
-		self.local_dir = None
-		self.file_name = ""
-		self.connection_id = None
+	def ping_model(self):
+		if self.model is not None:
+			return self.model.run_design()
+		else:
+			with open(self.get_dir(["temp"]) / ".".join([self.file_name, self.get_connection()]), 'w') as f:
+				f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
 
 
 class Logger:
 
 	def __init__(self):
 		self.path = None
+
+	def init_local(self, path):
+		self.path = path / "log.txt"
+		with open(self.path, 'w') as f:
+			f.write("\t".join([strftime("%H:%M:%S", localtime()), "Log initialized"]))
 
 	def init(self, path):
 		log_path = path / "logs"

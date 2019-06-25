@@ -7,6 +7,7 @@ def remap(value, min1, max1, min2, max2):
 	return float(min2) + (float(value) - float(min1)) * (float(max2) - float(min2)) / (float(max1) - float(min1))
 
 
+
 def permutation2inversion(permutation):
 
     inversion = []

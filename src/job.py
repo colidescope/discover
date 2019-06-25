@@ -6,11 +6,11 @@ from src.design import Design
 
 class Job:
 
-	def __init__(self, options, gh, logger):
+	def __init__(self, options, client, logger):
 		# self.options = options
-		self.gh = gh
-
+		self.client = client
 		self.logger = logger
+
 		self.des_count = 0
 		self.num_designs = int(options["Designs per generation"])
 
@@ -20,10 +20,10 @@ class Job:
 		self.save_elites = int(options["Elites"])
 		self.mutation_rate = float(options["Mutation rate"])
 
-		self.job_id = "_" + gh.get_file_name() + "_" + strftime("%y%m%d_%H%M%S", localtime())
-		self.path = gh.get_dir(["jobs"]) / self.job_id
+		self.job_id = "_" + client.get_file_name() + "_" + strftime("%y%m%d_%H%M%S", localtime())
+		self.path = client.get_dir(["jobs"]) / self.job_id
 
-		os.makedirs(self.path)
+		os.makedirs(self.path, exist_ok=True)
 
 		if options["Save screenshot"]:
 			os.makedirs(self.path / "images")
@@ -31,21 +31,21 @@ class Job:
 		self.logger.log("-----")
 		self.logger.log("Job created: {}, {} Designs / {} Generations".format(self.job_id, self.num_designs, self.max_gen))
 
-		self.init_data_file(self.gh)
+		self.init_data_file(self.client)
 
-		self.design_queue = self.init_designs(self.gh)
+		self.design_queue = self.init_designs(self.client)
 		self.design_log = [self.design_queue.pop(0)]
 
 		self.running = True
 
 
-	def init_designs(self, gh):
+	def init_designs(self, client):
 		self.logger.log("-----")
 		self.logger.log("Initializing random designs")
 		designs = []
 
 		for i in range(self.num_designs):
-			des = Design(self.des_count, i, self.gen, gh, self.logger)
+			des = Design(self.des_count, i, self.gen, client, self.logger)
 			des.generate_random_inputs()
 			designs.append(des)
 			self.des_count += 1
@@ -53,9 +53,11 @@ class Job:
 		return designs
 
 	def next_generation(self, population):
+
+		self.logger.log("Next Gen.")
 		children = []
 
-		ranking, crowding, penalties = rank(population, self.gh.get_outputs())
+		ranking, crowding, penalties = rank(population, self.client.get_outputs())
 		stats = [ [penalties[i], ranking[i], crowding[i]] for i in range(len(ranking))]
 
 		self.logger.log("Rank {}".format([str(x) for x in ranking]))
@@ -73,7 +75,7 @@ class Job:
 
 			# add elites to next generation
 			for i, eliteNum in enumerate(elites):
-				child = Design(self.des_count, i, self.gen, self.gh, self.logger)
+				child = Design(self.des_count, i, self.gen, self.client, self.logger)
 				child.set_inputs(population[eliteNum].get_inputs())
 				child.set_elite()
 				child.set_parents(population[eliteNum].get_id(), None)
@@ -83,6 +85,7 @@ class Job:
 
 		childNum = self.save_elites
 		while childNum < len(population):
+			self.logger.log("Next child.")
 			# choose two parents through two binary tournaments
 			pool = list(range(len(population)))
 			parents = []
@@ -104,8 +107,8 @@ class Job:
 				# add loser back to pool
 				pool.append(standings[1][0])
 
-			child = population[parents[0]].crossover(population[parents[1]], self.gh.get_inputs(), self.gen, childNum, self.des_count)
-			child.mutate(self.gh.get_inputs(), self.mutation_rate)
+			child = population[parents[0]].crossover(population[parents[1]], self.client.get_inputs(), self.gen, childNum, self.des_count)
+			child.mutate(self.client.get_inputs(), self.mutation_rate)
 			child.set_parents(population[parents[0]].get_id(), population[parents[1]].get_id())
 
 			if not child.check_duplicates(children):
@@ -113,6 +116,7 @@ class Job:
 				self.des_count += 1
 				childNum += 1
 			else:
+				self.logger.log("dup found")
 				# duplicate child, skipping...
 				continue
 
@@ -163,7 +167,7 @@ class Job:
 			else:
 				return False, "Job finished."
 
-	def init_data_file(self, gh):
+	def init_data_file(self, client):
 
 		header = []
 		header.append("id")
@@ -174,13 +178,13 @@ class Job:
 		# if usingConstraints:
 		header.append("feasible")
 
-		for _i in gh.get_inputs():
+		for _i in client.get_inputs():
 			header.append("[{}] {}".format(_i.get_type(), _i.get_id()) )
 		
-		for _o in gh.get_outputs():
+		for _o in client.get_outputs():
 			if _o.get_type() == "Objective":
 				header.append("[{}] {}".format(_o.get_goal(), _o.get_name()) )
-			elif _o["type"] == "Constraint":
+			elif _o.get_type() == "Constraint":
 				header.append("[{}] {}".format(_o["requirement"], _o["name"]) )
 
 		with open(self.path / "results.tsv", 'a') as f:

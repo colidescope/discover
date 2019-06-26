@@ -11,14 +11,12 @@ from src.job import Job
 from src.utils import remap
 # from src.test import Test
 
+testing = False
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'key1234'
 socketio = SocketIO(app)
 
 client = Client()
-# client = PYClient()
-# test = Test()
 
 local_path = Path(os.path.dirname(os.path.abspath(__file__)))
 logger = Logger()
@@ -30,10 +28,8 @@ job = None
 def index():
 	return render_template("index.html")
 
-# def connect_PY():
 
-
-@app.route('/api/v1.0/connect/', methods=['GET', 'POST'])
+@app.route('/api/v1.0/connect', methods=['GET', 'POST'])
 def connect():
 	data = request.json
 
@@ -67,21 +63,61 @@ def start():
 	options = job_spec["options"]
 
 	job = Job(options, client, logger)
-	client.set_job(job)
+	# client.set_job(job)
 
 	logger.log("Job started, connected to inputs {} and outputs {}".format(client.get_input_ids(), client.get_output_ids()))
 	
-	if client.get_connection() is None:
-		run_local()
-	else:
-		client.set_block()
-		client.ping_model()
-
 	message = "Optimization started: {} designs / {} generations".format(job.num_designs, job.max_gen)
 	socketio.emit('server message', {"message": message})
 
+	if client.get_connection():
+		# client.set_block()
+		# client.ping_model()
+		do_next()
+	else:
+		run_local()
+
 	return jsonify({"status": "success", "job_id": job.job_id})
 
+def do_next():
+	run, message = job.run_next()
+
+	if message is not None:
+		socketio.emit('server message', {"message": message})
+
+	if run:
+		client.set_block()
+		client.ping_model()
+		return jsonify({'status': 'Job running...'})
+	else:
+		job.running = False
+		logger.log("Job finished.")
+
+		return jsonify({'status': 'No job running'})
+
+def run_local():
+	model = client.model
+
+	while True:
+		run, message = job.run_next()
+
+		if message is not None:
+			socketio.emit('server message', {"message": message})
+
+		if not run:
+			job.running = False
+			logger.log("Job finished.")
+			break
+
+		# for i in range(job.des_count):
+		input_vals = []
+		for _id in model.get_input_ids():
+			input_vals.append(job.get_design_input(_id))
+
+		outputs = model.calculate(input_vals)
+		for _o in outputs:
+			job.set_output(_o)
+		job.write_des_data()
 
 
 @app.route("/api/v1.0/stop/", methods=['GET'])
@@ -97,27 +133,6 @@ def stop():
 		logger.log(message)
 
 	return jsonify({"status": "success", "job_id": job.job_id})
-
-
-@app.route("/api/v1.0/get_ss_path/", methods=['GET'])
-def get_ss_path():
-	if job is not None and job.is_running():
-		des = job.get_latest_des()
-		des_id = des.get_id()
-
-		local_path = context.get_local_path(["data"])
-
-		ss_path = "\\".join([local_path, job.get_id(), "images", str(des_id)])
-		return jsonify({'status': 'success', 'path': ss_path})
-	else:
-		return jsonify({"status": "fail"})
-
-@app.route("/api/v1.0/job_running/", methods=['GET'])
-def job_running():
-	if job is not None and job.is_running():
-		return jsonify(True)
-	else:
-		return jsonify(False)
 
 
 @app.route("/api/v1.0/input_ack/", methods=['GET', 'POST'])
@@ -153,34 +168,33 @@ def send_output():
 
 		if client.check_block():
 			job.write_des_data()
-			logger.log("Next")
-			do_next()
-			return "None"
+			# logger.log("Next")
+			
+			return do_next()
 		else:
 			return jsonify({'status': 'Process blocked'})
 
-def do_next():
-	run, message = job.run_next()
 
-	if message is not None:
-		socketio.emit('server message', {"message": message})
 
-	if run:
-		client.set_block()
-		res = client.ping_model()
-		if res is not None:
-			with app.test_client() as c:
-				rv = c.post('/api/v1.0/send_output/', json=res)
-				# result = rv.get_json()
-				# print(result)
+@app.route("/api/v1.0/get_ss_path/", methods=['GET'])
+def get_ss_path():
+	if job is not None and job.is_running():
+		des = job.get_latest_des()
+		des_id = des.get_id()
 
-		return jsonify({'status': 'Job running...'})
+		local_path = context.get_local_path(["data"])
+
+		ss_path = "\\".join([local_path, job.get_id(), "images", str(des_id)])
+		return jsonify({'status': 'success', 'path': ss_path})
 	else:
-		job.running = False
-		logger.log("Job finished.")
+		return jsonify({"status": "fail"})
 
-		return jsonify({'status': 'No job running'})
-
+@app.route("/api/v1.0/job_running/", methods=['GET'])
+def job_running():
+	if job is not None and job.is_running():
+		return jsonify(True)
+	else:
+		return jsonify(False)
 
 @app.route('/api/v1.0/ss_done/', methods=['GET'])
 def ss_done():
@@ -188,14 +202,16 @@ def ss_done():
 		return jsonify({'status': 'No job running'})
 	return do_next()
 
+
+
 @app.route('/api/v1.0/get_data/<string:job_name>', methods=['GET'])
 def get_data(job_name):
 
-	data_path = context.get_server_path(["data"]) / job_name / "results.tsv"
+	data_path = client.get_dir(["jobs"]) / job_name / "results.tsv"
 	if not data_path.exists():
 		return jsonify({"status": "fail"})
 
-	image_path = context.get_server_path(["data"]) / job_name / "images"
+	image_path = client.get_dir(["jobs"]) / job_name / "images"
 
 	json_out = []
 
@@ -212,7 +228,6 @@ def get_data(job_name):
 	socketio.emit('server message', {"message": message})
 
 	return json.dumps({"status": "success", "load_images": image_path.exists(), "data": json_out})
-
 
 @app.route('/api/v1.0/get_design/<string:job_name>/<string:des_id>', methods=['GET'])
 def get_design(job_name, des_id):
@@ -246,11 +261,12 @@ def get_design(job_name, des_id):
 
 	return jsonify({"status": "success"})
 
-
 @app.route("/api/v1.0/get_image/<string:job_name>/<string:des_id>", methods=['GET'])
 def get_image(job_name, des_id):
 	image_path = context.get_server_path(["data"]) / job_name / "images" 
 	return send_from_directory(image_path, des_id + '.png')
+
+
 
 def ack():
 	print('message was received!', file=sys.stderr)
@@ -261,32 +277,22 @@ def handle_my_custom_event(json):
 	emit('server message', json, callback=ack)
 
 
-def run_local():
-	self.model.run_design()
 
 if __name__ == '__main__':
 
-	# TESTING
-	with app.test_client() as c:
+	if testing:
+		with app.test_client() as c:
 
-		options = {
-			"Designs per generation": 6,
-			"Number of generations": 6,
-			"Elites": 1,
-			"Mutation rate": 0.05,
-			"Save screenshot": False
-		}
+			options = {
+				"Designs per generation": 10,
+				"Number of generations": 10,
+				"Elites": 2,
+				"Mutation rate": 0.05,
+				"Save screenshot": False
+			}
 
-		rv = c.post('/api/v1.0/start', json={
-			"options": options
-		})
-		# result = rv.get_json()
-		# print(result)
-
-		# print(job)		
-
-		# rv = c.post('/api/v1.0/send_output/', json=res)
-		# result = rv.get_json()
-		# print(result)
-
-	# socketio.run(app, debug=True, host='0.0.0.0', port=5000)
+			rv = c.post('/api/v1.0/start', json={
+				"options": options
+			})
+	else:
+		socketio.run(app, debug=True, host='0.0.0.0', port=5000)

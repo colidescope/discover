@@ -424,7 +424,7 @@ function runViz(result, jobName) {
                 offX = img_width + 40 - 280;
                 offY = img_height + 80;
             }else{
-                offX = 135;
+                offX = 135 - 280;
                 offY = 75;
             }
 

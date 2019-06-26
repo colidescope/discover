@@ -362,7 +362,7 @@ function testInputs() {
 function startOptimization() {
 
 	xhr = new XMLHttpRequest();
-	var url = "/api/v1.0/start/";
+	var url = "/api/v1.0/start";
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json");
 	xhr.onreadystatechange = function () { 

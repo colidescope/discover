@@ -2,7 +2,7 @@ import urllib, os, sys, random, math, json, string
 from time import localtime, strftime
 from pathlib import Path
 from src.utils import remap, rank, permutation2inversion, inversion2permutation
-from src.model import Model
+from src.test import Test
 
 class Input:
 
@@ -65,9 +65,9 @@ class Client:
 		self.outputs = []
 		self.model = None
 
-	def set_job(self, job):
-		if self.model is not None:
-			self.model.set_job(job)
+	# def set_job(self, job):
+		# if self.model is not None:
+			# self.model.set_job(job)
 
 	def is_connected(self):
 		return self.connected
@@ -84,7 +84,7 @@ class Client:
 
 		if self.connection_id is None:
 			# initialize model with inputs and outputs
-			self.model = Model(self)
+			self.model = Test(self)
 			# set inputs and outputs from model
 			for input_def in self.model.get_inputs():
 				self.add_input(input_def)

@@ -34,7 +34,8 @@ class Job:
 		self.init_data_file(self.client)
 
 		self.design_queue = self.init_designs(self.client)
-		self.design_log = [self.design_queue.pop(0)]
+		self.design_log = []
+		# self.design_log = [self.design_queue.pop(0)]
 
 		self.running = True
 

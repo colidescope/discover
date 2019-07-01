@@ -3,7 +3,7 @@ from flask import Flask, jsonify, request, Response, render_template, send_from_
 from flask_socketio import SocketIO, emit
 
 import urllib, os, sys, random, math, json
-from time import localtime, strftime
+from time import localtime, strftime, sleep
 from pathlib import Path
 
 from src.objects import Input, Client, Logger
@@ -71,8 +71,6 @@ def start():
 	socketio.emit('server message', {"message": message})
 
 	if client.get_connection():
-		# client.set_block()
-		# client.ping_model()
 		do_next()
 	else:
 		run_local()
@@ -109,7 +107,6 @@ def run_local():
 			logger.log("Job finished.")
 			break
 
-		# for i in range(job.des_count):
 		input_vals = []
 		for _id in model.get_input_ids():
 			input_vals.append(job.get_design_input(_id))
@@ -119,8 +116,12 @@ def run_local():
 			job.set_output(_o)
 		job.write_des_data()
 
+		# pause to test UI
+		sleep(.5)
 
-@app.route("/api/v1.0/stop/", methods=['GET'])
+
+
+@app.route("/api/v1.0/stop", methods=['GET'])
 def stop():
 	global job
 
@@ -135,7 +136,7 @@ def stop():
 	return jsonify({"status": "success", "job_id": job.job_id})
 
 
-@app.route("/api/v1.0/input_ack/", methods=['GET', 'POST'])
+@app.route("/api/v1.0/input_ack", methods=['GET', 'POST'])
 def input_ack():
 	input_def = json.loads(request.json)
 
@@ -151,7 +152,7 @@ def input_ack():
 		status = "Success: values for input {}".format(input_def["id"])
 		return jsonify({'status': status, 'input_vals': input_vals})
 
-@app.route('/api/v1.0/send_output/', methods=['GET', 'POST'])
+@app.route('/api/v1.0/send_output', methods=['GET', 'POST'])
 def send_output():
 	output_def = request.json
 	# print(output_def)
@@ -168,7 +169,6 @@ def send_output():
 
 		if client.check_block():
 			job.write_des_data()
-			# logger.log("Next")
 			
 			return do_next()
 		else:
@@ -204,14 +204,14 @@ def ss_done():
 
 
 
-@app.route('/api/v1.0/get_data/<string:job_name>', methods=['GET'])
-def get_data(job_name):
+@app.route('/api/v1.0/get_data/<string:job_path>', methods=['GET'])
+def get_data(job_path):
 
-	data_path = client.get_dir(["jobs"]) / job_name / "results.tsv"
+	data_path = Path(job_path) / "results.tsv"
 	if not data_path.exists():
 		return jsonify({"status": "fail"})
 
-	image_path = client.get_dir(["jobs"]) / job_name / "images"
+	image_path = Path(job_path) / "images"
 
 	json_out = []
 
@@ -224,20 +224,20 @@ def get_data(job_name):
 		d = line.split("\t")
 		json_out.append({header[i]: d[i] for i in range(len(d)) })
 
-	message = "Loaded data from server: {}".format(job_name)
+	message = "Loaded data from server: {}".format(job_path)
 	socketio.emit('server message', {"message": message})
 
 	return json.dumps({"status": "success", "load_images": image_path.exists(), "data": json_out})
 
-@app.route('/api/v1.0/get_design/<string:job_name>/<string:des_id>', methods=['GET'])
-def get_design(job_name, des_id):
-	if not gh.is_connected():
+@app.route('/api/v1.0/get_design/<string:job_path>/<string:des_id>', methods=['GET'])
+def get_design(job_path, des_id):
+	if not client.is_connected():
 		return jsonify({"status": "no-gh"})
 	if job is not None:
 		if job.is_running():
 			return jsonify({"status": "job-running"})
 
-	data_path = context.get_server_path(["data"]) / job_name / "results.tsv"
+	data_path = Path(job_path) / "results.tsv"
 	if not data_path.exists():
 		return jsonify({"status": "fail"})
 
@@ -261,9 +261,10 @@ def get_design(job_name, des_id):
 
 	return jsonify({"status": "success"})
 
-@app.route("/api/v1.0/get_image/<string:job_name>/<string:des_id>", methods=['GET'])
-def get_image(job_name, des_id):
-	image_path = context.get_server_path(["data"]) / job_name / "images" 
+@app.route("/api/v1.0/get_image/<string:job_path>/<string:des_id>", methods=['GET'])
+def get_image(job_path, des_id):
+
+	image_path = Path(job_path) / "images" 
 	return send_from_directory(image_path, des_id + '.png')
 
 
@@ -284,11 +285,10 @@ if __name__ == '__main__':
 		with app.test_client() as c:
 
 			options = {
-				"Designs per generation": 10,
-				"Number of generations": 10,
-				"Elites": 2,
-				"Mutation rate": 0.05,
-				"Save screenshot": False
+				"Designs per generation": 4,
+				"Number of generations": 4,
+				"Elites": 1,
+				"Mutation rate": 0.05
 			}
 
 			rv = c.post('/api/v1.0/start', json={

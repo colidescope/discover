@@ -51,7 +51,7 @@ def rank(population, outputs):
 
     objectiveGoals = [o.get_goal() for o in outputs if o.get_type() == "Objective"]
 
-    print("objective goals: " + ",".join(objectiveGoals), file=sys.stderr)
+    # print("objective goals: " + ",".join(objectiveGoals), file=sys.stderr)
 
     validSet = [x for x in designs if len(x['scores']) == len(objectiveGoals)]
 

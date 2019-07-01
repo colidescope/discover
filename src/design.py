@@ -5,14 +5,14 @@ from src.utils import remap, rank, permutation2inversion, inversion2permutation
 
 class Design:
 
-	def __init__(self, _id, des, gen, gh, logger):
+	def __init__(self, _id, des, gen, client, logger):
 		self.logger = logger
 		self.id = _id
 		self.desNum = des
 		self.genNum = gen
 		self.parents = [None, None]
 
-		self.gh = gh
+		self.client = client
 		# self.inputs_def = inputs_def
 		# self.outputs_def = outputs_def
 
@@ -25,7 +25,7 @@ class Design:
 		self.elite = 0
 
 	def generate_random_inputs(self):
-		for _input in self.gh.get_inputs():
+		for _input in self.client.get_inputs():
 			self.inputs.append(_input.generate_random())
 
 		self.logger.log("Created design [{}] with random inputs".format(str(self.id)))#, self.get_inputs_string()))
@@ -39,12 +39,12 @@ class Design:
 	# 	self.logger.log("Generated random inputs for design [{}]".format(str(self.id)))#, self.get_inputs_string()))
 
 	def crossover(self, partner, inputs_def, genNum, desNum, idNum):
-		child = Design(idNum, desNum, genNum, self.gh, self.logger)
+		child = Design(idNum, desNum, genNum, self.client, self.logger)
 
 		child_inputs = []
 
 		for i in range(len(self.get_inputs())):
-			if inputs_def[i].get_type() == 0:
+			if inputs_def[i].get_type() == "Continuous":
 
 				new_input = []
 
@@ -68,14 +68,14 @@ class Design:
 
 				child_inputs.append( new_input )
 
-			elif inputs_def[i].get_type() == 1:
+			elif inputs_def[i].get_type() == "Categorical":
 				# coin flip on each value of series
 				a = self.get_inputs()[i]
 				b = partner.get_inputs()[i]
 				new_input = [a[j] if random.random() > 0.5 else b[j] for j in range(len(a))]
 				child_inputs.append( new_input )
 
-			elif inputs_def[i].get_type() == 2:
+			elif inputs_def[i].get_type() == "Sequence":
 
 				a = permutation2inversion(self.get_inputs()[i])
 				b = permutation2inversion(partner.get_inputs()[i])
@@ -95,7 +95,8 @@ class Design:
 
 		for i in range(len(self.get_inputs())):
 
-			if inputs_def[i].get_type() == 0:
+			if inputs_def[i].get_type() == "Continuous":
+
 				# jitter input based on normal distribution
 				input_set = self.get_inputs()[i]
 
@@ -113,7 +114,7 @@ class Design:
 						mutation.append(0)
 				inputs_out.append(new_input_set)
 
-			elif inputs_def[i].get_type() == 1:
+			elif inputs_def[i].get_type() == "Categorical":
 				input_set = self.get_inputs()[i]
 				new_input_set = []
 
@@ -128,7 +129,7 @@ class Design:
 						mutation.append(0)
 				inputs_out.append(new_input_set)
 
-			elif inputs_def[i].get_type() == 2:
+			elif inputs_def[i].get_type() == "Sequence":
 				# some number of random swaps based on input-specific mutation rate 
 				# we want mutation rate to roughly correspond to percentage of sequence altered
 				# since each flip alters 2 places we divide mutation rate by 2
@@ -161,7 +162,7 @@ class Design:
 		self.inputs = inputs
 
 	def get_input(self, input_id):
-		input_names = [i.get_id() for i in self.gh.get_inputs()]
+		input_names = [i.get_id() for i in self.client.get_inputs()]
 		return self.inputs[input_names.index(input_id)]
 
 	def get_inputs(self):

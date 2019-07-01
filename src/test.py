@@ -8,17 +8,10 @@ class Test:
 	def __init__(self, client):
 
 		self.inputs = []
-		self.inputs.append({"id": "in-1", "type": 0, "min": 0, "max": 10, "num": 1})
+		self.inputs.append({"id": "in-1", "name": "number", "type": "Continuous", "min": 0, "max": 10, "num": 1})
 
 		self.outputs = []
-		self.outputs.append({"id": "out-1", "name": "square", "type": "Objective", "goal": "Maximize"})
-
-		self.job = None
-		# self.logger = logger
-		self.client = client
-
-	# def set_job(self, job):
-		# self.job = job
+		self.outputs.append({"id": "out-1", "name": "sum", "type": "Objective", "goal": "Maximize"})
 
 	def get_inputs(self):
 		return self.inputs

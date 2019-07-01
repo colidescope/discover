@@ -8,13 +8,16 @@ class Input:
 
 	def __init__(self, input_def):
 		self.id = input_def["id"]
-		self.type = int(input_def["type"])
+		self.name = input_def["name"]
+		self.type = input_def["type"]
 		self.min = float(input_def["min"])
 		self.max = float(input_def["max"])
 		self.num = int(input_def["num"])
 
 	def get_id(self):
 		return self.id
+	def get_name(self):
+		return self.name
 	def get_type(self):
 		return self.type
 	def get_min(self):
@@ -25,11 +28,11 @@ class Input:
 		return self.num
 
 	def generate_random(self):
-		if self.type == 0:
+		if self.type == "Continuous":
 			random_params = [remap(random.random(), 0, 1, self.min, self.max) for i in range(int(self.num))]
-		elif self.type == 1:
+		elif self.type == "Categorical":
 			random_params = [int(math.floor(random.random() * 0.9999 * float(self.max-self.min) + self.min)) for i in range(int(self.num))]
-		elif self.type == 2:
+		elif self.type == "Sequence":
 			seq = list(range(int(self.num)))
 			random.shuffle(seq)
 			random_params = seq
@@ -64,10 +67,10 @@ class Client:
 		# self.block = []
 		self.outputs = []
 		self.model = None
+		self.ss = False
 
-	# def set_job(self, job):
-		# if self.model is not None:
-			# self.model.set_job(job)
+	def capture_screenshots(self):
+		return self.ss
 
 	def is_connected(self):
 		return self.connected

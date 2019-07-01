@@ -25,7 +25,7 @@ class Job:
 
 		os.makedirs(self.path, exist_ok=True)
 
-		if options["Save screenshot"]:
+		if self.client.capture_screenshots():
 			os.makedirs(self.path / "images")
 
 		self.logger.log("-----")
@@ -54,8 +54,7 @@ class Job:
 		return designs
 
 	def next_generation(self, population):
-
-		self.logger.log("Next Gen.")
+		
 		children = []
 
 		ranking, crowding, penalties = rank(population, self.client.get_outputs())
@@ -86,7 +85,6 @@ class Job:
 
 		childNum = self.save_elites
 		while childNum < len(population):
-			self.logger.log("Next child.")
 			# choose two parents through two binary tournaments
 			pool = list(range(len(population)))
 			parents = []
@@ -117,7 +115,7 @@ class Job:
 				self.des_count += 1
 				childNum += 1
 			else:
-				self.logger.log("dup found")
+				self.logger.log("Duplicate child found, skipping...")
 				# duplicate child, skipping...
 				continue
 

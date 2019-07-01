@@ -106,7 +106,7 @@ function loadData() {
     if (element){element.parentNode.removeChild(element);}
 
     // Get the data
-    var jobName = document.getElementById("job-name-entry").value;
+    var jobName = encodeURIComponent(document.getElementById("job-name-entry").value);
     d3.json("/api/v1.0/get_data/"+jobName, function(error, result) {
 
         console.log(result);

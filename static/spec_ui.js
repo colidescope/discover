@@ -23,8 +23,8 @@ socket.on('server message', function(msg){
 
 
 
-createMenu("inputs", "input_0", 0);
-createMenu("outputs", "output_0", 0);
+// createMenu("inputs", "input_0", 0);
+// createMenu("outputs", "output_0", 0);
 
 
 function createMenu(section, id){
@@ -251,69 +251,70 @@ function deleteSet(id) {
 
 function parseSpec(){
 
-	var json_out = {"inputs": [], "outputs": [], "options": {}};
+	// var json_out = {"inputs": [], "outputs": [], "options": {}};
+	var json_out = {"options": {}};
 
-	var target = document.getElementById("inputs");
-	var menu_objects = target.querySelectorAll(".menu_object");
+	// var target = document.getElementById("inputs");
+	// var menu_objects = target.querySelectorAll(".menu_object");
 
-	for (var i = 0; i < menu_objects.length; i++){
+	// for (var i = 0; i < menu_objects.length; i++){
 
-		json_out["inputs"].push({});
-		var json_item = json_out["inputs"][json_out["inputs"].length-1]
+	// 	json_out["inputs"].push({});
+	// 	var json_item = json_out["inputs"][json_out["inputs"].length-1]
 
-		var menu_object = menu_objects[i];
-		var name = menu_object.querySelector(".param-name").value;
-		json_item["name"] = name;
+	// 	var menu_object = menu_objects[i];
+	// 	var name = menu_object.querySelector(".param-name").value;
+	// 	json_item["name"] = name;
 
-		var menu_item = menu_object.querySelector(".menu_item");
-		var sel = menu_item.getElementsByTagName("select")[0];
-		var type = sel.options[sel.selectedIndex].value;
-		json_item["type"] = type;
+	// 	var menu_item = menu_object.querySelector(".menu_item");
+	// 	var sel = menu_item.getElementsByTagName("select")[0];
+	// 	var type = sel.options[sel.selectedIndex].value;
+	// 	json_item["type"] = type;
 
-		var opts = menu_item.querySelector(".option_set");
-		var ps = opts.children;
+	// 	var opts = menu_item.querySelector(".option_set");
+	// 	var ps = opts.children;
 
-		for (var j = 0; j < ps.length; j++){
-			var p = ps[j];
-			var prop = p.getElementsByTagName("span")[0].innerHTML;
-			var val = p.getElementsByTagName("input")[0].value;
+	// 	for (var j = 0; j < ps.length; j++){
+	// 		var p = ps[j];
+	// 		var prop = p.getElementsByTagName("span")[0].innerHTML;
+	// 		var val = p.getElementsByTagName("input")[0].value;
 
-			json_item[prop] = val;
-		}
-	}
+	// 		json_item[prop] = val;
+	// 	}
+	// }
 
-	var target = document.getElementById("outputs");
-	var menu_objects = target.querySelectorAll(".menu_object");
+	// var target = document.getElementById("outputs");
+	// var menu_objects = target.querySelectorAll(".menu_object");
 
-	for (var i = 0; i < menu_objects.length; i++){
+	// for (var i = 0; i < menu_objects.length; i++){
 
-		json_out["outputs"].push({});
-		var json_item = json_out["outputs"][json_out["outputs"].length-1]
+	// 	json_out["outputs"].push({});
+	// 	var json_item = json_out["outputs"][json_out["outputs"].length-1]
 
-		var menu_object = menu_objects[i];
-		var name = menu_object.querySelector(".param-name").value;
-		json_item["name"] = name;
+	// 	var menu_object = menu_objects[i];
+	// 	var name = menu_object.querySelector(".param-name").value;
+	// 	json_item["name"] = name;
 
-		var menu_item = menu_object.querySelector(".menu_item");
-		var sel = menu_item.getElementsByTagName("select")[0];
-		var type = sel.options[sel.selectedIndex].value;
-		json_item["type"] = type;
+	// 	var menu_item = menu_object.querySelector(".menu_item");
+	// 	var sel = menu_item.getElementsByTagName("select")[0];
+	// 	var type = sel.options[sel.selectedIndex].value;
+	// 	json_item["type"] = type;
 
-		var opts = menu_item.querySelector(".option_set");
-		var ps = opts.children;
+	// 	var opts = menu_item.querySelector(".option_set");
+	// 	var ps = opts.children;
 
-		for (var j = 0; j < ps.length; j++){
-			var p = ps[j];
-			var prop = p.getElementsByTagName("span")[0].innerHTML;
-			var val = p.getElementsByTagName("select")[0].value;
+	// 	for (var j = 0; j < ps.length; j++){
+	// 		var p = ps[j];
+	// 		var prop = p.getElementsByTagName("span")[0].innerHTML;
+	// 		var val = p.getElementsByTagName("select")[0].value;
 
-			json_item[prop] = val;
+	// 		json_item[prop] = val;
 
-			if (type == "Constraint"){
-				json_item["val"] = p.getElementsByTagName("input")[0].value;;
-			}
-		}
-	}
+	// 		if (type == "Constraint"){
+	// 			json_item["val"] = p.getElementsByTagName("input")[0].value;;
+	// 		}
+	// 	}
+	// }
 
 	var target = document.getElementById("options");
 	var menu_objects = target.children;
@@ -385,7 +386,7 @@ function startOptimization() {
 function stopOptimization() {
 
 	xhr = new XMLHttpRequest();
-	var url = "/api/v1.0/stop/";
+	var url = "/api/v1.0/stop";
 	xhr.open("GET", url, true);
 	xhr.setRequestHeader("Content-type", "application/json");
 	xhr.onreadystatechange = function () { 

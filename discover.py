@@ -75,7 +75,7 @@ def start():
 	else:
 		run_local()
 
-	return jsonify({"status": "success", "job_id": job.job_id})
+	return jsonify({"status": "success", "job_id": str(job.get_path())})
 
 def do_next():
 	run, message = job.run_next()
@@ -117,7 +117,7 @@ def run_local():
 		job.write_des_data()
 
 		# pause to test UI
-		sleep(.5)
+		# sleep(.5)
 
 
 
@@ -231,11 +231,11 @@ def get_data(job_path):
 
 @app.route('/api/v1.0/get_design/<string:job_path>/<string:des_id>', methods=['GET'])
 def get_design(job_path, des_id):
-	if not client.is_connected():
-		return jsonify({"status": "no-gh"})
-	if job is not None:
-		if job.is_running():
-			return jsonify({"status": "job-running"})
+	# if not client.is_connected():
+		# return jsonify({"status": "no-gh"})
+	# if job is not None:
+	# 	if job.is_running():
+	# 		return jsonify({"status": "job-running"})
 
 	data_path = Path(job_path) / "results.tsv"
 	if not data_path.exists():
@@ -253,10 +253,10 @@ def get_design(job_path, des_id):
 
 	inputs = [ json.loads(d[i]) for i in range(len(d)) if "[Continuous]" in header[i] or "[Categorical]" in header[i] or "[Sequence]" in header[i] ]
 
-	des.set_inputs(inputs)
-	gh.ping(0)
+	# des.set_inputs(inputs)
+	# gh.ping(0)
 
-	message = "Reinstated design {} from {}".format(des_id, job_name)
+	message = "Reinstated design {} from {}".format(des_id, job_path)
 	socketio.emit('server message', {"message": message})
 
 	return jsonify({"status": "success"})

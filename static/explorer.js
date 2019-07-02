@@ -594,7 +594,7 @@ function runViz(result, jobName) {
     };
 
     function loadDesign(d) {
-        console.log("Attempting to lead design #" + d);
+        console.log("Attempting to load design #" + d);
         var request = new XMLHttpRequest();
         request.open('GET', '/api/v1.0/get_design/'+jobName+'/'+d, true)
         request.onload = function (d) {

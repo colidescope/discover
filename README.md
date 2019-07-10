@@ -1,2 +1,2 @@
 # Discover
-Design optimization tool built for Rhino Grasshopper
+Design optimization for Rhino Grasshopper

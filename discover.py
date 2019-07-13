@@ -48,7 +48,7 @@ def connect():
 	socketio.emit('server message', {"message": message})
 	logger.log(message)
 
-	return jsonify({'status': 'Connected to server with id {}'.format(gh.get_connection())})
+	return jsonify({'status': 'Connected to server with id {}'.format(client.get_connection())})
 
 
 @app.route("/api/v1.0/start", methods=['GET', 'POST'])
@@ -63,6 +63,8 @@ def start():
 	options = job_spec["options"]
 
 	job = Job(options, client, logger)
+	header = job.init_data_file()
+	socketio.emit('server message', header)
 	# client.set_job(job)
 
 	logger.log("Job started, connected to inputs {} and outputs {}".format(client.get_input_ids(), client.get_output_ids()))
@@ -114,11 +116,12 @@ def run_local():
 		outputs = model.calculate(input_vals)
 		for _o in outputs:
 			job.set_output(_o)
-		job.write_des_data()
+		
+		data = job.write_des_data()
+		socketio.emit('server message', data)
 
 		# pause to test UI
 		# sleep(.5)
-
 
 
 @app.route("/api/v1.0/stop", methods=['GET'])
@@ -158,7 +161,7 @@ def send_output():
 	# print(output_def)
 
 	if job is None or not job.is_running():
-		output_object = gh.add_output(output_def)
+		output_object = client.add_output(output_def)
 		
 		status = "Success: registered output {} with Discover".format(output_object.get_id())
 		return jsonify({'status': status})
@@ -168,13 +171,14 @@ def send_output():
 		job.set_output(output_def)
 
 		if client.check_block():
-			job.write_des_data()
-			
+			data = job.write_des_data()
+			socketio.emit('server message', data)
+
 			return do_next()
 		else:
 			return jsonify({'status': 'Process blocked'})
 
-
+###
 
 @app.route("/api/v1.0/get_ss_path/", methods=['GET'])
 def get_ss_path():

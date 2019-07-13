@@ -31,8 +31,6 @@ class Job:
 		self.logger.log("-----")
 		self.logger.log("Job created: {}, {} Designs / {} Generations".format(self.job_id, self.num_designs, self.max_gen))
 
-		self.init_data_file(self.client)
-
 		self.design_queue = self.init_designs(self.client)
 		self.design_log = []
 		# self.design_log = [self.design_queue.pop(0)]
@@ -146,7 +144,10 @@ class Job:
 	def write_des_data(self):
 		des = self.design_log[-1]
 		des.log_outputs()
-		self.write_to_data_file(des.get_data())
+
+		data = des.get_data()
+		self.write_to_data_file(data)
+		return data
 
 	def run_next(self):
 		if len(self.design_queue) > 0:
@@ -166,7 +167,7 @@ class Job:
 			else:
 				return False, "Job finished."
 
-	def init_data_file(self, client):
+	def init_data_file(self):
 
 		header = []
 		header.append("id")
@@ -177,10 +178,10 @@ class Job:
 		# if usingConstraints:
 		header.append("feasible")
 
-		for _i in client.get_inputs():
+		for _i in self.client.get_inputs():
 			header.append("[{}] {}".format(_i.get_type(), _i.get_id()) )
 		
-		for _o in client.get_outputs():
+		for _o in self.client.get_outputs():
 			if _o.get_type() == "Objective":
 				header.append("[{}] {}".format(_o.get_goal(), _o.get_name()) )
 			elif _o.get_type() == "Constraint":
@@ -188,6 +189,8 @@ class Job:
 
 		with open(self.path / "results.tsv", 'a') as f:
 			f.write("\t".join(header))
+
+		return header
 
 	def write_to_data_file(self, data):
 		with open(self.path / "results.tsv", 'a') as f:

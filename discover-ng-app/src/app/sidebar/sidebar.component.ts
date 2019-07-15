@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {MenuItem, MenuitemService} from "./menuitem.service";
 
 @Component({
   selector: 'app-sidebar',
@@ -8,6 +9,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 export class SidebarComponent {
   @Input() inverted: boolean = false;
   @Output() onStausChange: EventEmitter<SideBarStatus> = new EventEmitter<SideBarStatus>();
+  @Input() menuItems: MenuItem[];
   selectedItem: number = -1;
 
   selectItem(idx: number) {

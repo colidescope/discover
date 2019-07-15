@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {MenuItem} from "../menuitem.service";
 
 @Component({
   selector: 'app-sidemenu',
@@ -9,12 +10,7 @@ export class SidemenuComponent {
   @Input() inverted: boolean = false;
   @Input() itemSelected: number = -1;
   @Output() onItemSelected: EventEmitter<number> = new EventEmitter<number>();
-
-  menuItems: MenuItem[] = [
-    {label: 'O1'},
-    {label: 'O2'},
-    {label: 'O3'}
-  ];
+  @Input() menuItems: MenuItem[];
 
   onClickItem(index: number) {
     if (this.itemSelected == index) {
@@ -25,8 +21,4 @@ export class SidemenuComponent {
     this.onItemSelected.emit(this.itemSelected)
   }
 
-}
-
-interface MenuItem {
-  label: string
 }

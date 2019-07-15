@@ -1,12 +1,12 @@
 <app-navbar></app-navbar>
 <div class="container-fluid" id="main-container">
   <div class="row h-100">
-    <app-sidebar (onStausChange)="updateLeftSideBarStatus($event)">
+    <app-sidebar [menuItems]="getLeftMenuItems()" (onStausChange)="updateLeftSideBarStatus($event)">
     </app-sidebar>
 
     <div id="centralPanel" [ngClass]="getWidthClass()"></div>
 
-    <app-sidebar (onStausChange)="updateRightSideBarStatus($event)" [inverted]='true'>
+    <app-sidebar [menuItems]="getRightMenuItems()" (onStausChange)="updateRightSideBarStatus($event)" [inverted]='true'>
     </app-sidebar>
   </div>
 </div>

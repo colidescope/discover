@@ -73,6 +73,7 @@ def start():
 	socketio.emit('server message', {"message": message})
 
 	if client.get_connection():
+		# client.create_connection_file()
 		do_next()
 	else:
 		run_local()
@@ -82,11 +83,14 @@ def start():
 def do_next():
 	run, message = job.run_next()
 
+	sleep(.1)
+
 	if message is not None:
 		socketio.emit('server message', {"message": message})
 
 	if run:
 		client.set_block()
+		# sleep(0.01)
 		client.ping_model()
 		return jsonify({'status': 'Job running...'})
 	else:

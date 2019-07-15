@@ -1,0 +1,6 @@
+<div class="row no-gutters h-100" [class.inverted]="inverted">
+  <app-sidemenu [itemSelected]="selectedItem"
+                (onItemSelected)="selectItem($event)"
+                [inverted]="inverted"></app-sidemenu>
+  <app-sidepanel [class.closed]="!isOpen()" (onClose)="close()" [inverted]="inverted"></app-sidepanel>
+</div>

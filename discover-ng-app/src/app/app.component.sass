@@ -1,0 +1,25 @@
+#main-container
+  height: calc(100% - 56px)
+
+app-sidebar
+  z-index: 500
+  height: 100%
+  -webkit-transition: width 0.2s ease-out
+  -moz-transition: width 0.2s ease-out
+  -ms-transition: width 0.2s ease-out
+  -o-transition: width 0.2s ease-out
+  transition: width 0.2s ease-out
+
+#centralPanel
+  width: calc(100% - 120px)
+  -webkit-transition: width 0.2s ease-out
+  -moz-transition: width 0.2s ease-out
+  -ms-transition: width 0.2s ease-out
+  -o-transition: width 0.2s ease-out
+  transition: width 0.2s ease-out
+
+#centralPanel.two-panel-opened
+  width: calc(100% - 520px)
+
+#centralPanel.one-panel-opened
+  width: calc(100% - 320px)

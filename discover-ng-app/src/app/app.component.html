@@ -1,5 +1,12 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<nav class="navbar navbar-light bg-light shadow-sm">
-  <a class="navbar-brand mx-auto mb-0 h1 text-success" href="#">Discover</a>
-</nav>
-<router-outlet></router-outlet>
+<app-navbar></app-navbar>
+<div class="container-fluid" id="main-container">
+  <div class="row h-100">
+    <app-sidebar (onStausChange)="updateLeftSideBarStatus($event)">
+    </app-sidebar>
+
+    <div id="centralPanel" [ngClass]="getWidthClass()"></div>
+
+    <app-sidebar (onStausChange)="updateRightSideBarStatus($event)" [inverted]='true'>
+    </app-sidebar>
+  </div>
+</div>

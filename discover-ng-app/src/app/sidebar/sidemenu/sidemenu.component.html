@@ -1,0 +1,8 @@
+<div [ngClass]="inverted?'right':'left'">
+  <div *ngFor="let item of menuItems; let i = index"
+       class="menu-item" [class.selected]="i == itemSelected"
+       (click)="onClickItem(i)"
+       [ngbTooltip]="item.label" [placement]="inverted?'left':'right'">
+    {{item.label}}
+  </div>
+</div>

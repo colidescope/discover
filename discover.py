@@ -48,7 +48,7 @@ def connect():
 	socketio.emit('server message', {"message": message})
 	logger.log(message)
 
-	return jsonify({'status': 'Connected to server with id {}'.format(client.get_connection())})
+	return jsonify("Connected to server with id {}".format(client.get_connection()))
 
 
 @app.route("/api/v1.0/start", methods=['GET', 'POST'])
@@ -83,7 +83,7 @@ def start():
 def do_next():
 	run, message = job.run_next()
 
-	sleep(.1)
+	# sleep(1)
 
 	if message is not None:
 		socketio.emit('server message', {"message": message})
@@ -145,7 +145,7 @@ def stop():
 
 @app.route("/api/v1.0/input_ack", methods=['GET', 'POST'])
 def input_ack():
-	input_def = json.loads(request.json)
+	input_def = request.json
 
 	if job is None or not job.is_running():
 		input_object = client.add_input(input_def)
@@ -177,10 +177,20 @@ def send_output():
 		if client.check_block():
 			data = job.write_des_data()
 			socketio.emit('server message', data)
-
-			return do_next()
+			return jsonify({'status': 'run next'})
 		else:
 			return jsonify({'status': 'Process blocked'})
+
+@app.route('/api/v1.0/next', methods=['GET', 'POST'])
+def next():
+	sleep(0.1)
+	return do_next()
+
+
+# @app.route('/api/v1.0/sleep', methods=['GET', 'POST'])
+# def sleep_function():
+# 	sleep(1.0)
+# 	return jsonify({'status': None})
 
 ###
 

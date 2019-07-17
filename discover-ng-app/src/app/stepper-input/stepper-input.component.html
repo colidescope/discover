@@ -1,0 +1,9 @@
+<div class="row no-gutters align-items-center">
+  <label for="input">{{label}}:</label>
+  <form class="ml-auto">
+    <img src="/assets/ic_12px_arrow_less.png" alt="decrement" (click)="decrement()">
+    <input id="input" type="number" name="value" [step]="step" [(ngModel)]="value" [min]="min"
+           [max]="max">
+    <img src="/assets/ic_12px_arrow_add.png" alt="increment" (click)="increment()">
+  </form>
+</div>

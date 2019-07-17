@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {MenuItem, MenuitemService} from "./menuitem.service";
+import {MenuItem} from "./menuitem.service";
 
 @Component({
   selector: 'app-sidebar',
@@ -26,15 +26,16 @@ export class SidebarComponent {
 
   close() {
     this.selectedItem = -1;
-    this.onStausChange.emit({opened: false})
+    this.onStausChange.emit({opened: false, selectedIndex: this.selectedItem})
   }
 
   open(idx: number) {
     this.selectedItem = idx;
-    this.onStausChange.emit({opened: this.isOpen()})
+    this.onStausChange.emit({opened: this.isOpen(), selectedIndex: this.selectedItem})
   }
 }
 
 export interface SideBarStatus {
   opened: boolean
+  selectedIndex: number
 }

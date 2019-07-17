@@ -2,6 +2,14 @@
 <div class="container-fluid" id="main-container">
   <div class="row h-100">
     <app-sidebar [menuItems]="getLeftMenuItems()" (onStausChange)="updateLeftSideBarStatus($event)">
+      <div [ngSwitch]="leftSideBarStatus.selectedIndex">
+        <ng-template [ngSwitchCase]="0">
+          <app-run-container></app-run-container>
+        </ng-template>
+        <ng-template [ngSwitchCase]="1">
+          <h1>Explorer</h1>
+        </ng-template>
+      </div>
     </app-sidebar>
 
     <div id="centralPanel" [ngClass]="getWidthClass()"></div>

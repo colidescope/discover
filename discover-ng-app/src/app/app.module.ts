@@ -9,6 +9,9 @@ import {NavbarComponent} from './navbar/navbar.component';
 import {SidepanelComponent} from './sidebar/sidepanel/sidepanel.component';
 import {SidemenuComponent} from './sidebar/sidemenu/sidemenu.component';
 import {SidebarComponent} from './sidebar/sidebar.component';
+import {RunContainerComponent} from './run-container/run-container.component';
+import {StepperInputComponent} from './stepper-input/stepper-input.component';
+import {FormsModule} from "@angular/forms";
 
 const config: SocketIoConfig = {url: 'http://localhost:5000', options: {}};
 
@@ -18,11 +21,14 @@ const config: SocketIoConfig = {url: 'http://localhost:5000', options: {}};
     NavbarComponent,
     SidepanelComponent,
     SidemenuComponent,
-    SidebarComponent
+    SidebarComponent,
+    RunContainerComponent,
+    StepperInputComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     NgbModule,
     SocketIoModule.forRoot(config)
   ],

@@ -9,8 +9,8 @@ import {MenuitemService} from "./sidebar/menuitem.service";
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent {
-  leftSideBarStatus: SideBarStatus = {opened: false};
-  rightSideBarStatus: SideBarStatus = {opened: false};
+  leftSideBarStatus: SideBarStatus = {opened: false, selectedIndex: -1};
+  rightSideBarStatus: SideBarStatus = {opened: false, selectedIndex: -1};
 
   constructor(socket: Socket, private menuItemService: MenuitemService) {
     socket.on('connect', (socket) => {

@@ -12,6 +12,9 @@ import {SidebarComponent} from './sidebar/sidebar.component';
 import {RunContainerComponent} from './run-container/run-container.component';
 import {StepperInputComponent} from './stepper-input/stepper-input.component';
 import {FormsModule} from "@angular/forms";
+import {ExploreContainerComponent} from './explore-container/explore-container.component';
+import {SelectInputComponent} from './select-input/select-input.component';
+import {CheckboxInputComponent} from './checkbox-input/checkbox-input.component';
 
 const config: SocketIoConfig = {url: 'http://localhost:5000', options: {}};
 
@@ -23,7 +26,10 @@ const config: SocketIoConfig = {url: 'http://localhost:5000', options: {}};
     SidemenuComponent,
     SidebarComponent,
     RunContainerComponent,
-    StepperInputComponent
+    StepperInputComponent,
+    ExploreContainerComponent,
+    SelectInputComponent,
+    CheckboxInputComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,28 @@
 /* You can add global styles to this file, and also import other style files */c
 @import ~bootstrap/dist/css/bootstrap
 
+$primary-green: #009444
+$lime-green: #7AC943
+
+$sidepanel-width: 275px
+$sidemenu-width: 60px
+
 body
   height: 100vh
+
+.btn-success
+  background-color: $lime-green
+  border-color: $lime-green
+
+.btn-success:hover
+  background-color: $primary-green
+
+textarea
+  border: transparent
+  padding: 8px !important
+
+textarea:focus
+  outline-color: $primary-green
+
+.panel-header-text
+  color: $primary-green

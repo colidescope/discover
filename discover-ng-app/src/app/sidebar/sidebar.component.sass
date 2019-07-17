@@ -1,6 +1,8 @@
+@import "~src/styles"
+
 app-sidepanel
   overflow: hidden
-  width: 260px
+  width: $sidepanel-width
   background: #f9f9f9
   -webkit-transition: width 0.2s ease-out
   -moz-transition: width 0.2s ease-out
@@ -13,7 +15,7 @@ app-sidepanel.closed
 
 app-sidemenu
   background: #f2f2f2
-  width: 60px
+  width: $sidemenu-width
   height: 100%
 
 .inverted

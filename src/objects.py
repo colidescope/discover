@@ -14,6 +14,14 @@ class Input:
 		self.max = float(input_def["max"])
 		self.num = int(input_def["num"])
 
+	def update_def(self, input_def):
+		self.id = input_def["id"]
+		self.name = input_def["name"]
+		self.type = input_def["type"]
+		self.min = float(input_def["min"])
+		self.max = float(input_def["max"])
+		self.num = int(input_def["num"])
+
 	def get_id(self):
 		return self.id
 	def get_name(self):
@@ -109,7 +117,9 @@ class Client:
 		input_id = input_def["id"]
 
 		if input_id in self.get_input_ids():
-			return self.get_inputs()[self.get_input_ids().index(input_id)]
+			old_input = self.get_inputs()[self.get_input_ids().index(input_id)]
+			old_input.update_def(input_def)
+			return old_input
 		else:
 			new_input = Input(input_def)
 			self.inputs.append(new_input)

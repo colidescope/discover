@@ -15,6 +15,7 @@ import {FormsModule} from "@angular/forms";
 import {ExploreContainerComponent} from './explore-container/explore-container.component';
 import {SelectInputComponent} from './select-input/select-input.component';
 import {CheckboxInputComponent} from './checkbox-input/checkbox-input.component';
+import {HttpClientModule} from "@angular/common/http";
 
 const config: SocketIoConfig = {url: 'http://localhost:5000', options: {}};
 
@@ -34,6 +35,7 @@ const config: SocketIoConfig = {url: 'http://localhost:5000', options: {}};
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     FormsModule,
     NgbModule,
     SocketIoModule.forRoot(config)

@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {Socket} from "ngx-socket-io";
 import {SideBarStatus} from "./sidebar/sidebar.component";
 import {MenuitemService} from "./sidebar/menuitem.service";
 
@@ -12,13 +11,7 @@ export class AppComponent {
   leftSideBarStatus: SideBarStatus = {opened: false, selectedIndex: -1};
   rightSideBarStatus: SideBarStatus = {opened: false, selectedIndex: -1};
 
-  constructor(socket: Socket, private menuItemService: MenuitemService) {
-    socket.on('connect', (socket) => {
-      console.log('Socket Connected');
-    });
-    socket.on('disconnect', (socket) => {
-      console.log('Socket Disconnected')
-    })
+  constructor(private menuItemService: MenuitemService) {
   }
 
   getLeftMenuItems() {

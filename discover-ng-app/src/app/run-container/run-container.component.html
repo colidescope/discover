@@ -7,7 +7,7 @@
   <app-stepper-input [min]="0" [max]="9999" [step]=".01" label="Mutation rate"></app-stepper-input>
   <app-stepper-input [min]="0" [max]="9999" label="Elites"></app-stepper-input>
   <div class="row no-gutters mt-3">
-    <textarea class="col-12" [readOnly]="true" [rows]="5">Test placeholder...</textarea>
+    <textarea class="col-12" [readOnly]="true" [rows]="5">{{log}}</textarea>
   </div>
   <div class="row no-gutters mt-3">
     <button class="btn btn-sm btn-success btn-play col">RUN PROJECT</button>

@@ -16,6 +16,8 @@ import {ExploreContainerComponent} from './explore-container/explore-container.c
 import {SelectInputComponent} from './select-input/select-input.component';
 import {CheckboxInputComponent} from './checkbox-input/checkbox-input.component';
 import {HttpClientModule} from "@angular/common/http";
+import {NgxChartsModule} from "@swimlane/ngx-charts";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 const config: SocketIoConfig = {url: 'http://localhost:5000', options: {}};
 
@@ -34,8 +36,10 @@ const config: SocketIoConfig = {url: 'http://localhost:5000', options: {}};
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
+    NgxChartsModule,
     FormsModule,
     NgbModule,
     SocketIoModule.forRoot(config)

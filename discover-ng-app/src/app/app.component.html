@@ -13,39 +13,14 @@
     </app-sidebar>
 
     <div id="centralPanel" [ngClass]="getWidthClass()">
-      <div class="row no-gutters" style="max-height: 28px">
-        <input class="col" [value]="'Test'">
-        <img src="/assets/ic_24px_edit.png" class="ml-1 mr-4"/>
-        <div style="display: inline-block;width: 28px;height: 28px;cursor: pointer">
-          <img src="/assets/ic_28px_folder.png" style="position: absolute"/>
-          <input type="file" [value]="'Test'" style="opacity: 0;width: 28px;height: 28px;position: absolute">
-        </div>
-      </div>
-      <div class="row no-gutters mt-2" [ngClass]="getWidthClass()" style="height: calc(100% - 28px - 0.5rem)">
-        <div class="col h-100">
-          <ngx-charts-bubble-chart id="chart"
-                                   [results]="bubbleDemoTempData"
-                                   [autoScale]="true"
-                                   [showGridLines]="showGridLines"
-                                   [legend]="false"
-                                   [xAxis]="xAxis"
-                                   [yAxis]="yAxis"
-                                   [showXAxisLabel]="showXAxisLabel"
-                                   [showYAxisLabel]="showYAxisLabel"
-                                   [xAxisLabel]="xAxisLabel"
-                                   [yAxisLabel]="yAxisLabel"
-                                   [trimXAxisTicks]="trimXAxisTicks"
-                                   [trimYAxisTicks]="trimYAxisTicks"
-                                   [maxXAxisTickLength]="maxXAxisTickLength"
-                                   [maxYAxisTickLength]="maxYAxisTickLength"
-                                   [roundDomains]="roundDomains"
-                                   [minRadius]="minRadius"
-                                   [maxRadius]="maxRadius"
-                                   [schemeType]="schemeType"
-                                   (select)="onSelectBubbleInteractivePoint($event)"
-                                   [@fade]>
-          </ngx-charts-bubble-chart>
-        </div>
+      <app-load-project></app-load-project>
+      <div style="width: 100%; height: calc(100% - 30px); padding: 8px; position: relative">
+        <canvas baseChart
+                [datasets]="bubbleChartData"
+                [options]="bubbleChartOptions"
+                [legend]="false"
+                [chartType]="bubbleChartType">
+        </canvas>
       </div>
     </div>
 

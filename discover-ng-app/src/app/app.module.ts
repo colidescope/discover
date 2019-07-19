@@ -1,7 +1,8 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-
+import 'hammerjs';
+import 'chartjs-plugin-zoom';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component'
 import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
@@ -16,8 +17,8 @@ import {ExploreContainerComponent} from './explore-container/explore-container.c
 import {SelectInputComponent} from './select-input/select-input.component';
 import {CheckboxInputComponent} from './checkbox-input/checkbox-input.component';
 import {HttpClientModule} from "@angular/common/http";
-import {NgxChartsModule} from "@swimlane/ngx-charts";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {LoadProjectComponent} from './load-project/load-project.component';
+import {ChartsModule} from "ng2-charts";
 
 const config: SocketIoConfig = {url: 'http://localhost:5000', options: {}};
 
@@ -32,14 +33,14 @@ const config: SocketIoConfig = {url: 'http://localhost:5000', options: {}};
     StepperInputComponent,
     ExploreContainerComponent,
     SelectInputComponent,
-    CheckboxInputComponent
+    CheckboxInputComponent,
+    LoadProjectComponent
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
-    NgxChartsModule,
+    ChartsModule,
     FormsModule,
     NgbModule,
     SocketIoModule.forRoot(config)

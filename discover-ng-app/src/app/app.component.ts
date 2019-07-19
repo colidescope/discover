@@ -1,77 +1,16 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {SideBarStatus} from "./sidebar/sidebar.component";
 import {MenuitemService} from "./sidebar/menuitem.service";
+import {ChartDataSets, ChartOptions, ChartType} from "chart.js";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
   leftSideBarStatus: SideBarStatus = {opened: false, selectedIndex: -1};
   rightSideBarStatus: SideBarStatus = {opened: false, selectedIndex: -1};
-  view: any[] = [700, 400];
-
-  showGridLines = true;
-  legend = true;
-  legendTitle = "Dots Mf'er";
-  legendPosition = "right";
-  xAxis = true;
-  yAxis = true;
-  showXAxisLabel = true;
-  showYAxisLabel = true;
-  xAxisLabel = "LR";
-  yAxisLabel = "Jobs";
-  trimXAxisTicks = true;
-  trimYAxisTicks = true;
-  rotateXAxisTicks = true;
-  maxXAxisTickLength = 16;
-  maxYAxisTickLength = 16;
-// xAxisTicks;
-// yAxisTicks;
-  roundDomains = false;
-  maxRadius = 5;
-  minRadius = 5;
-  autoScale = true;
-  schemeType = "ordinal";
-  tooltipDisabled = false;
-
-  public bubbleDemoTempData = [
-    {
-      "name": "Example1",
-      "series": [
-        {
-          "name": "a",
-          "x": 0,
-          "y": 0,
-          "r": 1
-        },
-        {
-          "name": "b",
-          "x": 10,
-          "y": 3,
-          "r": 10
-        }
-      ]
-    },
-    {
-      "name": "Example2",
-      "series": [
-        {
-          "name": "1",
-          "x": 20,
-          "y": 1,
-          "r": 30
-        },
-        {
-          "name": "2",
-          "x": 3,
-          "y": 3,
-          "r": 500
-        }
-      ]
-    }
-  ];
 
   constructor(private menuItemService: MenuitemService) {
   }
@@ -102,11 +41,48 @@ export class AppComponent implements AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
-    setInterval(_ => {
-      console.log('resize');
-      window.dispatchEvent(new Event('resize'))
-    }, 250)
-  }
+  public bubbleChartOptions: ChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      xAxes: [{
+        ticks: {
+          min: 0,
+          max: 30,
+        }
+      }],
+      yAxes: [{
+        ticks: {
+          min: 0,
+          max: 30,
+        }
+      },]
+    },
+    plugins: {
+      zoom: {
+        pan: {
+          enabled: true,
+          mode: 'xy'
+        },
+        zoom: {
+          enabled: true,
+          mode: 'xy'
+        }
+      }
+    }
+  };
+  public bubbleChartType: ChartType = 'bubble';
+  public bubbleChartLegend = true;
 
+  public bubbleChartData: ChartDataSets[] = [
+    {
+      data: [
+        {x: 10, y: 10, r: 10},
+        {x: 15, y: 5, r: 15},
+        {x: 26, y: 12, r: 23},
+        {x: 7, y: 8, r: 8},
+      ],
+      label: 'Series A',
+    },
+  ];
 }

@@ -1,0 +1,8 @@
+<div [ngClass]="inverted?'right':'left'" style="margin-top: 26px">
+  <div *ngFor="let item of menuItems; let i = index"
+       class="d-flex justify-content-center align-items-center menu-item" [class.selected]="i == itemSelected"
+       (click)="onClickItem(i)"
+       [ngbTooltip]="item.label" [placement]="inverted?'left':'right'">
+    <img [src]="i == itemSelected?item.selectedIcon:item.icon" [alt]="item.label"/>
+  </div>
+</div>

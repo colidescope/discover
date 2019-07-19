@@ -1,0 +1,16 @@
+<div id="header" class="row">
+  <div class="col-12"><h5 class="panel-header-text">RUN OPTIONS</h5></div>
+</div>
+<div id="content">
+  <app-stepper-input [min]="0" [max]="9999" label="Designs per generations"></app-stepper-input>
+  <app-stepper-input [min]="0" [max]="9999" label="Number of generations"></app-stepper-input>
+  <app-stepper-input [min]="0" [max]="9999" [step]=".01" label="Mutation rate"></app-stepper-input>
+  <app-stepper-input [min]="0" [max]="9999" label="Elites"></app-stepper-input>
+  <div class="row no-gutters mt-3">
+    <textarea class="col-12" [readOnly]="true" [rows]="5">{{log}}</textarea>
+  </div>
+  <div class="row no-gutters mt-3">
+    <button class="btn btn-sm btn-success btn-play col">RUN PROJECT</button>
+    <button class="btn btn-sm btn-secondary btn-stop col ml-1" [disabled]="true">STOP PROJECT</button>
+  </div>
+</div>

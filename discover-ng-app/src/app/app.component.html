@@ -1,5 +1,30 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<nav class="navbar navbar-light bg-light shadow-sm">
-  <a class="navbar-brand mx-auto mb-0 h1 text-success" href="#">Discover</a>
-</nav>
-<router-outlet></router-outlet>
+<app-navbar></app-navbar>
+<div class="container-fluid" id="main-container">
+  <div class="row h-100">
+    <app-sidebar [menuItems]="getLeftMenuItems()" (onStausChange)="updateLeftSideBarStatus($event)">
+      <div [ngSwitch]="leftSideBarStatus.selectedIndex">
+        <ng-template [ngSwitchCase]="0">
+          <app-run-container></app-run-container>
+        </ng-template>
+        <ng-template [ngSwitchCase]="1">
+          <app-explore-container></app-explore-container>
+        </ng-template>
+      </div>
+    </app-sidebar>
+
+    <div id="centralPanel" [ngClass]="getWidthClass()">
+      <app-load-project></app-load-project>
+      <div style="width: 100%; height: calc(100% - 30px); padding: 8px; position: relative">
+        <canvas baseChart
+                [datasets]="bubbleChartData"
+                [options]="bubbleChartOptions"
+                [legend]="false"
+                [chartType]="bubbleChartType">
+        </canvas>
+      </div>
+    </div>
+
+    <app-sidebar [menuItems]="getRightMenuItems()" (onStausChange)="updateRightSideBarStatus($event)" [inverted]='true'>
+    </app-sidebar>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+@import "~src/styles"
+
+app-sidepanel
+  overflow: hidden
+  width: $sidepanel-width
+  background: #f9f9f9
+  -webkit-transition: width 0.2s ease-out
+  -moz-transition: width 0.2s ease-out
+  -ms-transition: width 0.2s ease-out
+  -o-transition: width 0.2s ease-out
+  transition: width 0.2s ease-out
+
+app-sidepanel.closed
+  width: 0
+
+app-sidemenu
+  background: #f2f2f2
+  width: $sidemenu-width
+  height: 100%
+
+.inverted
+  flex-direction: row-reverse

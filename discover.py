@@ -72,7 +72,7 @@ def start():
 
 	job = Job(options, client, logger)
 	header = job.init_data_file()
-	socketio.emit('server message', header)
+	socketio.emit('job header', header)
 	# client.set_job(job)
 
 	logger.log("Job started, connected to inputs {} and outputs {}".format(client.get_input_ids(), client.get_output_ids()))
@@ -130,7 +130,7 @@ def run_local():
 			job.set_output(_o)
 		
 		data = job.write_des_data()
-		socketio.emit('server message', data)
+		socketio.emit('job data', data)
 
 		# pause to test UI
 		# sleep(.5)

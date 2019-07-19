@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-load-project',
@@ -6,7 +6,7 @@ import {Component} from '@angular/core';
   styleUrls: ['./load-project.component.sass']
 })
 export class LoadProjectComponent {
-  projectName: string = '';
+  @Input() projectName: string = '';
 
   fileSelected(event: FileList) {
     console.log(event);

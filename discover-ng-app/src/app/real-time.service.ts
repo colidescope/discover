@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Socket} from "ngx-socket-io";
 import {BehaviorSubject} from "rxjs";
+import {JobData} from "./data/job";
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ import {BehaviorSubject} from "rxjs";
 export class RealTimeService {
 
   private log: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  private jobData: JobData;
 
   constructor(socket: Socket) {
     socket.on('connect', () => {
@@ -19,9 +21,19 @@ export class RealTimeService {
     socket.on('server message', (msg) => {
       this.log.next(this.log.value + '\n' + msg.message);
     });
+    socket.on('job header', (header: any) => {
+      this.jobData = new JobData(header);
+    });
+    socket.on('job data', (dataRow: any) => {
+      this.jobData.addRow(dataRow);
+    })
   }
 
   getLog() {
     return this.log;
+  }
+
+  getJobData() {
+    return this.jobData;
   }
 }

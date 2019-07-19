@@ -11,6 +11,7 @@ import {ChartDataSets, ChartOptions, ChartType} from "chart.js";
 export class AppComponent {
   leftSideBarStatus: SideBarStatus = {opened: false, selectedIndex: -1};
   rightSideBarStatus: SideBarStatus = {opened: false, selectedIndex: -1};
+  jobId: string = '';
 
   constructor(private menuItemService: MenuitemService) {
   }
@@ -39,6 +40,10 @@ export class AppComponent {
     } else {
       return '';
     }
+  }
+
+  updateJobId(jobId: string) {
+    this.jobId = jobId;
   }
 
   public bubbleChartOptions: ChartOptions = {

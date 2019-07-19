@@ -1,3 +1,4 @@
+flask-cors==3.0.8
 werkzeug==0.14.1
 Flask
 flask-socketio

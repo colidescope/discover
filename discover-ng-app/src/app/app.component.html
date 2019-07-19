@@ -7,21 +7,16 @@
           <app-run-container (jobIdChange)="updateJobId($event)"></app-run-container>
         </ng-template>
         <ng-template [ngSwitchCase]="1">
-          <app-explore-container></app-explore-container>
+          <app-explore-container (xAxisChange)="setXAxis($event)"
+                                 (yAxisChange)="setYAxis($event)">
+          </app-explore-container>
         </ng-template>
       </div>
     </app-sidebar>
 
     <div id="centralPanel" [ngClass]="getWidthClass()">
       <app-load-project [projectName]="jobId"></app-load-project>
-      <div style="width: 100%; height: calc(100% - 30px); padding: 8px; position: relative">
-        <canvas baseChart
-                [datasets]="bubbleChartData"
-                [options]="bubbleChartOptions"
-                [legend]="false"
-                [chartType]="bubbleChartType">
-        </canvas>
-      </div>
+      <app-scatter-chart [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"></app-scatter-chart>
     </div>
 
     <app-sidebar [menuItems]="getRightMenuItems()" (onStausChange)="updateRightSideBarStatus($event)" [inverted]='true'>

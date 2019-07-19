@@ -1,19 +1,23 @@
 #!flask/bin/python
-from flask import Flask, jsonify, request, Response, render_template, send_from_directory#, send_file
+import json
+import os
+import sys
+from pathlib import Path
+from time import sleep
+
+from flask import Flask, jsonify, request, render_template, send_from_directory  # , send_file
+from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
-import urllib, os, sys, random, math, json
-from time import localtime, strftime, sleep
-from pathlib import Path
-
-from src.objects import Input, Client, Logger
 from src.job import Job
-from src.utils import remap
+from src.objects import Client, Logger
+
 # from src.test import Test
 
 testing = False
 
 app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:4200"}})
 socketio = SocketIO(app)
 
 client = Client()
@@ -28,6 +32,10 @@ job = None
 def index():
 	return render_template("index.html")
 
+
+@app.route('/api/v1.0/test', methods=['GET'])
+def test():
+    return jsonify({'msg': 'hello'})
 
 @app.route('/api/v1.0/connect', methods=['GET', 'POST'])
 def connect():

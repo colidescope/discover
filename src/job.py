@@ -25,8 +25,8 @@ class Job:
 
 		os.makedirs(self.path, exist_ok=True)
 
-		if self.client.capture_screenshots():
-			os.makedirs(self.path / "images")
+		# if self.client.capture_screenshots():
+			# os.makedirs(self.path / "images")
 
 		self.logger.log("-----")
 		self.logger.log("Job created: {}, {} Designs / {} Generations".format(self.job_id, self.num_designs, self.max_gen))

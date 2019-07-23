@@ -119,6 +119,7 @@ def run_local():
 		if not run:
 			job.running = False
 			logger.log("Job finished.")
+            socketio.emit('job finished', True)
 			break
 
 		input_vals = []

@@ -2,10 +2,14 @@
   <div class="col-12"><h5 class="panel-header-text">EXPLORE</h5></div>
 </div>
 <div id="content">
-  <app-select-input [label]="'X Axis'" [options]="getOptions()" (valueChange)="xAxisChanged($event)"></app-select-input>
-  <app-select-input [label]="'Y Axis'" [options]="getOptions()" (valueChange)="yAxisChanged($event)"></app-select-input>
-  <app-select-input [label]="'Size'" [options]="getOptions()" (valueChange)="sizeChanged($event)"></app-select-input>
-  <app-select-input [label]="'Color'" [options]="getOptions()" (valueChange)="colorChanged($event)"></app-select-input>
+  <app-select-input [label]="'X Axis'" [options]="getOptions()" [value]="xAxis"
+                    (valueChange)="xAxisChanged($event)"></app-select-input>
+  <app-select-input [label]="'Y Axis'" [options]="getOptions()" [value]="yAxis"
+                    (valueChange)="yAxisChanged($event)"></app-select-input>
+  <app-select-input [label]="'Size'" [options]="getOptions()" [value]="size"
+                    (valueChange)="sizeChanged($event)"></app-select-input>
+  <app-select-input [label]="'Color'" [options]="getOptions()" [value]="color"
+                    (valueChange)="colorChanged($event)"></app-select-input>
   <div class="row no-gutters mt-3">
     <label class="col-8">Isolate:</label>
     <app-checkbox-input class="col-4" [checked]="isolate == 0" (checkedChange)="isolateOptimal($event)"

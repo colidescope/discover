@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {SideBarStatus} from "./sidebar/sidebar.component";
 import {MenuitemService} from "./sidebar/menuitem.service";
+import {JobData} from "./data/job";
+import {RealTimeService} from "./real-time.service";
 
 @Component({
   selector: 'app-root',
@@ -11,10 +13,23 @@ export class AppComponent {
   leftSideBarStatus: SideBarStatus = {opened: false, selectedIndex: -1};
   rightSideBarStatus: SideBarStatus = {opened: false, selectedIndex: -1};
   jobId: string = '';
-  xAxisLabel: string = '';
-  yAxisLabel: string = '';
+  jobData: JobData = null;
+  xAxisLabel: string = undefined;
+  yAxisLabel: string = undefined;
+  radiusLabel: string = undefined;
+  colorLabel: string = undefined;
 
-  constructor(private menuItemService: MenuitemService) {
+  constructor(private menuItemService: MenuitemService, private realTimeService: RealTimeService) {
+    realTimeService.jobData.subscribe((data) => {
+      this.jobData = data;
+      if (this.jobData) {
+        const options = this.jobData.getOptions();
+        this.xAxisLabel = options[0];
+        this.yAxisLabel = options[0];
+        this.colorLabel = options[0];
+        this.radiusLabel = options[0];
+      }
+    })
   }
 
   getLeftMenuItems() {
@@ -53,5 +68,13 @@ export class AppComponent {
 
   setYAxis(yLabel: string) {
     this.yAxisLabel = yLabel;
+  }
+
+  setRadiusLabel(radiusLabel: string) {
+    this.radiusLabel = radiusLabel;
+  }
+
+  setColorLabel(colorLabel: string) {
+    this.colorLabel = colorLabel;
   }
 }

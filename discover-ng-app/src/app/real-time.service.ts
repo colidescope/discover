@@ -9,7 +9,8 @@ import {JobData} from "./data/job";
 export class RealTimeService {
 
   private log: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  private jobData: JobData;
+  private _jobData: JobData;
+  public jobData: BehaviorSubject<JobData> = new BehaviorSubject<JobData>(null);
 
   constructor(socket: Socket) {
     socket.on('connect', () => {
@@ -22,18 +23,18 @@ export class RealTimeService {
       this.log.next(this.log.value + '\n' + msg.message);
     });
     socket.on('job header', (header: any) => {
-      this.jobData = new JobData(header);
+      this._jobData = new JobData(header);
     });
     socket.on('job data', (dataRow: any) => {
-      this.jobData.addRow(dataRow);
-    })
+      this._jobData.addRow(dataRow);
+    });
+    socket.on('job finished', () => {
+      this.jobData.next(this._jobData);
+      this._jobData = null;
+    });
   }
 
   getLog() {
     return this.log;
-  }
-
-  getJobData() {
-    return this.jobData;
   }
 }

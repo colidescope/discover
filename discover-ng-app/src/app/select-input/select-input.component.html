@@ -1,7 +1,7 @@
 <div class="row no-gutters align-items-center">
   <label for="select">{{label}}:</label>
   <form class="ml-auto">
-    <select id="select" [name]="label" (ngModelChange)="setValue($event)" [ngModel]="value">
+    <select id="select" [name]="label" [(ngModel)]="value" (ngModelChange)="setValue($event)">
       <option *ngFor="let option of options">
         {{option}}
       </option>

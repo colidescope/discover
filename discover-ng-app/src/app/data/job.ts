@@ -31,7 +31,6 @@ export class JobData {
 
   private filterOptions(header: string[]) {
     return header.filter((el: string, idx, arr) => {
-      console.log(el);
       if (el === 'id') {
         return true;
       } else if (el === 'generation') {

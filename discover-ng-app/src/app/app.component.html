@@ -7,8 +7,10 @@
           <app-run-container (jobIdChange)="updateJobId($event)"></app-run-container>
         </ng-template>
         <ng-template [ngSwitchCase]="1">
-          <app-explore-container (xAxisChange)="setXAxis($event)"
-                                 (yAxisChange)="setYAxis($event)">
+          <app-explore-container (xAxisChange)="setXAxis($event)" [xAxis]="xAxisLabel"
+                                 (yAxisChange)="setYAxis($event)" [yAxis]="yAxisLabel"
+                                 (sizeChange)="setRadiusLabel($event)" [size]="radiusLabel"
+                                 (colorChange)="setColorLabel($event)" [color]="colorLabel">
           </app-explore-container>
         </ng-template>
       </div>
@@ -16,10 +18,18 @@
 
     <div id="centralPanel" [ngClass]="getWidthClass()">
       <app-load-project [projectName]="jobId"></app-load-project>
-      <app-scatter-chart [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"></app-scatter-chart>
+      <app-scatter-chart *ngIf="jobData != null"
+                         [xAxisLabel]="xAxisLabel"
+                         [yAxisLabel]="yAxisLabel"
+                         [colorLabel]="colorLabel"
+                         [radiusLabel]="radiusLabel"
+                         [jobData]="jobData">
+      </app-scatter-chart>
     </div>
 
-    <app-sidebar [menuItems]="getRightMenuItems()" (onStausChange)="updateRightSideBarStatus($event)" [inverted]='true'>
+    <app-sidebar [menuItems]="getRightMenuItems()"
+                 (onStausChange)="updateRightSideBarStatus($event)"
+                 [inverted]='true'>
     </app-sidebar>
   </div>
 </div>

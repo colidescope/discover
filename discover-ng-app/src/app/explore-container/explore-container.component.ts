@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {RealTimeService} from "../real-time.service";
 import {JobData} from "../data/job";
 
@@ -9,14 +9,21 @@ import {JobData} from "../data/job";
 })
 export class ExploreContainerComponent {
   isolate: number = -1;
+  @Input() xAxis: string = undefined;
+  @Input() yAxis: string = undefined;
+  @Input() size: string = undefined;
+  @Input() color: string = undefined;
   @Output() xAxisChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() yAxisChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() sizeChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() colorChange: EventEmitter<string> = new EventEmitter<string>();
+  private jobData: JobData = null;
 
   constructor(private realTimeService: RealTimeService) {
+    this.realTimeService.jobData.subscribe((data) => {
+      this.jobData = data;
+    })
   }
-
 
   isolateOptimal(checked: boolean) {
     this.isolate = checked ? 0 : -1;
@@ -27,9 +34,8 @@ export class ExploreContainerComponent {
   }
 
   getOptions(): string[] {
-    const jobData: JobData = this.realTimeService.getJobData();
-    if (jobData) {
-      return jobData.getOptions();
+    if (this.jobData) {
+      return this.jobData.getOptions();
     }
     return [];
   }

@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
-import {ChartDataSets, ChartOptions, ChartPoint, ChartType} from "chart.js";
+import {ChartDataSets, ChartOptions, ChartType} from "chart.js";
 import {Color} from "ng2-charts";
 import {JobData} from "../data/job";
 
@@ -31,7 +31,10 @@ export class ScatterChartComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.jobData || changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel) {
-      this.computeData();
+      if (this.jobData) {
+        this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel);
+        this.bubbleChartData = [{data: this.jobData.getCharData()}];
+      }
       this.bubbleChartOptions = this.getChartOptions();
     } else if (changes.colorLabel) {
       // this.computeColors();
@@ -83,27 +86,9 @@ export class ScatterChartComponent implements OnChanges {
     };
   }
 
-  private computeData() {
-    if (this.jobData) {
-      const data: any[] = this.jobData.getData();
-      const positions: number[] = this.getPositions(this.jobData.getHeader());
-      const chartData: ChartPoint[] = [];
-      for (let row of data) {
-        chartData.push({x: row[positions[0]], y: row[positions[1]], r: Math.round(row[positions[2]])});
-      }
-      this.bubbleChartData = [{data: chartData}]
-    }
-  }
-
-  private getPositions(headers: string[]): number[] {
-    return [headers.indexOf(this.xAxisLabel),
-      headers.indexOf(this.yAxisLabel),
-      headers.indexOf(this.radiusLabel)];
-  }
-
   customTooltip(tooltip) {
     // Tooltip Element
-    var tooltipEl: any = document.getElementById('chartjs-tooltip');
+    let tooltipEl: any = document.getElementById('chartjs-tooltip');
 
     if (!tooltipEl) {
       tooltipEl = document.createElement('div');
@@ -126,19 +111,12 @@ export class ScatterChartComponent implements OnChanges {
       tooltipEl.classList.add('no-transform');
     }
 
-    function getBody(bodyItem) {
-      return bodyItem.lines;
-    }
-
     // Set Text
     if (tooltip.body) {
-      var titleLines = tooltip.title || [];
-      var bodyLines = tooltip.body.map(getBody);
-      console.log(tooltip);
-      var innerHtml = '<div> Design #' + tooltip.dataPoints[0].index;
+      let innerHtml = '<div> Design #' + tooltip.dataPoints[0].index;
       innerHtml += '</div>';
 
-      var tableRoot = tooltipEl.querySelector('table');
+      const tableRoot = tooltipEl.querySelector('table');
       tableRoot.innerHTML = innerHtml;
     }
 

@@ -11,6 +11,7 @@ export class RealTimeService {
   private log: BehaviorSubject<string> = new BehaviorSubject<string>('');
   private _jobData: JobData;
   public jobData: BehaviorSubject<JobData> = new BehaviorSubject<JobData>(null);
+  rows: number = 0;
 
   constructor(socket: Socket) {
     socket.on('connect', () => {
@@ -23,14 +24,12 @@ export class RealTimeService {
       this.log.next(this.log.value + '\n' + msg.message);
     });
     socket.on('job header', (header: any) => {
+      this.rows = 0;
       this._jobData = new JobData(header);
+      this.jobData.next(this._jobData);
     });
     socket.on('job data', (dataRow: any) => {
       this._jobData.addRow(dataRow);
-    });
-    socket.on('job finished', () => {
-      this.jobData.next(this._jobData);
-      this._jobData = null;
     });
   }
 

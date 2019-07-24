@@ -10,7 +10,7 @@ import {HttpClient} from "@angular/common/http";
 export class RunContainerComponent {
   designPerGenLabel: string = "Designs per generation";
   numberGenLabel: string = "Number of generations";
-  muatationRateLabel: string = "Mutation rate";
+  mutationRateLabel: string = "Mutation rate";
   elitesLabel: string = "Elites";
   jobRunning: boolean = false;
   @Output() jobIdChange: EventEmitter<string> = new EventEmitter<string>();

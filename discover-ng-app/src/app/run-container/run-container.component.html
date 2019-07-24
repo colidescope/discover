@@ -5,7 +5,7 @@
   <app-stepper-input [(value)]="designPerGen" [min]="0" [max]="9999" [label]="designPerGenLabel"></app-stepper-input>
   <app-stepper-input [(value)]="numberGen" [min]="0" [max]="9999" [label]="numberGenLabel"></app-stepper-input>
   <app-stepper-input [(value)]="mutationRate" [min]="0" [max]="1" [step]=".01"
-                     [label]="muatationRateLabel"></app-stepper-input>
+                     [label]="mutationRateLabel"></app-stepper-input>
   <app-stepper-input [(value)]="elites" [min]="0" [max]="9999" [label]="elitesLabel"></app-stepper-input>
   <div class="row no-gutters mt-3">
     <textarea class="col-12" [readOnly]="true" [rows]="5">{{log}}</textarea>

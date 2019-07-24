@@ -4,7 +4,7 @@ export class JobData {
   private readonly jobHeader: string[];
   private readonly jobOptions: string[];
   private readonly data: any[] = [];
-  private readonly chartData: ChartPoint[] = [];
+  private chartData: ChartPoint[] = [];
 
   private xSelector: string;
   private ySelector: string;
@@ -55,9 +55,10 @@ export class JobData {
   public computeData() {
     const data: any[] = this.getData();
     const positions: number[] = this.getPositions(this.xSelector, this.ySelector, this.rSelector);
-    this.chartData.length = 0;
+    this.chartData = [];
     for (let row of data) {
-      this.chartData.push({x: row[positions[0]], y: row[positions[1]], r: Math.round(row[positions[2]])});
+      let point = {x: row[positions[0]], y: row[positions[1]], r: Math.round(row[positions[2]])};
+      this.chartData.push(point);
     }
   }
 

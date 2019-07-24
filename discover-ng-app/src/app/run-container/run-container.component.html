@@ -11,7 +11,11 @@
     <textarea class="col-12" [readOnly]="true" [rows]="5">{{log}}</textarea>
   </div>
   <div class="row no-gutters mt-3">
-    <button (click)="startJob()" class="btn btn-sm btn-success btn-play col">RUN PROJECT</button>
-    <button class="btn btn-sm btn-secondary btn-stop col ml-1" [disabled]="true">STOP PROJECT</button>
+    <button (click)="startJob()" class="btn btn-sm btn-secondary btn-play col" [class.btn-success]="!jobRunning"
+            [disabled]="jobRunning">RUN PROJECT
+    </button>
+    <button (click)="stopJob()" class="btn btn-sm btn-secondary btn-stop col ml-1" [class.btn-success]="jobRunning"
+            [disabled]="!jobRunning">STOP PROJECT
+    </button>
   </div>
 </div>

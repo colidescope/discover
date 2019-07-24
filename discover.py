@@ -33,12 +33,6 @@ job = None
 def index():
     return render_template("index.html")
 
-
-@app.route('/api/v1.0/test', methods=['GET'])
-def test():
-    return jsonify({'msg': 'hello'})
-
-
 @app.route('/api/v1.0/connect', methods=['GET', 'POST'])
 def connect():
     data = request.json

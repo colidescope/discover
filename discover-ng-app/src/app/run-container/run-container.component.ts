@@ -12,6 +12,7 @@ export class RunContainerComponent {
   numberGenLabel: string = "Number of generations";
   muatationRateLabel: string = "Mutation rate";
   elitesLabel: string = "Elites";
+  jobRunning: boolean = false;
   @Output() jobIdChange: EventEmitter<string> = new EventEmitter<string>();
 
   log: string = '';
@@ -35,8 +36,20 @@ export class RunContainerComponent {
         'Elites': this.elites,
       }
     };
-    this.http.post("http://localhost:5000/api/v1.0/start", body).subscribe((response: any) => {
-      this.jobIdChange.emit(response.job_id)
-    });
+    this.jobRunning = true;
+    try {
+      this.http.post("http://localhost:5000/api/v1.0/start", body).subscribe((response: any) => {
+        this.jobIdChange.emit(response.job_id);
+        this.jobRunning = false;
+      });
+    } catch (e) {
+      this.jobRunning = false;
+    }
+  }
+
+  stopJob() {
+    this.http.get('http://localhost:5000/api/v1.0/stop').subscribe(() => {
+      this.jobRunning = false;
+    })
   }
 }

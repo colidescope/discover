@@ -10,7 +10,9 @@
           <app-explore-container (xAxisChange)="setXAxis($event)" [xAxis]="xAxisLabel"
                                  (yAxisChange)="setYAxis($event)" [yAxis]="yAxisLabel"
                                  (sizeChange)="setRadiusLabel($event)" [size]="radiusLabel"
-                                 (colorChange)="setColorLabel($event)" [color]="colorLabel">
+                                 (colorChange)="setColorLabel($event)" [color]="colorLabel"
+                                 (resetZoomClicked)="resetZoom()"
+                                 (clearSelectedClicked)="clearSelected()">
           </app-explore-container>
         </ng-template>
       </div>
@@ -18,7 +20,7 @@
 
     <div id="centralPanel" [ngClass]="getWidthClass()">
       <app-load-project [projectName]="jobId"></app-load-project>
-      <app-scatter-chart *ngIf="jobData != null"
+      <app-scatter-chart *ngIf="jobData != null" #scatter
                          [xAxisLabel]="xAxisLabel"
                          [yAxisLabel]="yAxisLabel"
                          [colorLabel]="colorLabel"

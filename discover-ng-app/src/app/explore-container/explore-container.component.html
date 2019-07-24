@@ -20,8 +20,8 @@
                         [value]="'Selected'"></app-checkbox-input>
   </div>
   <div class="row no-gutters mt-3">
-    <button class="btn btn-sm btn-success btn-reset col">RESET ZOOM</button>
-    <button class="btn btn-sm btn-success btn-clear col ml-1">CLEAR SELECTED</button>
+    <button class="btn btn-sm btn-success btn-reset col" (click)="resetZoom()">RESET ZOOM</button>
+    <button class="btn btn-sm btn-success btn-clear col ml-1" (click)="clearSelected()">CLEAR SELECTED</button>
   </div>
 </div>
 

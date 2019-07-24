@@ -17,6 +17,8 @@ export class ExploreContainerComponent {
   @Output() yAxisChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() sizeChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() colorChange: EventEmitter<string> = new EventEmitter<string>();
+  @Output() resetZoomClicked: EventEmitter<null> = new EventEmitter<null>();
+  @Output() clearSelectedClicked: EventEmitter<null> = new EventEmitter<null>();
   private jobData: JobData = null;
 
   constructor(private realTimeService: RealTimeService) {
@@ -56,4 +58,11 @@ export class ExploreContainerComponent {
     this.sizeChange.emit(event)
   }
 
+  resetZoom() {
+    this.resetZoomClicked.emit();
+  }
+
+  clearSelected() {
+    this.clearSelectedClicked.emit();
+  }
 }

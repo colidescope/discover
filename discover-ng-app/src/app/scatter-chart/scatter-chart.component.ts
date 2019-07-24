@@ -1,6 +1,6 @@
 import {Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import {ChartDataSets, ChartOptions, ChartType} from "chart.js";
-import {Color} from "ng2-charts";
+import {BaseChartDirective, Color} from "ng2-charts";
 import {JobData} from "../data/job";
 
 @Component({
@@ -14,9 +14,10 @@ export class ScatterChartComponent implements OnChanges {
   @Input() radiusLabel: string = '';
   @Input() colorLabel: string = '';
   @Input() jobData: JobData = null;
-  @ViewChild('#chart', {static: true}) _chart;
+  @ViewChild(BaseChartDirective, {static: true}) _chart: BaseChartDirective;
   public bubbleChartType: ChartType = 'bubble';
   public bubbleChartOptions: ChartOptions = this.getChartOptions();
+  public selectedPoints: boolean[] = [];
   public bubbleChartData: ChartDataSets[] = [
     {
       data: [
@@ -33,7 +34,14 @@ export class ScatterChartComponent implements OnChanges {
     if (changes.jobData || changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel) {
       if (this.jobData) {
         this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel);
-        this.bubbleChartData = [{data: this.jobData.getCharData()}];
+        let chartData = this.jobData.getCharData();
+        this.selectedPoints = [];
+        this.bubbleChartData = [{
+          data: chartData,
+          borderWidth: [].fill(1, 0, chartData.length),
+          hoverBorderWidth: [].fill(1, 0, chartData.length),
+          borderColor: '#222222'
+        }];
       }
       this.bubbleChartOptions = this.getChartOptions();
     } else if (changes.colorLabel) {
@@ -79,7 +87,8 @@ export class ScatterChartComponent implements OnChanges {
           },
           zoom: {
             enabled: true,
-            mode: 'xy'
+            mode: 'xy',
+            speed: 0.05
           }
         }
       }
@@ -94,7 +103,7 @@ export class ScatterChartComponent implements OnChanges {
       tooltipEl = document.createElement('div');
       tooltipEl.id = 'chartjs-tooltip';
       tooltipEl.innerHTML = '<table></table>';
-      this._chart.canvas.parentNode.appendChild(tooltipEl);
+      this._chart.chart.canvas.parentNode.appendChild(tooltipEl);
     }
 
     // Hide if no tooltip
@@ -120,8 +129,8 @@ export class ScatterChartComponent implements OnChanges {
       tableRoot.innerHTML = innerHtml;
     }
 
-    const positionY = this._chart.canvas.offsetTop;
-    const positionX = this._chart.canvas.offsetLeft;
+    const positionY = this._chart.chart.canvas.offsetTop;
+    const positionX = this._chart.chart.canvas.offsetLeft;
 
     // Display, position, and set styles for font
     tooltipEl.style.opacity = 1;
@@ -132,4 +141,25 @@ export class ScatterChartComponent implements OnChanges {
     tooltipEl.style.fontStyle = tooltip._bodyFontStyle;
     tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
   };
+
+  onClick(event: { event?: MouseEvent; active: any[] }) {
+    for (let point of event.active) {
+      this.selectedPoints[point._index] = !this.selectedPoints[point._index];
+      this.bubbleChartData[0].borderWidth[point._index] = this.selectedPoints[point._index] ? 3 : 1;
+      this.bubbleChartData[0].hoverBorderWidth[point._index] = this.selectedPoints[point._index] ? 3 : 1;
+      this._chart.chart.update();
+    }
+  }
+
+  public resetZoom() {
+    (this._chart.chart as any).resetZoom(); //Method available only trough plugin
+  }
+
+  public clearSelected() {
+    this.selectedPoints = [];
+    this.bubbleChartData[0].borderWidth = [].fill(1, this.bubbleChartData[0].data.length);
+    this.bubbleChartData[0].hoverBorderWidth = [].fill(1, this.bubbleChartData[0].data.length);
+    this._chart.chart.update();
+  }
+
 }

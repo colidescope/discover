@@ -1,8 +1,9 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {SideBarStatus} from "./sidebar/sidebar.component";
 import {MenuitemService} from "./sidebar/menuitem.service";
 import {JobData} from "./data/job";
 import {RealTimeService} from "./real-time.service";
+import {ScatterChartComponent} from "./scatter-chart/scatter-chart.component";
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ export class AppComponent {
   yAxisLabel: string = undefined;
   radiusLabel: string = undefined;
   colorLabel: string = undefined;
+  @ViewChild('scatter', {static: false}) scatterChart: ScatterChartComponent;
 
   constructor(private menuItemService: MenuitemService, private realTimeService: RealTimeService) {
     realTimeService.jobData.subscribe((data) => {
@@ -76,5 +78,13 @@ export class AppComponent {
 
   setColorLabel(colorLabel: string) {
     this.colorLabel = colorLabel;
+  }
+
+  resetZoom() {
+    this.scatterChart.resetZoom();
+  }
+
+  clearSelected() {
+    this.scatterChart.clearSelected();
   }
 }

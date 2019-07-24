@@ -12,7 +12,7 @@ export class JobData {
 
   constructor(header: any) {
     this.jobHeader = header;
-    this.jobOptions = this.filterOptions(header);
+    this.jobOptions = JobData.filterOptions(header);
   }
 
   addRow(row: any) {
@@ -66,7 +66,7 @@ export class JobData {
     return [this.jobHeader.indexOf(xSelector), this.jobHeader.indexOf(ySelector), this.jobHeader.indexOf(rSelector)];
   }
 
-  private filterOptions(header: string[]) {
+  static filterOptions(header: string[]) {
     return header.filter((el: string, idx, arr) => {
       if (el === 'id') {
         return true;

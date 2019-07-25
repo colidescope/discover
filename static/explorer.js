@@ -1,4 +1,4 @@
-var chartDiv = document.getElementById("_chart");
+var chartDiv = document.getElementById("chart");
 
 // Variables
 var svgWidth  = chartDiv.clientWidth,
@@ -8,7 +8,7 @@ var svgWidth  = chartDiv.clientWidth,
     height = svgHeight - margin.top  - margin.bottom;
 
 // SVG Viewport
-var svgViewport = d3.select(".col-_chart")
+var svgViewport = d3.select(".col-chart")
     .append("svg")
     .attr("id", "scatter")
     .attr("width", width + margin.left + margin.right)

@@ -1,6 +1,6 @@
 import {Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import {ChartDataSets, ChartOptions, ChartType} from "chart.js";
-import {BaseChartDirective, Color} from "ng2-charts";
+import {BaseChartDirective} from "ng2-charts";
 import {JobData} from "../data/job";
 
 @Component({
@@ -14,21 +14,12 @@ export class ScatterChartComponent implements OnChanges {
   @Input() radiusLabel: string = '';
   @Input() colorLabel: string = '';
   @Input() jobData: JobData = null;
+  @Input() jobId: string = '';
   @ViewChild(BaseChartDirective, {static: true}) _chart: BaseChartDirective;
   public bubbleChartType: ChartType = 'bubble';
   public bubbleChartOptions: ChartOptions = this.getChartOptions();
   public selectedPoints: boolean[] = [];
-  public bubbleChartData: ChartDataSets[] = [
-    {
-      data: [
-        {x: 10, y: 10, r: 10},
-        {x: 15, y: 5, r: 15},
-        {x: 26, y: 12, r: 23},
-        {x: 7, y: 8, r: 8}
-      ]
-    }
-  ];
-  bubbleChartColors: Color[] = [{backgroundColor: ["#FF0000", "#00FFFF", "#FF00FF", "#0000FF", "#00FF00"]}];
+  public bubbleChartData: ChartDataSets[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.jobData || changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel || changes.colorLabel) {
@@ -54,7 +45,53 @@ export class ScatterChartComponent implements OnChanges {
       maintainAspectRatio: false,
       tooltips: {
         enabled: false,
-        custom: this.customTooltip
+        custom: (tooltip) => {
+          let tooltipEl: any = document.getElementById('chartjs-tooltip');
+
+          if (!tooltipEl) {
+            tooltipEl = document.createElement('div');
+            tooltipEl.id = 'chartjs-tooltip';
+            tooltipEl.innerHTML = '<table></table>';
+            this._chart.chart.canvas.parentNode.appendChild(tooltipEl);
+          }
+
+          // Hide if no tooltip
+          if (tooltip.opacity === 0) {
+            tooltipEl.style.opacity = 0;
+            return;
+          }
+
+          // Set caret Position
+          tooltipEl.classList.remove('above', 'below', 'no-transform');
+          if (tooltip.yAlign) {
+            tooltipEl.classList.add(tooltip.yAlign);
+          } else {
+            tooltipEl.classList.add('no-transform');
+          }
+
+          // Set Text
+          if (tooltip.body) {
+            let index = tooltip.dataPoints[0].index;
+            let innerHtml = '<img style="max-width: 200px" src="http://localhost:5000/api/v1.0/get_image/' + encodeURI(this.jobId) + '/' + index + '"/>';
+            innerHtml += '<div> Design #' + index;
+            innerHtml += '</div>';
+
+            const tableRoot = tooltipEl.querySelector('table');
+            tableRoot.innerHTML = innerHtml;
+          }
+
+          const positionY = this._chart.chart.canvas.offsetTop;
+          const positionX = this._chart.chart.canvas.offsetLeft;
+
+          // Display, position, and set styles for font
+          tooltipEl.style.opacity = 1;
+          tooltipEl.style.left = positionX + tooltip.caretX + 'px';
+          tooltipEl.style.top = positionY + tooltip.caretY + 'px';
+          tooltipEl.style.fontFamily = tooltip._bodyFontFamily;
+          tooltipEl.style.fontSize = tooltip.bodyFontSize + 'px';
+          tooltipEl.style.fontStyle = tooltip._bodyFontStyle;
+          tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
+        }
       },
       scales: {
         xAxes: [{
@@ -93,53 +130,6 @@ export class ScatterChartComponent implements OnChanges {
       }
     };
   }
-
-  customTooltip(tooltip) {
-    // Tooltip Element
-    let tooltipEl: any = document.getElementById('chartjs-tooltip');
-
-    if (!tooltipEl) {
-      tooltipEl = document.createElement('div');
-      tooltipEl.id = 'chartjs-tooltip';
-      tooltipEl.innerHTML = '<table></table>';
-      this._chart.chart.canvas.parentNode.appendChild(tooltipEl);
-    }
-
-    // Hide if no tooltip
-    if (tooltip.opacity === 0) {
-      tooltipEl.style.opacity = 0;
-      return;
-    }
-
-    // Set caret Position
-    tooltipEl.classList.remove('above', 'below', 'no-transform');
-    if (tooltip.yAlign) {
-      tooltipEl.classList.add(tooltip.yAlign);
-    } else {
-      tooltipEl.classList.add('no-transform');
-    }
-
-    // Set Text
-    if (tooltip.body) {
-      let innerHtml = '<div> Design #' + tooltip.dataPoints[0].index;
-      innerHtml += '</div>';
-
-      const tableRoot = tooltipEl.querySelector('table');
-      tableRoot.innerHTML = innerHtml;
-    }
-
-    const positionY = this._chart.chart.canvas.offsetTop;
-    const positionX = this._chart.chart.canvas.offsetLeft;
-
-    // Display, position, and set styles for font
-    tooltipEl.style.opacity = 1;
-    tooltipEl.style.left = positionX + tooltip.caretX + 'px';
-    tooltipEl.style.top = positionY + tooltip.caretY + 'px';
-    tooltipEl.style.fontFamily = tooltip._bodyFontFamily;
-    tooltipEl.style.fontSize = tooltip.bodyFontSize + 'px';
-    tooltipEl.style.fontStyle = tooltip._bodyFontStyle;
-    tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
-  };
 
   onClick(event: { event?: MouseEvent; active: any[] }) {
     for (let point of event.active) {

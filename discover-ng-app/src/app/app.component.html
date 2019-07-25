@@ -4,27 +4,35 @@
     <app-sidebar [menuItems]="getLeftMenuItems()" (onStausChange)="updateLeftSideBarStatus($event)">
       <div [ngSwitch]="leftSideBarStatus.selectedIndex">
         <ng-template [ngSwitchCase]="0">
-          <app-run-container></app-run-container>
+          <app-run-container (jobIdChange)="updateJobId($event)"></app-run-container>
         </ng-template>
         <ng-template [ngSwitchCase]="1">
-          <app-explore-container></app-explore-container>
+          <app-explore-container (xAxisChange)="setXAxis($event)" [xAxis]="xAxisLabel"
+                                 (yAxisChange)="setYAxis($event)" [yAxis]="yAxisLabel"
+                                 (sizeChange)="setRadiusLabel($event)" [size]="radiusLabel"
+                                 (colorChange)="setColorLabel($event)" [color]="colorLabel"
+                                 (resetZoomClicked)="resetZoom()"
+                                 (clearSelectedClicked)="clearSelected()">
+          </app-explore-container>
         </ng-template>
       </div>
     </app-sidebar>
 
     <div id="centralPanel" [ngClass]="getWidthClass()">
-      <app-load-project></app-load-project>
-      <div style="width: 100%; height: calc(100% - 30px); padding: 8px; position: relative">
-        <canvas baseChart
-                [datasets]="bubbleChartData"
-                [options]="bubbleChartOptions"
-                [legend]="false"
-                [chartType]="bubbleChartType">
-        </canvas>
-      </div>
+      <app-load-project [projectName]="jobId"></app-load-project>
+      <app-scatter-chart *ngIf="jobData != null" #scatter
+                         [xAxisLabel]="xAxisLabel"
+                         [yAxisLabel]="yAxisLabel"
+                         [colorLabel]="colorLabel"
+                         [radiusLabel]="radiusLabel"
+                         [jobData]="jobData"
+                         [jobId]="jobId">
+      </app-scatter-chart>
     </div>
 
-    <app-sidebar [menuItems]="getRightMenuItems()" (onStausChange)="updateRightSideBarStatus($event)" [inverted]='true'>
+    <app-sidebar [menuItems]="getRightMenuItems()"
+                 (onStausChange)="updateRightSideBarStatus($event)"
+                 [inverted]='true'>
     </app-sidebar>
   </div>
 </div>

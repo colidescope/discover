@@ -2,15 +2,20 @@
   <div class="col-12"><h5 class="panel-header-text">RUN OPTIONS</h5></div>
 </div>
 <div id="content">
-  <app-stepper-input [min]="0" [max]="9999" label="Designs per generations"></app-stepper-input>
-  <app-stepper-input [min]="0" [max]="9999" label="Number of generations"></app-stepper-input>
-  <app-stepper-input [min]="0" [max]="9999" [step]=".01" label="Mutation rate"></app-stepper-input>
-  <app-stepper-input [min]="0" [max]="9999" label="Elites"></app-stepper-input>
+  <app-stepper-input [(value)]="designPerGen" [min]="0" [max]="9999" [label]="designPerGenLabel"></app-stepper-input>
+  <app-stepper-input [(value)]="numberGen" [min]="0" [max]="9999" [label]="numberGenLabel"></app-stepper-input>
+  <app-stepper-input [(value)]="mutationRate" [min]="0" [max]="1" [step]=".01"
+                     [label]="mutationRateLabel"></app-stepper-input>
+  <app-stepper-input [(value)]="elites" [min]="0" [max]="9999" [label]="elitesLabel"></app-stepper-input>
   <div class="row no-gutters mt-3">
     <textarea class="col-12" [readOnly]="true" [rows]="5">{{log}}</textarea>
   </div>
   <div class="row no-gutters mt-3">
-    <button class="btn btn-sm btn-success btn-play col">RUN PROJECT</button>
-    <button class="btn btn-sm btn-secondary btn-stop col ml-1" [disabled]="true">STOP PROJECT</button>
+    <button (click)="startJob()" class="btn btn-sm btn-secondary btn-play col" [class.btn-success]="!jobRunning"
+            [disabled]="jobRunning">RUN PROJECT
+    </button>
+    <button (click)="stopJob()" class="btn btn-sm btn-secondary btn-stop col ml-1" [class.btn-success]="jobRunning"
+            [disabled]="!jobRunning">STOP PROJECT
+    </button>
   </div>
 </div>

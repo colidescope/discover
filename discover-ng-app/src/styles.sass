@@ -43,3 +43,27 @@ input[type=file]
   -webkit-appearance: none
   -moz-appearance: none
   appearance: none
+
+canvas
+  -moz-user-select: none
+  -webkit-user-select: none
+  -ms-user-select: none
+
+#chartjs-tooltip
+  opacity: 1
+  position: absolute
+  background: rgba(255, 255, 255, 1)
+  color: black
+  border-radius: 6px
+  border: 1px solid black
+  -webkit-transition: all .1s ease
+  transition: all .1s ease
+  pointer-events: none
+  -webkit-transform: translate(-50%, -110%)
+  transform: translate(-50%, -110%)
+
+.chartjs-tooltip-key
+  display: inline-block
+  width: 10px
+  height: 10px
+  margin-right: 10px

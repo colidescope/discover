@@ -1,0 +1,9 @@
+<div style="width: 100%; height: calc(100% - 30px); padding: 8px; position: relative">
+  <canvas baseChart id="chart"
+          [datasets]="bubbleChartData"
+          [options]="bubbleChartOptions"
+          [chartType]="bubbleChartType"
+          [legend]="false"
+          (chartClick)="onClick($event)">
+  </canvas>
+</div>

@@ -1,5 +1,3 @@
-
-
 var chartDiv = document.getElementById("chart");
 
 // Variables

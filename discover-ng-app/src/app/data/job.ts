@@ -1,14 +1,17 @@
 import {ChartPoint} from "chart.js";
+import * as chroma from 'chroma-js';
 
 export class JobData {
   private readonly jobHeader: string[];
   private readonly jobOptions: string[];
   private readonly data: any[] = [];
   private chartData: ChartPoint[] = [];
-
+  private chartColors: string[] = [];
   private xSelector: string;
   private ySelector: string;
   private rSelector: string;
+  private colorSelector: string;
+  private scale = chroma.scale(['red', 'green', 'blue']).mode('hsl');
 
   constructor(header: any) {
     this.jobHeader = header;
@@ -17,7 +20,8 @@ export class JobData {
 
   addRow(row: any) {
     this.data.push(row);
-    this.addDataRow(row)
+    this.addDataRow(row);
+    this.computeColors();
   }
 
   getRow(idx: number) {
@@ -36,20 +40,27 @@ export class JobData {
     return this.jobOptions;
   }
 
-  public updateSelectors(xSelector: string, ySelector: string, rSelector: string) {
+  public updateSelectors(xSelector: string, ySelector: string, rSelector: string, colorSelector: string) {
     this.xSelector = xSelector;
     this.ySelector = ySelector;
     this.rSelector = rSelector;
-    this.computeData()
+    this.colorSelector = colorSelector;
+    this.computeData();
+    this.computeColors();
   }
 
   private addDataRow(row: any) {
     const positions: number[] = this.getPositions(this.xSelector, this.ySelector, this.rSelector);
     this.chartData.push({x: row[positions[0]], y: row[positions[1]], r: Math.round(row[positions[2]])});
+    this.computeColors();
   }
 
   public getCharData(): ChartPoint[] {
     return this.chartData;
+  }
+
+  public getCharColors(): string[] {
+    return this.chartColors;
   }
 
   public computeData() {
@@ -59,6 +70,21 @@ export class JobData {
     for (let row of data) {
       let point = {x: row[positions[0]], y: row[positions[1]], r: Math.round(row[positions[2]])};
       this.chartData.push(point);
+    }
+  }
+
+  private computeColors() {
+    const data: any[] = this.getData();
+    const position: number = this.jobHeader.indexOf(this.colorSelector);
+    const values: number[] = data.map((element) => {
+      return element[position] as number
+    });
+    this.chartColors.length = 0;
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    for (let val of values) {
+      const percent = (val - min) / (max - min);
+      this.chartColors.push(this.scale(percent).hex());
     }
   }
 

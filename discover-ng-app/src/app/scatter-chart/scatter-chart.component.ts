@@ -31,21 +31,20 @@ export class ScatterChartComponent implements OnChanges {
   bubbleChartColors: Color[] = [{backgroundColor: ["#FF0000", "#00FFFF", "#FF00FF", "#0000FF", "#00FF00"]}];
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.jobData || changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel) {
+    if (changes.jobData || changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel || changes.colorLabel) {
       if (this.jobData) {
-        this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel);
+        this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
         let chartData = this.jobData.getCharData();
         this.selectedPoints = [];
         this.bubbleChartData = [{
           data: chartData,
           borderWidth: [].fill(1, 0, chartData.length),
           hoverBorderWidth: [].fill(1, 0, chartData.length),
-          borderColor: '#222222'
+          borderColor: [].fill('#0222', 0, chartData.length),
+          backgroundColor: this.jobData.getCharColors()
         }];
       }
       this.bubbleChartOptions = this.getChartOptions();
-    } else if (changes.colorLabel) {
-      // this.computeColors();
     }
   }
 
@@ -145,8 +144,9 @@ export class ScatterChartComponent implements OnChanges {
   onClick(event: { event?: MouseEvent; active: any[] }) {
     for (let point of event.active) {
       this.selectedPoints[point._index] = !this.selectedPoints[point._index];
-      this.bubbleChartData[0].borderWidth[point._index] = this.selectedPoints[point._index] ? 3 : 1;
-      this.bubbleChartData[0].hoverBorderWidth[point._index] = this.selectedPoints[point._index] ? 3 : 1;
+      this.bubbleChartData[0].borderWidth[point._index] = this.selectedPoints[point._index] ? 2 : 1;
+      this.bubbleChartData[0].hoverBorderWidth[point._index] = this.selectedPoints[point._index] ? 2 : 1;
+      this.bubbleChartData[0].borderColor[point._index] = this.selectedPoints[point._index] ? '#222' : '#0222';
       this._chart.chart.update();
     }
   }
@@ -159,6 +159,7 @@ export class ScatterChartComponent implements OnChanges {
     this.selectedPoints = [];
     this.bubbleChartData[0].borderWidth = [].fill(1, this.bubbleChartData[0].data.length);
     this.bubbleChartData[0].hoverBorderWidth = [].fill(1, this.bubbleChartData[0].data.length);
+    this.bubbleChartData[0].borderColor = [].fill('#0222', this.bubbleChartData[0].data.length);
     this._chart.chart.update();
   }
 

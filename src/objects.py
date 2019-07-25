@@ -75,10 +75,10 @@ class Client:
 		# self.block = []
 		self.outputs = []
 		self.model = None
-		self.ss = False
+		self.ss_connection_id = None
 
-	def capture_screenshots(self):
-		return self.ss
+	# def capture_screenshots(self):
+		# return self.ss
 
 	def is_connected(self):
 		return self.connected
@@ -154,6 +154,16 @@ class Client:
 		return pos
 	def check_block(self):
 		return sum(self.block) == len(self.block)
+
+	def get_ss_connection(self):
+		return self.ss_connection_id
+	def set_ss_connection(self, _id):
+		self.ss_connection_id = _id
+		return self.get_dir(["temp"]) / ".".join([self.file_name, self.ss_connection_id])
+	def ping_ss(self):
+		with open(self.get_dir(["temp"]) / ".".join([self.file_name, self.ss_connection_id]), 'w') as f:
+			# f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
+			pass
 
 	def ping_model(self):
 		with open(self.get_dir(["temp"]) / ".".join([self.file_name, self.get_connection()]), 'w') as f:

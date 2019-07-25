@@ -193,8 +193,13 @@ def send_output():
 
 @app.route('/api/v1.0/next', methods=['GET', 'POST'])
 def next():
-    sleep(0.1)
-    return do_next()
+	sleep(0.1)
+
+	if client.get_ss_connection() is None:
+		return do_next()
+	else:
+		client.ping_ss()
+		return None
 
 
 # @app.route('/api/v1.0/sleep', methods=['GET', 'POST'])
@@ -204,33 +209,62 @@ def next():
 
 ###
 
-@app.route("/api/v1.0/get_ss_path/", methods=['GET'])
-def get_ss_path():
-    if job is not None and job.is_running():
-        des = job.get_latest_des()
-        des_id = des.get_id()
 
-        local_path = context.get_local_path(["data"])
+@app.route("/api/v1.0/ss-register-id", methods=['GET', 'POST'])
+def ss_register_id():
+	ss_id = request.json["id"]
+	path = client.set_ss_connection(ss_id)
+	status = "Success: registered screenshot id {} with Discover".format(ss_id)
+	return jsonify({"status": status, "path": str(path)})
 
-        ss_path = "\\".join([local_path, job.get_id(), "images", str(des_id)])
-        return jsonify({'status': 'success', 'path': ss_path})
-    else:
-        return jsonify({"status": "fail"})
+	# status = "Success: registered input {} with Discover".format(input_object.get_id())
+	# input_vals = input_object.generate_random()
+
+	# if job is not None and job.is_running():
+	# 	des = job.get_latest_des()
+	# 	des_id = des.get_id()
+
+	# 	path = client.get_dir(["jobs", job.get_id(), "images"])
+	# 	os.makedirs(path, exist_ok=True)
+
+	# 	img_path = path / str(des_id)
+
+	# 	# ss_path = "\\".join([local_path, , "images", str(des_id)])
+	# 	return jsonify({"status": "success", "file_path": str(img_path)})
+	# else:
+	# 	return jsonify({"status": "No job running.", "file_path": ""})
 
 
-@app.route("/api/v1.0/job_running/", methods=['GET'])
-def job_running():
-    if job is not None and job.is_running():
-        return jsonify(True)
-    else:
-        return jsonify(False)
+@app.route("/api/v1.0/ss-get-path", methods=['GET', 'POST'])
+def ss_get_path():
 
+	ss_id = request.json["id"]
 
-@app.route('/api/v1.0/ss_done/', methods=['GET'])
+	if job is not None and job.is_running():
+		des = job.get_latest_des()
+		des_id = des.get_id()
+
+		path = client.get_dir(["jobs", job.get_id(), "images"])
+		os.makedirs(path, exist_ok=True)
+
+		img_path = path / str(des_id)
+
+		# ss_path = "\\".join([local_path, , "images", str(des_id)])
+		return jsonify({"status": "success", "path": str(img_path)})
+	else:
+		return jsonify({"status": "No job running.", "path": ""})
+
+# @app.route("/api/v1.0/job_running", methods=['GET'])
+# def job_running():
+# 	if job is not None and job.is_running():
+# 		return jsonify(True)
+# 	else:
+# 		return jsonify(False)
+
+@app.route('/api/v1.0/ss-done', methods=['GET', 'POST'])
 def ss_done():
-    if job is None or not job.is_running():
-        return jsonify({'status': 'No job running'})
-    return do_next()
+	ss_id = request.json["id"]
+	return do_next()
 
 
 @app.route('/api/v1.0/get_data/<string:job_path>', methods=['GET'])
@@ -298,16 +332,16 @@ def get_image(job_path, des_id):
     return send_from_directory(image_path, des_id + '.png')
 
 
+#SOCKET-IO
 def ack():
-    print('message was received!', file=sys.stderr)
 
-
+	print('message was received!', file=sys.stderr)
 @socketio.on('client message')
 def handle_my_custom_event(json):
-    print('received json: ' + str(json), file=sys.stderr)
-    emit('server message', json, callback=ack)
+	print('received json: ' + str(json), file=sys.stderr)
+	emit('server message', json, callback=ack)
 
-
+#FLASK
 if __name__ == '__main__':
 
     if testing:

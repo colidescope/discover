@@ -1,7 +1,8 @@
-import {Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {ChartDataSets, ChartOptions, ChartType} from "chart.js";
 import {BaseChartDirective} from "ng2-charts";
 import {JobData} from "../data/job";
+import {Design} from "../designs-container/designs-container.component";
 
 @Component({
   selector: 'app-scatter-chart',
@@ -15,6 +16,7 @@ export class ScatterChartComponent implements OnChanges {
   @Input() colorLabel: string = '';
   @Input() jobData: JobData = null;
   @Input() jobId: string = '';
+  @Output() selectedPointsChange: EventEmitter<Design[]> = new EventEmitter();
   @ViewChild(BaseChartDirective, {static: true}) _chart: BaseChartDirective;
   public bubbleChartType: ChartType = 'bubble';
   public bubbleChartOptions: ChartOptions = this.getChartOptions();
@@ -138,6 +140,7 @@ export class ScatterChartComponent implements OnChanges {
       this.bubbleChartData[0].hoverBorderWidth[point._index] = this.selectedPoints[point._index] ? 2 : 1;
       this.bubbleChartData[0].borderColor[point._index] = this.selectedPoints[point._index] ? '#222' : '#0222';
       this._chart.chart.update();
+      this.selectedPointsChange.emit(this.getSelectedDesigns());
     }
   }
 
@@ -151,6 +154,19 @@ export class ScatterChartComponent implements OnChanges {
     this.bubbleChartData[0].hoverBorderWidth = [].fill(1, this.bubbleChartData[0].data.length);
     this.bubbleChartData[0].borderColor = [].fill('#0222', this.bubbleChartData[0].data.length);
     this._chart.chart.update();
+    this.selectedPointsChange.emit([]);
   }
 
+  private getSelectedDesigns(): Design[] {
+    const designs: Design[] = [];
+    this.selectedPoints.forEach((value, index) => {
+      if (value) {
+        designs.push({
+          index: index,
+          imageUri: "http://localhost:5000/api/v1.0/get_image/" + encodeURI(this.jobId) + "/" + index
+        })
+      }
+    });
+    return designs;
+  }
 }

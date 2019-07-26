@@ -4,6 +4,7 @@ import {MenuitemService} from "./sidebar/menuitem.service";
 import {JobData} from "./data/job";
 import {RealTimeService} from "./real-time.service";
 import {ScatterChartComponent} from "./scatter-chart/scatter-chart.component";
+import {Design} from "./designs-container/designs-container.component";
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ export class AppComponent {
   yAxisLabel: string = undefined;
   radiusLabel: string = undefined;
   colorLabel: string = undefined;
+  selectedDesigns: Design[] = [];
   @ViewChild('scatter', {static: false}) scatterChart: ScatterChartComponent;
 
   constructor(private menuItemService: MenuitemService, private realTimeService: RealTimeService) {
@@ -86,5 +88,9 @@ export class AppComponent {
 
   clearSelected() {
     this.scatterChart.clearSelected();
+  }
+
+  updateSelectedDesigns(event: Design[]) {
+    this.selectedDesigns = event;
   }
 }

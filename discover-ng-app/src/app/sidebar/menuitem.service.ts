@@ -9,7 +9,9 @@ export class MenuitemService {
     {label: 'Explore', icon: 'assets/ic_24px_explore.png', selectedIcon: 'assets/ic_24px_explore_selected.png'}
   ];
 
-  rightMenuItems: MenuItem[] = [];
+  rightMenuItems: MenuItem[] = [
+    {label: 'Designs', icon: 'assets/ic_24px_designs.png', selectedIcon: 'assets/ic_24px_designs_selected.png'}
+  ];
 }
 
 export interface MenuItem {

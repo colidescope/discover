@@ -12,7 +12,8 @@
                                  (sizeChange)="setRadiusLabel($event)" [size]="radiusLabel"
                                  (colorChange)="setColorLabel($event)" [color]="colorLabel"
                                  (resetZoomClicked)="resetZoom()"
-                                 (clearSelectedClicked)="clearSelected()">
+                                 (clearSelectedClicked)="clearSelected()"
+                                 [(isolate)]="isolate">
           </app-explore-container>
         </ng-template>
       </div>
@@ -27,7 +28,8 @@
                          [radiusLabel]="radiusLabel"
                          [jobData]="jobData"
                          [jobId]="jobId"
-                         (selectedPointsChange)="updateSelectedDesigns($event)">
+                         (selectedPointsChange)="updateSelectedDesigns($event)"
+                         [isolate]="isolate">
       </app-scatter-chart>
     </div>
 

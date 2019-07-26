@@ -1,6 +1,8 @@
 import {ChartPoint} from "chart.js";
 import * as chroma from 'chroma-js';
 
+declare const getDominantSet;
+
 export class JobData {
   private readonly jobHeader: string[];
   private readonly jobOptions: string[];
@@ -28,7 +30,7 @@ export class JobData {
     return this.data[idx];
   }
 
-  getData() {
+  getData(): any[] {
     return this.data;
   }
 
@@ -92,16 +94,29 @@ export class JobData {
     return [this.jobHeader.indexOf(xSelector), this.jobHeader.indexOf(ySelector), this.jobHeader.indexOf(rSelector)];
   }
 
-  static filterOptions(header: string[]) {
-    return header.filter((el: string, idx, arr) => {
-      if (el === 'id') {
-        return true;
-      } else if (el === 'generation') {
-        return true;
-      } else if (el.startsWith('[Maximize]') || el.startsWith('[Minimize]')) {
-        return true;
+  public computeOptimal(): any[] {
+    const optHeader = JobData.filterForOptimal(this.getHeader());
+    const transformedData: any[] = [];
+    for (let row of this.getData()) {
+      const transformedRow = {};
+      for (let h of optHeader) {
+        let indexOf = this.getHeader().indexOf(h);
+        transformedRow[h] = row[indexOf];
       }
-      return false;
+      transformedData.push(transformedRow);
+    }
+    return getDominantSet(transformedData);
+  }
+
+  static filterOptions(header: string[]) {
+    return header.filter((el: string) => {
+      return el === 'id' || el === 'generation' || el.startsWith('[Maximize]') || el.startsWith('[Minimize]');
+    });
+  }
+
+  static filterForOptimal(header: string[]) {
+    return header.filter((el: string) => {
+      return el === 'id' || el.startsWith('[Maximize]') || el.startsWith('[Minimize]');
     });
   }
 }

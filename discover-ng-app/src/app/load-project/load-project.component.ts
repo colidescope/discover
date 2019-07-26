@@ -27,8 +27,6 @@ export class LoadProjectComponent {
         (response: Project) => {
           if (response.status === 'success') {
             const header: string[] = this.extractHeaders(response.data[0]);
-            console.log(header);
-            console.log(response.data[0]);
             this.realtime.setHeader(header);
             for (let row of response.data) {
               let dataRow = [];

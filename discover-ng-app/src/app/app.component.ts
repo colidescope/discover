@@ -21,6 +21,7 @@ export class AppComponent {
   radiusLabel: string = undefined;
   colorLabel: string = undefined;
   selectedDesigns: Design[] = [];
+  isolate: number = -1;
   @ViewChild('scatter', {static: false}) scatterChart: ScatterChartComponent;
 
   constructor(private menuItemService: MenuitemService, private realTimeService: RealTimeService) {

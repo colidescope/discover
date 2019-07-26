@@ -8,7 +8,7 @@ import {JobData} from "../data/job";
   styleUrls: ['./explore-container.component.sass']
 })
 export class ExploreContainerComponent {
-  isolate: number = -1;
+  @Input() isolate: number = -1;
   @Input() xAxis: string = undefined;
   @Input() yAxis: string = undefined;
   @Input() size: string = undefined;
@@ -19,6 +19,7 @@ export class ExploreContainerComponent {
   @Output() colorChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() resetZoomClicked: EventEmitter<null> = new EventEmitter<null>();
   @Output() clearSelectedClicked: EventEmitter<null> = new EventEmitter<null>();
+  @Output() isolateChange: EventEmitter<number> = new EventEmitter();
   private jobData: JobData = null;
 
   constructor(private realTimeService: RealTimeService) {
@@ -29,10 +30,12 @@ export class ExploreContainerComponent {
 
   isolateOptimal(checked: boolean) {
     this.isolate = checked ? 0 : -1;
+    this.isolateChange.emit(this.isolate);
   }
 
   isolateSelected(checked: boolean) {
     this.isolate = checked ? 1 : -1;
+    this.isolateChange.emit(this.isolate);
   }
 
   getOptions(): string[] {

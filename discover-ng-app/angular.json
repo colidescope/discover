@@ -30,7 +30,9 @@
             "styles": [
               "src/styles.sass"
             ],
-            "scripts": []
+            "scripts": [
+              "src/scripts/kung.js"
+            ]
           },
           "configurations": {
             "production": {

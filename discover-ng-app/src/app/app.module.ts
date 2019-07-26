@@ -20,6 +20,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {LoadProjectComponent} from './load-project/load-project.component';
 import {ChartsModule} from "ng2-charts";
 import {ScatterChartComponent} from './scatter-chart/scatter-chart.component';
+import {DesignsContainerComponent} from './designs-container/designs-container.component';
 
 const config: SocketIoConfig = {url: 'http://localhost:5000', options: {}};
 
@@ -36,7 +37,8 @@ const config: SocketIoConfig = {url: 'http://localhost:5000', options: {}};
     SelectInputComponent,
     CheckboxInputComponent,
     LoadProjectComponent,
-    ScatterChartComponent
+    ScatterChartComponent,
+    DesignsContainerComponent
   ],
   imports: [
     BrowserModule,

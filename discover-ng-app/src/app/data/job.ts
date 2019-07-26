@@ -53,7 +53,19 @@ export class JobData {
 
   private addDataRow(row: any) {
     const positions: number[] = this.getPositions(this.xSelector, this.ySelector, this.rSelector);
-    this.chartData.push({x: row[positions[0]], y: row[positions[1]], r: Math.round(row[positions[2]])});
+    const radiusData: number[] = this.getData().map((element) => {
+      return element[positions[2]] as number;
+    });
+    const min = Math.min(...radiusData);
+    const max = Math.max(...radiusData);
+    let i = 0;
+    for (let point of this.getCharData()) {
+      const percent = (radiusData[i] - min) / (max - min);
+      point.r = 5 + (percent * 10);
+      i++;
+    }
+    const percent = (row[positions[2]] - min) / (max - min);
+    this.chartData.push({x: row[positions[0]], y: row[positions[1]], r: 5 + (percent * 10)});
     this.computeColors();
   }
 
@@ -68,9 +80,15 @@ export class JobData {
   public computeData() {
     const data: any[] = this.getData();
     const positions: number[] = this.getPositions(this.xSelector, this.ySelector, this.rSelector);
+    const radiusData: number[] = data.map((element) => {
+      return element[positions[2]] as number;
+    });
+    const min = Math.min(...radiusData);
+    const max = Math.max(...radiusData);
     this.chartData = [];
     for (let row of data) {
-      let point = {x: row[positions[0]], y: row[positions[1]], r: Math.round(row[positions[2]])};
+      const percent = (row[positions[2]] - min) / (max - min);
+      let point = {x: row[positions[0]], y: row[positions[1]], r: 5 + (percent * 10)};
       this.chartData.push(point);
     }
   }
@@ -79,7 +97,7 @@ export class JobData {
     const data: any[] = this.getData();
     const position: number = this.jobHeader.indexOf(this.colorSelector);
     const values: number[] = data.map((element) => {
-      return element[position] as number
+      return element[position] as number;
     });
     this.chartColors.length = 0;
     const min = Math.min(...values);

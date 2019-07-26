@@ -196,6 +196,5 @@ export class ScatterChartComponent implements OnChanges {
     } else {
       this.bubbleChartData[0].backgroundColor = this.jobData.getCharColors();
     }
-    console.log(this.bubbleChartData[0].backgroundColor[180]);
   }
 }

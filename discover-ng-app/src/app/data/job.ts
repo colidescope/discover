@@ -13,7 +13,7 @@ export class JobData {
   private colorSelector: string;
   private scale = chroma.scale(['red', 'green', 'blue']).mode('hsl');
 
-  constructor(header: any) {
+  constructor(header: string[]) {
     this.jobHeader = header;
     this.jobOptions = JobData.filterOptions(header);
   }

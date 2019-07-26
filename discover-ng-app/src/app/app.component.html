@@ -19,7 +19,7 @@
     </app-sidebar>
 
     <div id="centralPanel" [ngClass]="getWidthClass()">
-      <app-load-project [projectName]="jobId"></app-load-project>
+      <app-load-project [(projectName)]="jobId"></app-load-project>
       <app-scatter-chart *ngIf="jobData != null" #scatter
                          [xAxisLabel]="xAxisLabel"
                          [yAxisLabel]="yAxisLabel"

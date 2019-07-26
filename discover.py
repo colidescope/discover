@@ -278,7 +278,7 @@ def get_data(job_path):
     json_out = []
 
     with open(data_path, 'r') as f:
-        lines = f.readlines()
+        lines = f.read().splitlines()  # Read lines deleting last \n
 
     header = lines.pop(0).split("\t")
 

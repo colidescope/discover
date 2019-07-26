@@ -29,6 +29,7 @@ export class ScatterChartComponent implements OnChanges {
         this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
         let chartData = this.jobData.getCharData();
         this.selectedPoints = [];
+        console.log(chartData);
         this.bubbleChartData = [{
           data: chartData,
           borderWidth: [].fill(1, 0, chartData.length),
@@ -97,20 +98,12 @@ export class ScatterChartComponent implements OnChanges {
       },
       scales: {
         xAxes: [{
-          ticks: {
-            min: 0,
-            max: 30,
-          },
           scaleLabel: {
             display: true,
             labelString: this.xAxisLabel
           }
         }],
         yAxes: [{
-          ticks: {
-            min: 0,
-            max: 30,
-          },
           scaleLabel: {
             display: true,
             labelString: this.yAxisLabel

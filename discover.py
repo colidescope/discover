@@ -132,9 +132,6 @@ def run_local():
         data = job.write_des_data()
         socketio.emit('job data', data)
 
-    # pause to test UI
-    # sleep(.5)
-
 
 @app.route("/api/v1.0/stop", methods=['GET'])
 def stop():
@@ -185,7 +182,8 @@ def send_output():
 
         if client.check_block():
             data = job.write_des_data()
-            socketio.emit('server message', data)
+            # socketio.emit('server message', data)
+            socketio.emit('job data', data)
             return jsonify({'status': 'run next'})
         else:
             return jsonify({'status': 'Process blocked'})
@@ -199,7 +197,7 @@ def next():
 		return do_next()
 	else:
 		client.ping_ss()
-		return None
+		return jsonify({'status': 'done'})
 
 
 # @app.route('/api/v1.0/sleep', methods=['GET', 'POST'])

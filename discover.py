@@ -185,7 +185,8 @@ def send_output():
 
         if client.check_block():
             data = job.write_des_data()
-            socketio.emit('server message', data)
+            # socketio.emit('server message', data)
+            socketio.emit('job data', data)
             return jsonify({'status': 'run next'})
         else:
             return jsonify({'status': 'Process blocked'})

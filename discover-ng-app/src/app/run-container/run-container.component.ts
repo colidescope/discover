@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {RealTimeService} from "../real-time.service";
 import {HttpClient} from "@angular/common/http";
 
@@ -16,10 +16,14 @@ export class RunContainerComponent {
   @Output() jobIdChange: EventEmitter<string> = new EventEmitter<string>();
 
   log: string = '';
-  designPerGen: number = 0;
-  numberGen: number = 0;
-  mutationRate: number = 0.0;
-  elites: number = 0.0;
+  @Input() designPerGen: number = 0;
+  @Input() numberGen: number = 0;
+  @Input() mutationRate: number = 0.0;
+  @Input() elites: number = 0.0;
+  @Output() designPerGenChange: EventEmitter<number> = new EventEmitter<number>();
+  @Output() numberGenChange: EventEmitter<number> = new EventEmitter<number>();
+  @Output() mutationRateChange: EventEmitter<number> = new EventEmitter<number>();
+  @Output() elitesChange: EventEmitter<number> = new EventEmitter<number>();
 
   constructor(logService: RealTimeService, private http: HttpClient) {
     logService.getLog().subscribe(value => {
@@ -28,6 +32,7 @@ export class RunContainerComponent {
   }
 
   startJob() {
+    this.jobRunning = true;
     const body = {
       options: {
         'Designs per generation': this.designPerGen,
@@ -36,15 +41,13 @@ export class RunContainerComponent {
         'Elites': this.elites,
       }
     };
-    this.jobRunning = true;
-    try {
-      this.http.post("http://localhost:5000/api/v1.0/start", body).subscribe((response: any) => {
-        this.jobIdChange.emit(response.job_id);
-        this.jobRunning = false;
-      });
-    } catch (e) {
+    this.http.post("http://localhost:5000/api/v1.0/start", body).subscribe((response: any) => {
+      this.jobIdChange.emit(response.job_id);
       this.jobRunning = false;
-    }
+    }, (error) => {
+      this.jobRunning = false;
+      console.log(error);
+    });
   }
 
   stopJob() {

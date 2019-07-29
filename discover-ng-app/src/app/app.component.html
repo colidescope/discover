@@ -4,13 +4,17 @@
     <app-sidebar [menuItems]="getLeftMenuItems()" [selectedItem]="0" (onStausChange)="updateLeftSideBarStatus($event)">
       <div [ngSwitch]="leftSideBarStatus.selectedIndex">
         <ng-template [ngSwitchCase]="0">
-          <app-run-container (jobIdChange)="updateJobId($event)"></app-run-container>
+          <app-run-container (jobIdChange)="updateJobId($event)"
+                             [(designPerGen)]="designPerGen"
+                             [(numberGen)]="numberGen"
+                             [(mutationRate)]="mutationRate"
+                             [(elites)]="elites"></app-run-container>
         </ng-template>
         <ng-template [ngSwitchCase]="1">
-          <app-explore-container (xAxisChange)="setXAxis($event)" [xAxis]="xAxisLabel"
-                                 (yAxisChange)="setYAxis($event)" [yAxis]="yAxisLabel"
-                                 (sizeChange)="setRadiusLabel($event)" [size]="radiusLabel"
-                                 (colorChange)="setColorLabel($event)" [color]="colorLabel"
+          <app-explore-container [(xAxis)]="xAxisLabel"
+                                 [(yAxis)]="yAxisLabel"
+                                 [(size)]="radiusLabel"
+                                 [(color)]="colorLabel"
                                  (resetZoomClicked)="resetZoom()"
                                  (clearSelectedClicked)="clearSelected()"
                                  [(isolate)]="isolate">

@@ -26,9 +26,4 @@ export class StepperInputComponent {
       this.valueChange.emit(this.value);
     }
   }
-
-  changeValue(value: number) {
-    this.value = value;
-    this.valueChange.emit(value);
-  }
 }

@@ -16,10 +16,20 @@ export class AppComponent {
   rightSideBarStatus: SideBarStatus = {opened: false, selectedIndex: -1};
   jobId: string = '';
   jobData: JobData = null;
+
+  //Run Panel State
+  designPerGen: number = 5;
+  numberGen: number = 5;
+  mutationRate: number = 0.05;
+  elites: number = 1;
+
+  //Explore Panel State
   xAxisLabel: string = undefined;
   yAxisLabel: string = undefined;
   radiusLabel: string = undefined;
   colorLabel: string = undefined;
+
+
   selectedDesigns: Design[] = [];
   isolate: number = -1;
   @ViewChild('scatter', {static: false}) scatterChart: ScatterChartComponent;
@@ -65,22 +75,6 @@ export class AppComponent {
 
   updateJobId(jobId: string) {
     this.jobId = jobId;
-  }
-
-  setXAxis(xLabel: string) {
-    this.xAxisLabel = xLabel;
-  }
-
-  setYAxis(yLabel: string) {
-    this.yAxisLabel = yLabel;
-  }
-
-  setRadiusLabel(radiusLabel: string) {
-    this.radiusLabel = radiusLabel;
-  }
-
-  setColorLabel(colorLabel: string) {
-    this.colorLabel = colorLabel;
   }
 
   resetZoom() {

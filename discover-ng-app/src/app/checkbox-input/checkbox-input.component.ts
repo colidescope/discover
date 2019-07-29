@@ -17,9 +17,9 @@ export class CheckboxInputComponent {
 
   getImage(): string {
     if (this.checked) {
-      return '/assets/ic_22px_box_selected.png'
+      return '/assets/ic_22px_box_selected.svg'
     } else {
-      return '/assets/ic_22px_box.png'
+      return '/assets/ic_22px_box.svg'
     }
   }
 }

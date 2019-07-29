@@ -2,7 +2,7 @@
   <app-sidemenu [itemSelected]="selectedItem" [menuItems]="menuItems"
                 (onItemSelected)="selectItem($event)"
                 [inverted]="inverted"></app-sidemenu>
-  <app-sidepanel [class.closed]="!isOpen()" (onClose)="close()" [inverted]="inverted">
+  <div id="sidepanel" [class.closed]="!isOpen()">
     <ng-content></ng-content>
-  </app-sidepanel>
+  </div>
 </div>

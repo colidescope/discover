@@ -1,10 +1,10 @@
 <div class="row no-gutters align-items-center">
   <label for="input">{{label}}:</label>
   <form class="ml-auto">
-    <img src="/assets/ic_12px_arrow_less.png" alt="decrement" (click)="decrement()">
+    <img src="/assets/ic_12px_arrow_less.svg" alt="decrement" (click)="decrement()">
     <input id="input" type="number" [name]="label" [step]="step" (ngModelChange)="changeValue($event)" [ngModel]="value"
            [min]="min"
            [max]="max">
-    <img src="/assets/ic_12px_arrow_add.png" alt="increment" (click)="increment()">
+    <img src="/assets/ic_12px_arrow_add.svg" alt="increment" (click)="increment()">
   </form>
 </div>

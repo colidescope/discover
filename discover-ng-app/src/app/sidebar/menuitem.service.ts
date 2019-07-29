@@ -5,12 +5,12 @@ import {Injectable} from '@angular/core';
 })
 export class MenuitemService {
   leftMenuItems: MenuItem[] = [
-    {label: 'Run', icon: 'assets/ic_24px_run.png', selectedIcon: 'assets/ic_24px_run_selected.png'},
-    {label: 'Explore', icon: 'assets/ic_24px_explore.png', selectedIcon: 'assets/ic_24px_explore_selected.png'}
+    {label: 'Run', icon: 'assets/ic_24px_run.svg', selectedIcon: 'assets/ic_24px_run_selected.svg'},
+    {label: 'Explore', icon: 'assets/ic_24px_explore.svg', selectedIcon: 'assets/ic_24px_explore_selected.svg'}
   ];
 
   rightMenuItems: MenuItem[] = [
-    {label: 'Designs', icon: 'assets/ic_24px_designs.png', selectedIcon: 'assets/ic_24px_designs_selected.png'}
+    {label: 'Designs', icon: 'assets/ic_24px_designs.svg', selectedIcon: 'assets/ic_24px_designs_selected.svg'}
   ];
 }
 

@@ -7,7 +7,6 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component'
 import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
 import {NavbarComponent} from './navbar/navbar.component';
-import {SidepanelComponent} from './sidebar/sidepanel/sidepanel.component';
 import {SidemenuComponent} from './sidebar/sidemenu/sidemenu.component';
 import {SidebarComponent} from './sidebar/sidebar.component';
 import {RunContainerComponent} from './run-container/run-container.component';
@@ -28,7 +27,6 @@ const config: SocketIoConfig = {url: 'http://localhost:5000', options: {}};
   declarations: [
     AppComponent,
     NavbarComponent,
-    SidepanelComponent,
     SidemenuComponent,
     SidebarComponent,
     RunContainerComponent,

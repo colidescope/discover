@@ -1,8 +1,8 @@
 <div class="row no-gutters">
-  <input class="col" [value]="projectName" (keydown)="loadProject($event)">
-  <img src="/assets/ic_24px_edit.png" class="ml-1 mr-4"/>
-  <div id="file-chooser">
-    <img class="position-absolute" src="/assets/ic_28px_folder.png"/>
-    <input (change)="fileSelected($event.target.files)" id="file-input" type="file">
-  </div>
+  <input class="col" [value]="projectName" placeholder="Project path" (keydown)="loadProject($event)">
+  <!--<img src="/assets/ic_24px_edit.png" class="ml-1 mr-4"/>-->
+  <!--<div id="file-chooser">-->
+  <!--<img class="position-absolute" src="/assets/ic_28px_folder.png"/>-->
+  <!--<input (change)="fileSelected($event.target.files)" id="file-input" type="file">-->
+  <!--</div>-->
 </div>

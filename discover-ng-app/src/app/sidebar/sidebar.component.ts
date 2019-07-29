@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {MenuItem} from "./menuitem.service";
 
 @Component({
@@ -6,11 +6,17 @@ import {MenuItem} from "./menuitem.service";
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.sass']
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnChanges {
   @Input() inverted: boolean = false;
   @Output() onStausChange: EventEmitter<SideBarStatus> = new EventEmitter<SideBarStatus>();
   @Input() menuItems: MenuItem[];
-  selectedItem: number = -1;
+  @Input() selectedItem: number = -1;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.selectedItem) {
+      this.open(this.selectedItem);
+    }
+  }
 
   selectItem(idx: number) {
     if (idx == -1 || this.selectedItem == idx) {

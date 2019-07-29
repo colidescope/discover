@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 <div class="container-fluid" id="main-container">
   <div class="row h-100">
-    <app-sidebar [menuItems]="getLeftMenuItems()" (onStausChange)="updateLeftSideBarStatus($event)">
+    <app-sidebar [menuItems]="getLeftMenuItems()" [selectedItem]="0" (onStausChange)="updateLeftSideBarStatus($event)">
       <div [ngSwitch]="leftSideBarStatus.selectedIndex">
         <ng-template [ngSwitchCase]="0">
           <app-run-container (jobIdChange)="updateJobId($event)"></app-run-container>

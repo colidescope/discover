@@ -57,11 +57,14 @@ canvas
   color: black
   border-radius: 6px
   border: 1px solid black
-  -webkit-transition: all .1s ease
-  transition: all .1s ease
   pointer-events: none
   -webkit-transform: translate(-50%, -110%)
   transform: translate(-50%, -110%)
+  z-index: 10000
+
+#chartjs-tooltip.below
+  -webkit-transform: translate(-50%, 10%)
+  transform: translate(-50%, 10%)
 
 .chartjs-tooltip-key
   display: inline-block

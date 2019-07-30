@@ -60,25 +60,18 @@ export class ScatterChartComponent implements OnChanges {
         custom: (tooltip) => {
           let tooltipEl: any = document.getElementById('chartjs-tooltip');
 
+          let canvas = this._chart.chart.canvas;
           if (!tooltipEl) {
             tooltipEl = document.createElement('div');
             tooltipEl.id = 'chartjs-tooltip';
             tooltipEl.innerHTML = '<table></table>';
-            this._chart.chart.canvas.parentNode.appendChild(tooltipEl);
+            canvas.parentNode.appendChild(tooltipEl);
           }
 
           // Hide if no tooltip
           if (tooltip.opacity === 0) {
             tooltipEl.style.opacity = 0;
             return;
-          }
-
-          // Set caret Position
-          tooltipEl.classList.remove('above', 'below', 'no-transform');
-          if (tooltip.yAlign) {
-            tooltipEl.classList.add(tooltip.yAlign);
-          } else {
-            tooltipEl.classList.add('no-transform');
           }
 
           // Set Text
@@ -92,17 +85,30 @@ export class ScatterChartComponent implements OnChanges {
             tableRoot.innerHTML = innerHtml;
           }
 
-          const positionY = this._chart.chart.canvas.offsetTop;
-          const positionX = this._chart.chart.canvas.offsetLeft;
+          const positionY = canvas.offsetTop;
+          const positionX = canvas.offsetLeft;
 
           // Display, position, and set styles for font
           tooltipEl.style.opacity = 1;
-          tooltipEl.style.left = positionX + tooltip.caretX + 'px';
+          let left = positionX + tooltip.caretX;
+          if (left < 100) {
+            tooltipEl.style.left = '100px';
+          } else if (left > canvas.width - 100) {
+            tooltipEl.style.left = canvas.width - 100 + 'px';
+          } else {
+            tooltipEl.style.left = left + 'px';
+          }
           tooltipEl.style.top = positionY + tooltip.caretY + 'px';
           tooltipEl.style.fontFamily = tooltip._bodyFontFamily;
           tooltipEl.style.fontSize = tooltip.bodyFontSize + 'px';
           tooltipEl.style.fontStyle = tooltip._bodyFontStyle;
           tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
+          //Above or below
+          if (positionY + tooltip.caretY < 180) {
+            tooltipEl.classList.add('below');
+          } else {
+            tooltipEl.classList.remove('below')
+          }
         }
       },
       scales: {

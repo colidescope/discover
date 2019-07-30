@@ -24,15 +24,16 @@
     </app-sidebar>
 
     <div id="centralPanel" [ngClass]="getWidthClass()">
-      <app-load-project [(projectName)]="jobId"></app-load-project>
-      <app-scatter-chart *ngIf="jobData != null" #scatter
+      <app-load-project [projectName]="jobId" (projectNameChange)="updateJobId($event)"></app-load-project>
+      <app-scatter-chart #scatter
+                         *ngIf="jobData != null"
                          [xAxisLabel]="xAxisLabel"
                          [yAxisLabel]="yAxisLabel"
                          [colorLabel]="colorLabel"
                          [radiusLabel]="radiusLabel"
                          [jobData]="jobData"
                          [jobId]="jobId"
-                         (selectedPointsChange)="updateSelectedDesigns($event)"
+                         [(selectedPoints)]="selectedDesigns"
                          [isolate]="isolate">
       </app-scatter-chart>
     </div>

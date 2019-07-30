@@ -75,6 +75,7 @@ export class AppComponent {
 
   updateJobId(jobId: string) {
     this.jobId = jobId;
+    this.clearSelected();
   }
 
   resetZoom() {
@@ -82,10 +83,9 @@ export class AppComponent {
   }
 
   clearSelected() {
-    this.scatterChart.clearSelected();
-  }
-
-  updateSelectedDesigns(event: Design[]) {
-    this.selectedDesigns = event;
+    if (this.scatterChart) {
+      this.scatterChart.clearSelected();
+    }
+    this.selectedDesigns = [];
   }
 }

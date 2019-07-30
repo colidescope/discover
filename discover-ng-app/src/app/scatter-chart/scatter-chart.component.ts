@@ -18,11 +18,11 @@ export class ScatterChartComponent implements OnChanges {
   @Input() jobData: JobData = null;
   @Input() jobId: string = '';
   @Input() isolate: number;
+  @Input() selectedPoints: Design[] = [];
   @Output() selectedPointsChange: EventEmitter<Design[]> = new EventEmitter();
   @ViewChild(BaseChartDirective, {static: true}) _chart: BaseChartDirective;
   public bubbleChartType: ChartType = 'bubble';
   public bubbleChartOptions: ChartOptions = this.getChartOptions();
-  public selectedPoints: boolean[] = [];
   public bubbleChartData: ChartDataSets[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -30,12 +30,14 @@ export class ScatterChartComponent implements OnChanges {
       if (this.jobData) {
         this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
         let chartData = this.jobData.getCharData();
-        this.selectedPoints = [];
+        let borderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
+        let hoverBorderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
+        let borderColor = chartData.map((v, idx) => this.isSelected(idx) ? '#222' : '#0222');
         this.bubbleChartData = [{
           data: chartData,
-          borderWidth: [].fill(1, 0, chartData.length),
-          hoverBorderWidth: [].fill(1, 0, chartData.length),
-          borderColor: [].fill('#0222', 0, chartData.length),
+          borderWidth: borderWidth,
+          hoverBorderWidth: hoverBorderWidth,
+          borderColor: borderColor,
           backgroundColor: this.jobData.getCharColors()
         }];
       }
@@ -135,13 +137,21 @@ export class ScatterChartComponent implements OnChanges {
 
   onClick(event: { event?: MouseEvent; active: any[] }) {
     for (let point of event.active) {
-      this.selectedPoints[point._index] = !this.selectedPoints[point._index];
-      this.bubbleChartData[0].borderWidth[point._index] = this.selectedPoints[point._index] ? 2 : 1;
-      this.bubbleChartData[0].hoverBorderWidth[point._index] = this.selectedPoints[point._index] ? 2 : 1;
-      this.bubbleChartData[0].borderColor[point._index] = this.selectedPoints[point._index] ? '#222' : '#0222';
+      const selected: Design = this.selectedPoints.find((design => design && design.index == point._index));
+      this.bubbleChartData[0].borderWidth[point._index] = selected ? 1 : 2;
+      this.bubbleChartData[0].hoverBorderWidth[point._index] = selected ? 1 : 2;
+      this.bubbleChartData[0].borderColor[point._index] = selected ? '#0222' : '#222';
+      if (!selected) {
+        this.selectedPoints.push({
+          index: point._index,
+          imageUri: "http://localhost:5000/api/v1.0/get_image/" + encodeURI(this.jobId) + "/" + point._index
+        });
+      } else {
+        this.selectedPoints.splice(this.selectedPoints.findIndex((design) => design === selected), 1)
+      }
       this.computeOpacity(this.isolate);
       console.log(this.bubbleChartData[0].backgroundColor[180]);
-      this.selectedPointsChange.emit(this.getSelectedDesigns());
+      this.selectedPointsChange.emit(this.selectedPoints);
       this._chart.chart.update();
     }
   }
@@ -160,19 +170,6 @@ export class ScatterChartComponent implements OnChanges {
     this._chart.chart.update();
   }
 
-  private getSelectedDesigns(): Design[] {
-    const designs: Design[] = [];
-    this.selectedPoints.forEach((value, index) => {
-      if (value) {
-        designs.push({
-          index: index,
-          imageUri: "http://localhost:5000/api/v1.0/get_image/" + encodeURI(this.jobId) + "/" + index
-        })
-      }
-    });
-    return designs;
-  }
-
   private computeOpacity(mode: number) {
     if (mode == 0) {
       const optimal: any[] = this.jobData.computeOptimal();
@@ -187,7 +184,7 @@ export class ScatterChartComponent implements OnChanges {
       });
     } else if (mode == 1) {
       this.bubbleChartData[0].backgroundColor = (this.bubbleChartData[0].backgroundColor as string[]).map((hex, idx) => {
-        if (!this.selectedPoints[idx]) {
+        if (!this.isSelected(idx)) {
           return chroma(hex).alpha(0.05).hex()
         } else {
           return chroma(hex).alpha(1).hex();
@@ -196,5 +193,9 @@ export class ScatterChartComponent implements OnChanges {
     } else {
       this.bubbleChartData[0].backgroundColor = this.jobData.getCharColors();
     }
+  }
+
+  private isSelected(idx: number): boolean {
+    return this.selectedPoints.find((design) => design.index === idx) != undefined;
   }
 }

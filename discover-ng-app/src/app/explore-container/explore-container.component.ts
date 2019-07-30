@@ -38,9 +38,9 @@ export class ExploreContainerComponent {
     this.isolateChange.emit(this.isolate);
   }
 
-  getOptions(): string[] {
+  getOptions(withNone: boolean = false): string[] {
     if (this.jobData) {
-      return this.jobData.getOptions();
+      return withNone ? ['None', ...this.jobData.getOptions()] : this.jobData.getOptions();
     }
     return [];
   }

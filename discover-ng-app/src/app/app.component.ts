@@ -39,10 +39,10 @@ export class AppComponent {
       this.jobData = data;
       if (this.jobData) {
         const options = this.jobData.getOptions();
-        this.xAxisLabel = options[0];
-        this.yAxisLabel = options[0];
-        this.colorLabel = options[0];
-        this.radiusLabel = options[0];
+        this.xAxisLabel = options[options.length - 2];
+        this.yAxisLabel = options[options.length - 1];
+        this.colorLabel = 'generation';
+        this.radiusLabel = 'id';
       }
     })
   }

@@ -54,17 +54,17 @@ export class JobData {
   private addDataRow(row: any) {
     const positions: number[] = this.getPositions(this.xSelector, this.ySelector, this.rSelector);
     const radiusData: number[] = this.getData().map((element) => {
-      return element[positions[2]] as number;
+      return (positions[2] > -1 ? element[positions[2]] : 0) as number;
     });
     const min = Math.min(...radiusData);
     const max = Math.max(...radiusData);
     let i = 0;
     for (let point of this.getCharData()) {
-      const percent = (radiusData[i] - min) / (max - min);
+      const percent = positions[2] > -1 ? (radiusData[i] - min) / (max - min) : 0;
       point.r = 5 + (percent * 10);
       i++;
     }
-    const percent = (row[positions[2]] - min) / (max - min);
+    const percent = positions[2] > -1 ? (row[positions[2]] - min) / (max - min) : 0;
     this.chartData.push({x: row[positions[0]], y: row[positions[1]], r: 5 + (percent * 10)});
     this.computeColors();
   }
@@ -81,13 +81,13 @@ export class JobData {
     const data: any[] = this.getData();
     const positions: number[] = this.getPositions(this.xSelector, this.ySelector, this.rSelector);
     const radiusData: number[] = data.map((element) => {
-      return element[positions[2]] as number;
+      return (positions[2] > -1 ? element[positions[2]] : 0) as number;
     });
     const min = Math.min(...radiusData);
     const max = Math.max(...radiusData);
     this.chartData = [];
     for (let row of data) {
-      const percent = (row[positions[2]] - min) / (max - min);
+      const percent = positions[2] > -1 ? (row[positions[2]] - min) / (max - min) : 0;
       let point = {x: row[positions[0]], y: row[positions[1]], r: 5 + (percent * 10)};
       this.chartData.push(point);
     }
@@ -96,15 +96,22 @@ export class JobData {
   private computeColors() {
     const data: any[] = this.getData();
     const position: number = this.jobHeader.indexOf(this.colorSelector);
-    const values: number[] = data.map((element) => {
-      return element[position] as number;
-    });
-    this.chartColors.length = 0;
-    const min = Math.min(...values);
-    const max = Math.max(...values);
-    for (let val of values) {
-      const percent = (val - min) / (max - min);
-      this.chartColors.push(this.scale(percent).hex());
+    if (position > -1) {
+      const values: number[] = data.map((element) => {
+        return element[position] as number;
+      });
+      this.chartColors.length = 0;
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      for (let val of values) {
+        const percent = (val - min) / (max - min);
+        this.chartColors.push(this.scale(percent).hex());
+      }
+    } else {
+      this.chartColors.length = 0;
+      for (let val of data) {
+        this.chartColors.push('#6c757d');
+      }
     }
   }
 

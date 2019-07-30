@@ -119,14 +119,14 @@ export class ScatterChartComponent implements OnChanges, OnInit {
       },
       scales: {
         xAxes: [{
-          afterTickToLabelConversion: this.minMaxTickRemover,
+          afterTickToLabelConversion: ScatterChartComponent.minMaxTickRemover,
           scaleLabel: {
             display: true,
             labelString: this.xAxisLabel
           }
         }],
         yAxes: [{
-          afterTickToLabelConversion: this.minMaxTickRemover,
+          afterTickToLabelConversion: ScatterChartComponent.minMaxTickRemover,
           scaleLabel: {
             display: true,
             labelString: this.yAxisLabel
@@ -144,6 +144,11 @@ export class ScatterChartComponent implements OnChanges, OnInit {
             mode: 'xy',
             speed: 0.05
           }
+        }
+      },
+      hover: {
+        onHover: (event, activeElements) => {
+          this._chart.chart.canvas.style.cursor = activeElements[0] ? 'pointer' : 'default';
         }
       }
     };
@@ -213,7 +218,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     return this.selectedPoints.find((design) => design.index === idx) != undefined;
   }
 
-  private minMaxTickRemover(scale) {
+  private static minMaxTickRemover(scale) {
     scale.ticks[0] = null;
     scale.ticks[scale.ticks.length - 1] = null;
 

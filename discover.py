@@ -294,9 +294,10 @@ def get_data(job_path):
 def get_design(job_path, des_id):
     # if not client.is_connected():
     # return jsonify({"status": "no-gh"})
-    # if job is not None:
-    # 	if job.is_running():
-    # 		return jsonify({"status": "job-running"})
+
+    if job is not None:
+    	if job.is_running():
+    		return jsonify({"status": "job-running"})
 
     data_path = Path(job_path) / "results.tsv"
     if not data_path.exists():
@@ -316,7 +317,8 @@ def get_design(job_path, des_id):
               "[Continuous]" in header[i] or "[Categorical]" in header[i] or "[Sequence]" in header[i]]
 
     # des.set_inputs(inputs)
-    # gh.ping(0)
+    # client.set_block()
+    # client.ping_model()
 
     message = "Reinstated design {} from {}".format(des_id, job_path)
     socketio.emit('server message', {"message": message})
@@ -332,7 +334,6 @@ def get_image(job_path, des_id):
 
 #SOCKET-IO
 def ack():
-
 	print('message was received!', file=sys.stderr)
 @socketio.on('client message')
 def handle_my_custom_event(json):

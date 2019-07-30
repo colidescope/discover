@@ -1,16 +1,18 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import * as Chart from "chart.js";
 import {ChartDataSets, ChartOptions, ChartType} from "chart.js";
 import {BaseChartDirective} from "ng2-charts";
 import {JobData} from "../data/job";
 import {Design} from "../designs-container/designs-container.component";
 import * as chroma from 'chroma-js';
+import {clipper} from "./custom-clipper";
 
 @Component({
   selector: 'app-scatter-chart',
   templateUrl: './scatter-chart.component.html',
   styleUrls: ['./scatter-chart.component.sass']
 })
-export class ScatterChartComponent implements OnChanges {
+export class ScatterChartComponent implements OnChanges, OnInit {
   @Input() xAxisLabel: string = '';
   @Input() yAxisLabel: string = '';
   @Input() radiusLabel: string = '';
@@ -24,6 +26,10 @@ export class ScatterChartComponent implements OnChanges {
   public bubbleChartType: ChartType = 'bubble';
   public bubbleChartOptions: ChartOptions = this.getChartOptions();
   public bubbleChartData: ChartDataSets[] = [];
+
+  ngOnInit(): void {
+    Chart.pluginService.register(clipper); //Custom clipper to avoid points getting put of grid area.
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.jobData || changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel || changes.colorLabel) {
@@ -113,12 +119,14 @@ export class ScatterChartComponent implements OnChanges {
       },
       scales: {
         xAxes: [{
+          afterTickToLabelConversion: this.minMaxTickRemover,
           scaleLabel: {
             display: true,
             labelString: this.xAxisLabel
           }
         }],
         yAxes: [{
+          afterTickToLabelConversion: this.minMaxTickRemover,
           scaleLabel: {
             display: true,
             labelString: this.yAxisLabel
@@ -203,5 +211,13 @@ export class ScatterChartComponent implements OnChanges {
 
   private isSelected(idx: number): boolean {
     return this.selectedPoints.find((design) => design.index === idx) != undefined;
+  }
+
+  private minMaxTickRemover(scale) {
+    scale.ticks[0] = null;
+    scale.ticks[scale.ticks.length - 1] = null;
+
+    scale.ticksAsNumbers[0] = null;
+    scale.ticksAsNumbers[scale.ticksAsNumbers.length - 1] = null;
   }
 }

@@ -1,5 +1,6 @@
 import {ChartPoint} from "chart.js";
 import * as chroma from 'chroma-js';
+import {BehaviorSubject} from "rxjs";
 
 declare const getDominantSet;
 
@@ -9,11 +10,15 @@ export class JobData {
   private readonly data: any[] = [];
   private chartData: ChartPoint[] = [];
   private chartColors: string[] = [];
+  private xAxisRange: number[] = [0, 100];
+  private yAxisRange: number[] = [0, 100];
+  private i = 0;
+  public rangesChange: BehaviorSubject<number> = new BehaviorSubject(this.i);
   private xSelector: string;
   private ySelector: string;
   private rSelector: string;
   private colorSelector: string;
-  private scale = chroma.scale(['red', 'green', 'blue']).mode('hsl');
+  private scale = chroma.scale(['#FF0000', '#00FF00', '#0000FF']).mode('hsl');
 
   constructor(header: string[]) {
     this.jobHeader = header;
@@ -24,6 +29,8 @@ export class JobData {
     this.data.push(row);
     this.addDataRow(row);
     this.computeColors();
+    this.computeRanges();
+    this.rangesChange.next(++this.i);
   }
 
   getRow(idx: number) {
@@ -49,6 +56,7 @@ export class JobData {
     this.colorSelector = colorSelector;
     this.computeData();
     this.computeColors();
+    this.computeRanges();
   }
 
   private addDataRow(row: any) {
@@ -66,7 +74,6 @@ export class JobData {
     }
     const percent = positions[2] > -1 ? (row[positions[2]] - min) / (max - min) : 0;
     this.chartData.push({x: row[positions[0]], y: row[positions[1]], r: 5 + (percent * 10)});
-    this.computeColors();
   }
 
   public getCharData(): ChartPoint[] {
@@ -85,11 +92,14 @@ export class JobData {
     });
     const min = Math.min(...radiusData);
     const max = Math.max(...radiusData);
-    this.chartData = [];
+    let i: number = 0;
     for (let row of data) {
       const percent = positions[2] > -1 ? (row[positions[2]] - min) / (max - min) : 0;
-      let point = {x: row[positions[0]], y: row[positions[1]], r: 5 + (percent * 10)};
-      this.chartData.push(point);
+      let point = this.chartData[i];
+      point.x = row[positions[0]];
+      point.y = row[positions[1]];
+      point.r = 5 + (percent * 10);
+      i++;
     }
   }
 
@@ -131,6 +141,37 @@ export class JobData {
       transformedData.push(transformedRow);
     }
     return getDominantSet(transformedData);
+  }
+
+
+  private computeRanges() {
+    const positions = this.getPositions(this.xSelector, this.ySelector, this.rSelector);
+    const xValues = this.getData().map(value => value[positions[0]]);
+    const yValues = this.getData().map(value => value[positions[1]]);
+    let max = Math.max(...xValues);
+    let min = Math.min(...xValues);
+    let offset = (max - min) * 0.05;
+    this.xAxisRange = [min - offset, max + offset];
+    max = Math.max(...yValues);
+    min = Math.min(...yValues);
+    offset = (max - min) * 0.05;
+    this.yAxisRange = [min - offset, max + offset];
+  }
+
+  public getMinX(): number {
+    return this.xAxisRange[0];
+  }
+
+  public getMaxX(): number {
+    return this.xAxisRange[1]
+  }
+
+  public getMinY(): number {
+    return this.yAxisRange[0]
+  }
+
+  public getMaxY(): number {
+    return this.yAxisRange[1]
   }
 
   static filterOptions(header: string[]) {

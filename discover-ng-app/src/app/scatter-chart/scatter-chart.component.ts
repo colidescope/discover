@@ -6,6 +6,7 @@ import {JobData} from "../data/job";
 import {Design} from "../designs-container/designs-container.component";
 import * as chroma from 'chroma-js';
 import {clipper} from "./custom-clipper";
+import {debounceTime} from "rxjs/operators";
 
 @Component({
   selector: 'app-scatter-chart',
@@ -32,6 +33,11 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes.jobData && this.jobData) {
+      this.jobData.rangesChange.pipe(debounceTime(250)).subscribe((v) => {
+        this.bubbleChartOptions = this.getChartOptions()
+      });
+    }
     if (changes.jobData || changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel || changes.colorLabel) {
       if (this.jobData) {
         this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
@@ -46,8 +52,8 @@ export class ScatterChartComponent implements OnChanges, OnInit {
           borderColor: borderColor,
           backgroundColor: this.jobData.getCharColors()
         }];
+        this.bubbleChartOptions = this.getChartOptions();
       }
-      this.bubbleChartOptions = this.getChartOptions();
       if (this.isolate != -1) {
         this.computeOpacity(this.isolate);
       }
@@ -123,6 +129,10 @@ export class ScatterChartComponent implements OnChanges, OnInit {
           scaleLabel: {
             display: true,
             labelString: this.xAxisLabel
+          },
+          ticks: {
+            min: this.jobData ? this.jobData.getMinX() : 0,
+            max: this.jobData ? this.jobData.getMaxX() : 100
           }
         }],
         yAxes: [{
@@ -130,6 +140,10 @@ export class ScatterChartComponent implements OnChanges, OnInit {
           scaleLabel: {
             display: true,
             labelString: this.yAxisLabel
+          },
+          ticks: {
+            min: this.jobData ? this.jobData.getMinY() : 0,
+            max: this.jobData ? this.jobData.getMaxY() : 100
           }
         },]
       },

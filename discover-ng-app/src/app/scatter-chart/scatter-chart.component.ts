@@ -140,8 +140,8 @@ export class ScatterChartComponent implements OnChanges, OnInit {
             labelString: this.xAxisLabel
           },
           beforeFit: (scale?: any) => {
-            scale.options.ticks.max = this.jobData.getMaxX();
-            scale.options.ticks.min = this.jobData.getMinX();
+            scale.options.ticks.suggestedMax = this.jobData.getMaxX();
+            scale.options.ticks.suggestedMin = this.jobData.getMinX();
           }
         }],
         yAxes: [{
@@ -151,8 +151,8 @@ export class ScatterChartComponent implements OnChanges, OnInit {
             labelString: this.yAxisLabel
           },
           beforeFit: (scale?: any) => {
-            scale.options.ticks.max = this.jobData.getMaxY();
-            scale.options.ticks.min = this.jobData.getMinY();
+            scale.options.ticks.suggestedMax = this.jobData.getMaxY();
+            scale.options.ticks.suggestedMin = this.jobData.getMinY();
           }
         },]
       },
@@ -227,6 +227,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     } else if (mode == 1) {
       this.bubbleChartData[0].backgroundColor = (this.bubbleChartData[0].backgroundColor as string[]).map((hex, idx) => {
         if (!this.isSelected(idx)) {
+          console.log(hex);
           return chroma(hex).alpha(0.05).hex()
         } else {
           return chroma(hex).alpha(1).hex();

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {RealTimeService} from "../real-time.service";
 import {HttpClient} from "@angular/common/http";
 
@@ -15,6 +15,7 @@ export class RunContainerComponent {
   @Input() jobRunning: boolean = false;
   @Output() jobRunningChange: EventEmitter<boolean> = new EventEmitter();
   @Output() jobIdChange: EventEmitter<string> = new EventEmitter<string>();
+  @ViewChild('logArea', {static: true}) logArea: ElementRef;
 
   log: string = '';
   @Input() designPerGen: number = 0;
@@ -29,6 +30,11 @@ export class RunContainerComponent {
   constructor(logService: RealTimeService, private http: HttpClient) {
     logService.getLog().subscribe(value => {
       this.log = value;
+      if (this.logArea) {
+        setTimeout(() => {
+          this.logArea.nativeElement.scrollTop = this.logArea.nativeElement.scrollHeight;
+        }, 200);
+      }
     });
   }
 

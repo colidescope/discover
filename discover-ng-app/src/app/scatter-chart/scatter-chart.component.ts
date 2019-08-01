@@ -74,7 +74,6 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   }
 
   getChartOptions(): ChartOptions {
-    console.log('opts');
     return {
       responsive: true,
       maintainAspectRatio: false,
@@ -194,7 +193,6 @@ export class ScatterChartComponent implements OnChanges, OnInit {
         this.selectedPoints.splice(this.selectedPoints.findIndex((design) => design === selected), 1)
       }
       this.computeOpacity(this.isolate);
-      console.log(this.bubbleChartData[0].backgroundColor[180]);
       this.selectedPointsChange.emit(this.selectedPoints);
       this._chart.chart.update();
     }

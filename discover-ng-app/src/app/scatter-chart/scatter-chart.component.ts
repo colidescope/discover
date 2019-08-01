@@ -32,21 +32,35 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.jobData || changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel || changes.colorLabel) {
+    if (changes.jobData) {
       if (this.jobData) {
         this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
         let chartData = this.jobData.getCharData();
         let borderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
         let hoverBorderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
         let borderColor = chartData.map((v, idx) => this.isSelected(idx) ? '#222' : '#0222');
-        this.bubbleChartData = [{
-          data: chartData,
-          borderWidth: borderWidth,
-          hoverBorderWidth: hoverBorderWidth,
-          borderColor: borderColor,
-          backgroundColor: this.jobData.getCharColors()
-        }];
-        this.bubbleChartOptions = this.getChartOptions();
+
+        if (changes.jobData) {
+          this.bubbleChartData = [{
+            data: chartData,
+            borderWidth: borderWidth,
+            hoverBorderWidth: hoverBorderWidth,
+            borderColor: borderColor,
+            backgroundColor: this.jobData.getCharColors()
+          }];
+          this.bubbleChartOptions = this.getChartOptions();
+        }
+      }
+      if (this.isolate != -1) {
+        this.computeOpacity(this.isolate);
+      }
+    } else if (changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel || changes.colorLabel) {
+      if (this.jobData) {
+        this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
+        let options = this._chart.chart.config.options;
+        options.scales.xAxes[0].scaleLabel.labelString = this.xAxisLabel;
+        options.scales.yAxes[0].scaleLabel.labelString = this.yAxisLabel;
+        this._chart.chart.update();
       }
       if (this.isolate != -1) {
         this.computeOpacity(this.isolate);

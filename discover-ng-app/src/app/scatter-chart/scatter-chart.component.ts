@@ -53,6 +53,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
       }
       if (this.isolate != -1) {
         this.computeOpacity(this.isolate);
+        this._chart.chart.update();
       }
     } else if (changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel || changes.colorLabel) {
       if (this.jobData) {
@@ -64,6 +65,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
       }
       if (this.isolate != -1) {
         this.computeOpacity(this.isolate);
+        this._chart.chart.update();
       }
     } else if (changes.isolate) {
       this.computeOpacity(this.isolate);
@@ -219,18 +221,17 @@ export class ScatterChartComponent implements OnChanges, OnInit {
         if (!optimal.find((optim) => {
           return optim.id == idx
         })) {
-          return chroma(hex).alpha(0.05).hex()
+          return chroma(this.jobData.getCharColors()[idx]).alpha(0.05).hex()
         } else {
-          return chroma(hex).alpha(1).hex();
+          return chroma(this.jobData.getCharColors()[idx]).alpha(1).hex();
         }
       });
     } else if (mode == 1) {
       this.bubbleChartData[0].backgroundColor = (this.bubbleChartData[0].backgroundColor as string[]).map((hex, idx) => {
         if (!this.isSelected(idx)) {
-          console.log(hex);
-          return chroma(hex).alpha(0.05).hex()
+          return chroma(this.jobData.getCharColors()[idx]).alpha(0.05).hex()
         } else {
-          return chroma(hex).alpha(1).hex();
+          return chroma(this.jobData.getCharColors()[idx]).alpha(1).hex();
         }
       });
     } else {

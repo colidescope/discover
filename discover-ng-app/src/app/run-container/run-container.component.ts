@@ -28,7 +28,10 @@ export class RunContainerComponent {
   constructor(logService: RealTimeService, private http: HttpClient) {
     logService.getLog().subscribe(value => {
       this.log = value;
-    })
+    });
+    logService.jobFinished.subscribe(() => {
+      this.jobRunning = false;
+    });
   }
 
   startJob() {
@@ -43,7 +46,6 @@ export class RunContainerComponent {
     };
     this.http.post("http://localhost:5000/api/v1.0/start", body).subscribe((response: any) => {
       this.jobIdChange.emit(response.job_id);
-      this.jobRunning = false;
     }, (error) => {
       this.jobRunning = false;
       console.log(error);

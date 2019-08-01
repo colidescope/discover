@@ -9,8 +9,8 @@ from flask import Flask, jsonify, request, render_template, send_from_directory 
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
-from src.job import Job
 from src.design import Design
+from src.job import Job
 from src.objects import Client, Logger
 
 # from src.test import Test
@@ -103,6 +103,7 @@ def do_next():
         return jsonify({'status': 'Job running...'})
     else:
         job.running = False
+        socketio.emit('job finished', True)
         logger.log("Job finished.")
 
         return jsonify({'status': 'No job running'})

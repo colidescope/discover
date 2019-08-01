@@ -114,7 +114,8 @@ export class JobData {
       const min = Math.min(...values);
       const max = Math.max(...values);
       for (let val of values) {
-        const percent = (val - min) / (max - min);
+        let denom = (max - min);
+        const percent = denom == 0 ? 0 : (val - min) / denom;
         this.chartColors.push(this.scale(percent).hex());
       }
     } else {

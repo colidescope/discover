@@ -13,6 +13,8 @@ export class RealTimeService {
   public jobData: BehaviorSubject<JobData> = new BehaviorSubject<JobData>(null);
   public jobFinished: BehaviorSubject<null> = new BehaviorSubject<null>(null);
 
+  private i: number = 0;
+
   constructor(socket: Socket) {
     socket.on('connect', () => {
       this.log.next('Established connection to server');
@@ -27,10 +29,14 @@ export class RealTimeService {
       this.setHeader(header);
     });
     socket.on('job data', (dataRow: any) => {
-      this.addRow(dataRow);
+      setTimeout(() => {
+        this.addRow(dataRow);
+      }, this.i * 1000);
+      this.i++;
     });
     socket.on('job finished', () => {
       this.jobFinished.next(null);
+      this.i = 0;
     });
   }
 

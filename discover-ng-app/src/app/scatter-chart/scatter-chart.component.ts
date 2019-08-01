@@ -6,7 +6,6 @@ import {JobData} from "../data/job";
 import {Design} from "../designs-container/designs-container.component";
 import * as chroma from 'chroma-js';
 import {clipper} from "./custom-clipper";
-import {debounceTime} from "rxjs/operators";
 
 @Component({
   selector: 'app-scatter-chart',
@@ -33,11 +32,6 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.jobData && this.jobData) {
-      this.jobData.rangesChange.pipe(debounceTime(250)).subscribe((v) => {
-        this.bubbleChartOptions = this.getChartOptions()
-      });
-    }
     if (changes.jobData || changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel || changes.colorLabel) {
       if (this.jobData) {
         this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
@@ -64,6 +58,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   }
 
   getChartOptions(): ChartOptions {
+    console.log('opts');
     return {
       responsive: true,
       maintainAspectRatio: false,
@@ -130,9 +125,9 @@ export class ScatterChartComponent implements OnChanges, OnInit {
             display: true,
             labelString: this.xAxisLabel
           },
-          ticks: {
-            min: this.jobData ? this.jobData.getMinX() : 0,
-            max: this.jobData ? this.jobData.getMaxX() : 100
+          beforeFit: (scale?: any) => {
+            scale.options.ticks.max = this.jobData.getMaxX();
+            scale.options.ticks.min = this.jobData.getMinX();
           }
         }],
         yAxes: [{
@@ -141,9 +136,9 @@ export class ScatterChartComponent implements OnChanges, OnInit {
             display: true,
             labelString: this.yAxisLabel
           },
-          ticks: {
-            min: this.jobData ? this.jobData.getMinY() : 0,
-            max: this.jobData ? this.jobData.getMaxY() : 100
+          beforeFit: (scale?: any) => {
+            scale.options.ticks.max = this.jobData.getMaxY();
+            scale.options.ticks.min = this.jobData.getMinY();
           }
         },]
       },

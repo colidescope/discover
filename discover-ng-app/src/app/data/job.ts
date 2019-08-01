@@ -1,6 +1,5 @@
 import {ChartPoint} from "chart.js";
 import * as chroma from 'chroma-js';
-import {BehaviorSubject} from "rxjs";
 
 declare const getDominantSet;
 
@@ -12,8 +11,6 @@ export class JobData {
   private chartColors: string[] = [];
   private xAxisRange: number[] = [0, 100];
   private yAxisRange: number[] = [0, 100];
-  private i = 0;
-  public rangesChange: BehaviorSubject<number> = new BehaviorSubject(this.i);
   private xSelector: string;
   private ySelector: string;
   private rSelector: string;
@@ -30,7 +27,6 @@ export class JobData {
     this.addDataRow(row);
     this.computeColors();
     this.computeRanges();
-    this.rangesChange.next(++this.i);
   }
 
   getRow(idx: number) {

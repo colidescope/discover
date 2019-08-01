@@ -16,6 +16,7 @@ export class AppComponent {
   rightSideBarStatus: SideBarStatus = {opened: false, selectedIndex: -1};
   jobId: string = '';
   jobData: JobData = null;
+  jobRunning = false;
 
   //Run Panel State
   designPerGen: number = 5;
@@ -44,7 +45,10 @@ export class AppComponent {
         this.colorLabel = 'generation';
         this.radiusLabel = 'id';
       }
-    })
+    });
+    realTimeService.jobFinished.subscribe(() => {
+      this.jobRunning = false;
+    });
   }
 
   getLeftMenuItems() {

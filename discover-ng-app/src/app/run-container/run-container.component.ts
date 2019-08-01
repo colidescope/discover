@@ -12,7 +12,8 @@ export class RunContainerComponent {
   numberGenLabel: string = "Number of generations";
   mutationRateLabel: string = "Mutation rate";
   elitesLabel: string = "Elites";
-  jobRunning: boolean = false;
+  @Input() jobRunning: boolean = false;
+  @Output() jobRunningChange: EventEmitter<boolean> = new EventEmitter();
   @Output() jobIdChange: EventEmitter<string> = new EventEmitter<string>();
 
   log: string = '';
@@ -29,13 +30,11 @@ export class RunContainerComponent {
     logService.getLog().subscribe(value => {
       this.log = value;
     });
-    logService.jobFinished.subscribe(() => {
-      this.jobRunning = false;
-    });
   }
 
   startJob() {
     this.jobRunning = true;
+    this.jobRunningChange.emit(true);
     const body = {
       options: {
         'Designs per generation': this.designPerGen,
@@ -48,6 +47,7 @@ export class RunContainerComponent {
       this.jobIdChange.emit(response.job_id);
     }, (error) => {
       this.jobRunning = false;
+      this.jobRunningChange.emit(false);
       console.log(error);
     });
   }
@@ -55,6 +55,7 @@ export class RunContainerComponent {
   stopJob() {
     this.http.get('http://localhost:5000/api/v1.0/stop').subscribe(() => {
       this.jobRunning = false;
+      this.jobRunningChange.emit(false);
     })
   }
 }

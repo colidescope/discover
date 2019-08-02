@@ -92,7 +92,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
           }
 
           // Hide if no tooltip
-          if (tooltip.opacity === 0) {
+          if (tooltip.opacity === 0 || !this.isMouseInsideChart()) {
             tooltipEl.style.opacity = 0;
             return;
           }
@@ -185,7 +185,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
       hover: {
         onHover: (event, activeElements) => {
           this.lastMousePosition = [event.layerX, event.layerY];
-          this._chart.chart.canvas.style.cursor = activeElements[0] ? 'pointer' : 'default';
+          this._chart.chart.canvas.style.cursor = this.isMouseInsideChart() && activeElements[0] ? 'pointer' : 'default';
         }
       }
     };
@@ -260,5 +260,10 @@ export class ScatterChartComponent implements OnChanges, OnInit {
 
     scale.ticksAsNumbers[0] = null;
     scale.ticksAsNumbers[scale.ticksAsNumbers.length - 1] = null;
+  }
+
+  private isMouseInsideChart() {
+    return this.lastMousePosition[0] > this._chart.chart.chartArea.left && this.lastMousePosition[0] < this._chart.chart.chartArea.right
+      && this.lastMousePosition[1] > this._chart.chart.chartArea.top && this.lastMousePosition[1] < this._chart.chart.chartArea.bottom;
   }
 }

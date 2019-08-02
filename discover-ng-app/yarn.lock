@@ -1457,13 +1457,6 @@ chartjs-color@^2.1.0:
     chartjs-color-string "^0.6.0"
     color-convert "^0.5.3"
 
-chartjs-plugin-zoom@^0.7.3:
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/chartjs-plugin-zoom/-/chartjs-plugin-zoom-0.7.3.tgz#f4413f765ce887f4fd6e0cecd459fcc8f06b9746"
-  integrity sha512-y4rFIcxLtMkemxLJa8zFODgNqLZ7IPiZnKtzY1biRZhsaj8C6iwmXfWfmwMeB9sT4C6Mbp5MwMKQvORvdzHHzw==
-  dependencies:
-    hammerjs "^2.0.8"
-
 "chokidar@>=2.0.0 <4.0.0":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.0.2.tgz#0d1cd6d04eb2df0327446188cd13736a3367d681"

@@ -26,6 +26,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   public bubbleChartType: ChartType = 'bubble';
   public bubbleChartOptions: ChartOptions = this.getChartOptions();
   public bubbleChartData: ChartDataSets[] = [];
+  private lastMousePosition: number[];
 
   ngOnInit(): void {
     Chart.pluginService.register(clipper); //Custom clipper to avoid points getting put of grid area.
@@ -165,13 +166,25 @@ export class ScatterChartComponent implements OnChanges, OnInit {
           },
           zoom: {
             enabled: true,
-            mode: 'xy',
+            mode: () => {
+              let yMode = this.lastMousePosition[0] < this._chart.chart.chartArea.left;
+              let xMode = this.lastMousePosition[1] > this._chart.chart.chartArea.bottom;
+              if (xMode && yMode) {
+                return "xy";
+              } else if (xMode) {
+                return "x";
+              } else if (yMode) {
+                return "y"
+              }
+              return "xy";
+            },
             speed: 0.05
           }
         }
       },
       hover: {
         onHover: (event, activeElements) => {
+          this.lastMousePosition = [event.layerX, event.layerY];
           this._chart.chart.canvas.style.cursor = activeElements[0] ? 'pointer' : 'default';
         }
       }

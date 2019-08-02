@@ -2,7 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import 'hammerjs';
-import 'chartjs-plugin-zoom';
+import '../scripts/chartjs-plugin-zoom';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component'
 import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";

@@ -12,14 +12,14 @@
   <app-stepper-input [(value)]="elites" (valueChange)="elitesChange.emit($event)" [min]="0" [max]="9999"
                      [label]="elitesLabel"></app-stepper-input>
   <div class="row no-gutters mt-3">
-    <textarea #logArea id="log-area" class="col-12" [readOnly]="true" [rows]="5">{{log}}</textarea>
-  </div>
-  <div class="row no-gutters mt-3">
     <button (click)="startJob()" class="btn btn-sm btn-secondary btn-play col" [class.btn-success]="!jobRunning"
             [disabled]="jobRunning">RUN
     </button>
     <button (click)="stopJob()" class="btn btn-sm btn-secondary btn-stop col ml-1" [class.btn-success]="jobRunning"
             [disabled]="!jobRunning">STOP
     </button>
+  </div>
+  <div class="row no-gutters mt-3">
+    <textarea #logArea id="log-area" class="col-12" [readOnly]="true" [rows]="5">{{log}}</textarea>
   </div>
 </div>

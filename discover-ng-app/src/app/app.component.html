@@ -1,4 +1,7 @@
-<app-navbar></app-navbar>
+<app-navbar>
+  <app-load-project class="mx-auto" style="min-width: 70%" [projectName]="jobId"
+                    (projectNameChange)="updateJobId($event)"></app-load-project>
+</app-navbar>
 <div class="container-fluid" id="main-container">
   <div class="row h-100">
     <app-sidebar [menuItems]="getLeftMenuItems()" [selectedItem]="0" (onStausChange)="updateLeftSideBarStatus($event)">
@@ -23,9 +26,7 @@
         </ng-template>
       </div>
     </app-sidebar>
-
     <div id="centralPanel" [ngClass]="getWidthClass()">
-      <app-load-project [projectName]="jobId" (projectNameChange)="updateJobId($event)"></app-load-project>
       <app-scatter-chart #scatter
                          *ngIf="jobData != null"
                          [xAxisLabel]="xAxisLabel"
@@ -38,7 +39,6 @@
                          [isolate]="isolate">
       </app-scatter-chart>
     </div>
-
     <app-sidebar [menuItems]="getRightMenuItems()"
                  (onStausChange)="updateRightSideBarStatus($event)"
                  [inverted]='true'>

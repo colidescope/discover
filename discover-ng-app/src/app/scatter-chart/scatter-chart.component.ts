@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import * as Chart from "chart.js";
-import {ChartDataSets, ChartOptions, ChartType} from "chart.js";
+import {ChartDataSets, ChartOptions, ChartType, PointStyle} from "chart.js";
 import {BaseChartDirective} from "ng2-charts";
 import {JobData} from "../data/job";
 import {Design} from "../designs-container/designs-container.component";
@@ -39,18 +39,18 @@ export class ScatterChartComponent implements OnChanges, OnInit {
         let chartData = this.jobData.getCharData();
         let borderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
         let hoverBorderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
-        let borderColor = chartData.map((v, idx) => this.isSelected(idx) ? '#222' : '#0222');
-
-        if (changes.jobData) {
-          this.bubbleChartData = [{
-            data: chartData,
-            borderWidth: borderWidth,
-            hoverBorderWidth: hoverBorderWidth,
-            borderColor: borderColor,
-            backgroundColor: this.jobData.getCharColors()
-          }];
-          this.bubbleChartOptions = this.getChartOptions();
-        }
+        let borderColor = chartData.map((v, idx) => this.isSelected(idx) ? '#222' : this.jobData.getChartColors()[idx]);
+        let pointStyles: PointStyle[] = chartData.map((v, idx) => this.jobData.isFeasible(idx) ? 'circle' : 'rect');
+        let chartColors = this.jobData.getChartColors().map((v, idx) => this.jobData.isFeasible(idx) ? v : '#0000');
+        this.bubbleChartData = [{
+          data: chartData,
+          borderWidth: borderWidth,
+          hoverBorderWidth: hoverBorderWidth,
+          borderColor: borderColor,
+          backgroundColor: chartColors,
+          pointStyle: pointStyles
+        }];
+        this.bubbleChartOptions = this.getChartOptions();
       }
       if (this.isolate != -1) {
         this.computeOpacity(this.isolate);
@@ -59,9 +59,19 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     } else if (changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel || changes.colorLabel) {
       if (this.jobData) {
         this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
-        let options = this._chart.chart.config.options;
-        options.scales.xAxes[0].scaleLabel.labelString = this.xAxisLabel;
-        options.scales.yAxes[0].scaleLabel.labelString = this.yAxisLabel;
+        if (changes.xAxisLabel || changes.yAxisLabel) {
+          let options = this._chart.chart.config.options;
+          options.scales.xAxes[0].scaleLabel.labelString = this.xAxisLabel;
+          options.scales.yAxes[0].scaleLabel.labelString = this.yAxisLabel;
+        }
+        if (changes.colorLabel) {
+          let chartColors = this.jobData.getChartColors().map((v, idx) => this.jobData.isFeasible(idx) ? v : '#0000');
+          let borderColor = this.jobData.getCharData().map((v, idx) => {
+            return this.isSelected(idx) ? '#222' : this.jobData.getChartColors()[idx];
+          });
+          this._chart.chart.data.datasets[0].borderColor = borderColor;
+          this._chart.chart.data.datasets[0].backgroundColor = chartColors;
+        }
         this._chart.chart.update();
       }
       if (this.isolate != -1) {
@@ -232,21 +242,21 @@ export class ScatterChartComponent implements OnChanges, OnInit {
         if (!optimal.find((optim) => {
           return optim.id == idx
         })) {
-          return chroma(this.jobData.getCharColors()[idx]).alpha(0.05).hex()
+          return chroma(this.jobData.getChartColors()[idx]).alpha(0.05).hex()
         } else {
-          return chroma(this.jobData.getCharColors()[idx]).alpha(1).hex();
+          return chroma(this.jobData.getChartColors()[idx]).alpha(1).hex();
         }
       });
     } else if (mode == 1) {
       this.bubbleChartData[0].backgroundColor = (this.bubbleChartData[0].backgroundColor as string[]).map((hex, idx) => {
         if (!this.isSelected(idx)) {
-          return chroma(this.jobData.getCharColors()[idx]).alpha(0.05).hex()
+          return chroma(this.jobData.getChartColors()[idx]).alpha(0.05).hex()
         } else {
-          return chroma(this.jobData.getCharColors()[idx]).alpha(1).hex();
+          return chroma(this.jobData.getChartColors()[idx]).alpha(1).hex();
         }
       });
     } else {
-      this.bubbleChartData[0].backgroundColor = this.jobData.getCharColors();
+      this.bubbleChartData[0].backgroundColor = this.jobData.getChartColors();
     }
   }
 

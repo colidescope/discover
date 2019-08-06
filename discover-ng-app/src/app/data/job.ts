@@ -11,6 +11,7 @@ export class JobData {
   private chartColors: string[] = [];
   private xAxisRange: number[] = [0, 100];
   private yAxisRange: number[] = [0, 100];
+  private readonly feasibleIndex: number;
   private xSelector: string;
   private ySelector: string;
   private rSelector: string;
@@ -19,6 +20,7 @@ export class JobData {
 
   constructor(header: string[]) {
     this.jobHeader = header;
+    this.feasibleIndex = header.indexOf('feasible');
     this.jobOptions = JobData.filterOptions(header);
   }
 
@@ -27,6 +29,13 @@ export class JobData {
     this.addDataRow(row);
     this.computeColors();
     this.computeRanges();
+  }
+
+  isFeasible(idx: number): boolean {
+    if (this.feasibleIndex > -1) {
+      return this.getRow(idx)[this.feasibleIndex] === "True"
+    }
+    return false;
   }
 
   getRow(idx: number) {
@@ -64,19 +73,19 @@ export class JobData {
     const max = Math.max(...radiusData);
     let i = 0;
     for (let point of this.getCharData()) {
-      const percent = positions[2] > -1 ? (radiusData[i] - min) / (max - min) : 0;
-      point.r = 5 + (percent * 10);
+      const radiusPercent = positions[2] > -1 && this.isFeasible(i) ? (radiusData[i] - min) / (max - min) : 0;
+      point.r = 5 + (radiusPercent * 10);
       i++;
     }
-    const percent = positions[2] > -1 ? (row[positions[2]] - min) / (max - min) : 0;
-    this.chartData.push({x: row[positions[0]], y: row[positions[1]], r: 5 + (percent * 10)});
+    const radiusPercent = positions[2] > -1 && this.isFeasible(this.data.length - 1) ? (row[positions[2]] - min) / (max - min) : 0;
+    this.chartData.push({x: row[positions[0]], y: row[positions[1]], r: 5 + (radiusPercent * 10)});
   }
 
   public getCharData(): ChartPoint[] {
     return this.chartData;
   }
 
-  public getCharColors(): string[] {
+  public getChartColors(): string[] {
     return this.chartColors;
   }
 
@@ -90,11 +99,11 @@ export class JobData {
     const max = Math.max(...radiusData);
     let i: number = 0;
     for (let row of data) {
-      const percent = positions[2] > -1 ? (row[positions[2]] - min) / (max - min) : 0;
+      const radiusPercent = positions[2] > -1 && this.isFeasible(i) ? (row[positions[2]] - min) / (max - min) : 0;
       let point = this.chartData[i];
       point.x = row[positions[0]];
       point.y = row[positions[1]];
-      point.r = 5 + (percent * 10);
+      point.r = 5 + (radiusPercent * 10);
       i++;
     }
   }

@@ -206,7 +206,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
       const selected: Design = this.selectedPoints.find((design => design && design.index == point._index));
       this.bubbleChartData[0].borderWidth[point._index] = selected ? 1 : 2;
       this.bubbleChartData[0].hoverBorderWidth[point._index] = selected ? 1 : 2;
-      this.bubbleChartData[0].borderColor[point._index] = selected ? '#0222' : '#222';
+      this.bubbleChartData[0].borderColor[point._index] = selected ? this.jobData.getChartColors()[point._index] : '#222';
       if (!selected) {
         this.selectedPoints.push({
           index: point._index,
@@ -229,7 +229,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     this.selectedPoints = [];
     this.bubbleChartData[0].borderWidth = [].fill(1, this.bubbleChartData[0].data.length);
     this.bubbleChartData[0].hoverBorderWidth = [].fill(1, this.bubbleChartData[0].data.length);
-    this.bubbleChartData[0].borderColor = [].fill('#0222', this.bubbleChartData[0].data.length);
+    this.bubbleChartData[0].borderColor = this.jobData.getCharData().map((v, idx) => this.jobData.getChartColors()[idx]);
     this.computeOpacity(this.isolate);
     this.selectedPointsChange.emit([]);
     this._chart.chart.update();
@@ -242,21 +242,21 @@ export class ScatterChartComponent implements OnChanges, OnInit {
         if (!optimal.find((optim) => {
           return optim.id == idx
         })) {
-          return chroma(this.jobData.getChartColors()[idx]).alpha(0.05).hex()
+          return this.jobData.isFeasible(idx) ? chroma(this.jobData.getChartColors()[idx]).alpha(0.05).hex() : '#0000';
         } else {
-          return chroma(this.jobData.getChartColors()[idx]).alpha(1).hex();
+          return this.jobData.isFeasible(idx) ? chroma(this.jobData.getChartColors()[idx]).alpha(1).hex() : '#0000';
         }
       });
     } else if (mode == 1) {
       this.bubbleChartData[0].backgroundColor = (this.bubbleChartData[0].backgroundColor as string[]).map((hex, idx) => {
         if (!this.isSelected(idx)) {
-          return chroma(this.jobData.getChartColors()[idx]).alpha(0.05).hex()
+          return this.jobData.isFeasible(idx) ? chroma(this.jobData.getChartColors()[idx]).alpha(0.05).hex() : '#0000';
         } else {
-          return chroma(this.jobData.getChartColors()[idx]).alpha(1).hex();
+          return this.jobData.isFeasible(idx) ? chroma(this.jobData.getChartColors()[idx]).alpha(1).hex() : '#0000';
         }
       });
     } else {
-      this.bubbleChartData[0].backgroundColor = this.jobData.getChartColors();
+      this.bubbleChartData[0].backgroundColor = this.jobData.getChartColors().map((v, idx) => this.jobData.isFeasible(idx) ? v : '#0000');
     }
   }
 

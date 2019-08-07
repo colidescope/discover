@@ -72,7 +72,7 @@ export class JobData {
     const min = Math.min(...radiusData);
     const max = Math.max(...radiusData);
     let i = 0;
-    for (let point of this.getCharData()) {
+    for (let point of this.getChartData()) {
       const radiusPercent = positions[2] > -1 && this.isFeasible(i) ? (radiusData[i] - min) / (max - min) : 0;
       point.r = 5 + (radiusPercent * 10);
       i++;
@@ -81,7 +81,7 @@ export class JobData {
     this.chartData.push({x: row[positions[0]], y: row[positions[1]], r: 5 + (radiusPercent * 10)});
   }
 
-  public getCharData(): ChartPoint[] {
+  public getChartData(): ChartPoint[] {
     return this.chartData;
   }
 

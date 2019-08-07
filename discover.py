@@ -355,7 +355,10 @@ def get_design(job_path, des_id):
     return jsonify({"status": "success"})
 
 
-
+@app.route("/api/v1.0/image_folder_exists/<string:job_path>", methods=['GET'])
+def image_folder_exists(job_path):
+    image_path = Path(job_path) / "images"
+    return jsonify(os.path.exists(image_path))
 
 
 @app.route("/api/v1.0/get_image/<string:job_path>/<string:des_id>", methods=['GET'])

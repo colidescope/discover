@@ -4,7 +4,7 @@
 <div id="content" class="row no-gutters">
   <div id="design-item" class="col-6 p-1" *ngFor="let design of designsList; let i = index"
        (click)="regenerateDesign(i)">
-    <img *ngIf="design.imageUri" [src]="design.imageUri" [alt]="'Design #'+design.index" style="max-width: 100%">
+    <img *ngIf="jobHaveImages" [src]="design.imageUri" [alt]="'Design #'+design.index" style="max-width: 100%">
     <div>Design #{{design.index}}</div>
   </div>
 </div>

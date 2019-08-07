@@ -59,13 +59,13 @@ canvas
   border-radius: 6px
   border: 1px solid black
   pointer-events: none
-  -webkit-transform: translate(-50%, -110%)
-  transform: translate(-50%, -110%)
+  -webkit-transform: translate(-50%, calc(-100% - 10px))
+  transform: translate(-50%, calc(-100% - 10px))
   z-index: 10000
 
 #chartjs-tooltip.below
-  -webkit-transform: translate(-50%, 10%)
-  transform: translate(-50%, 10%)
+  -webkit-transform: translate(-50%, 18px)
+  transform: translate(-50%, 18px)
 
 .chartjs-tooltip-key
   display: inline-block

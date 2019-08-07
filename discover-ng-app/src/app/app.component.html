@@ -36,7 +36,8 @@
                          [jobData]="jobData"
                          [jobId]="jobId"
                          [(selectedPoints)]="selectedDesigns"
-                         [isolate]="isolate">
+                         [isolate]="isolate"
+                         [jobHaveImages]="jobHaveImages">
       </app-scatter-chart>
     </div>
     <app-sidebar [menuItems]="getRightMenuItems()"
@@ -44,7 +45,9 @@
                  [inverted]='true'>
       <div [ngSwitch]="rightSideBarStatus.selectedIndex">
         <ng-template [ngSwitchCase]="0">
-          <app-designs-container [jobId]="jobId" [designsList]="selectedDesigns"></app-designs-container>
+          <app-designs-container [jobId]="jobId"
+                                 [jobHaveImages]="jobHaveImages"
+                                 [designsList]="selectedDesigns"></app-designs-container>
         </ng-template>
       </div>
     </app-sidebar>

@@ -9,6 +9,7 @@ import {HttpClient} from "@angular/common/http";
 export class DesignsContainerComponent {
   @Input() designsList: Design[] = [];
   @Input() jobId: string = '';
+  @Input() jobHaveImages: boolean = false;
 
   constructor(private http: HttpClient) {
   }

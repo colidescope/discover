@@ -22,6 +22,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   @Input() jobId: string = '';
   @Input() isolate: number;
   @Input() selectedPoints: Design[] = [];
+  @Input() jobHaveImages: boolean = false;
   isolatedPoints: Design[] = [];
 
   @Output() selectedPointsChange: EventEmitter<Design[]> = new EventEmitter();
@@ -121,7 +122,10 @@ export class ScatterChartComponent implements OnChanges, OnInit {
           // Set Text
           if (tooltip.body) {
             let index = tooltip.dataPoints[0].index;
-            let innerHtml = '<img style="max-width: 200px" src="http://localhost:5000/api/v1.0/get_image/' + encodeURI(this.jobId) + '/' + index + '"/>';
+            let innerHtml = '';
+            if (this.jobHaveImages) {
+              innerHtml += '<img style="max-width: 200px" src="http://localhost:5000/api/v1.0/get_image/' + encodeURI(this.jobId) + '/' + index + '"/>';
+            }
             innerHtml += '<div> Design #' + index;
             innerHtml += '</div>';
 
@@ -287,11 +291,6 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   }
 
   getBorderColor(idx: number): string {
-    if (idx == 4) {
-      console.log(this.isSelected(idx));
-      console.log(this.isIsolated(idx));
-      console.log(this.jobData.isFeasible(idx));
-    }
     if (this.isSelected(idx)) return '#222';
     if (this.jobData.isFeasible(idx)) {
       return '#0222';

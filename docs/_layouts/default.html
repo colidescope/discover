@@ -40,6 +40,10 @@
 <!--         {% if site.github.is_user_page %}
         <p class="view"><a href="{{ site.github.owner_url }}">View My GitHub Profile</a></p>
         {% endif %} -->
+        
+        <form action="{{ site.github.zip_url }}">
+          <input type="submit" value="Download" />
+        </form>
 
         {% if site.show_downloads %}
         <ul class="downloads">

@@ -146,7 +146,11 @@ export class JobData {
       }
       transformedData.push(transformedRow);
     }
-    return getDominantSet(transformedData);
+    if (transformedData.length > 0) {
+      return getDominantSet(transformedData);
+    } else {
+      return [];
+    }
   }
 
 

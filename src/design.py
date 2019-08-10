@@ -186,18 +186,20 @@ class Design:
 			self.objectives.append(value)
 
 		elif _o["type"] == "Constraint":
-			goal = _o["goal"]
-			goal_val = float(_o["val"])
 
-			if goal == "Less than":
+			goal = _o["goal"]
+			goal_type = (" ").join(goal.split(" ")[:-1])
+			goal_val = float(goal.split(" ")[-1])
+
+			if goal_type == "Less than":
 				if value >= goal_val:
 					self.penalty += 1
 					self.feasible = False
-			elif goal == "Greater than":
+			elif goal_type == "Greater than":
 				if value <= goal_val:
 					self.penalty += 1
 					self.feasible = False
-			elif goal == "Equals":
+			elif goal_type == "Equals":
 				if value != goal_val:
 					self.penalty += 1
 					self.feasible = False

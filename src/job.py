@@ -184,8 +184,8 @@ class Job:
 		for _o in self.client.get_outputs():
 			if _o.get_type() == "Objective":
 				header.append("[{}] {}".format(_o.get_goal(), _o.get_name()) )
-			elif _o.get_type() == "Constraint":
-				header.append("[{}] {}".format(_o["requirement"], _o["name"]) )
+			# elif _o.get_type() == "Constraint":
+			# 	header.append("[{}] {}".format(_o.get_goal(), _o.get_name()) )
 
 		with open(self.path / "results.tsv", 'a') as f:
 			f.write("\t".join(header))

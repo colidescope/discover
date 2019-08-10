@@ -11,12 +11,14 @@
   <app-select-input [label]="'Color'" [options]="getOptions(true)" [value]="color"
                     (valueChange)="colorChanged($event)"></app-select-input>
   <div class="row no-gutters mt-3">
-    <label class="col-6">Isolate:</label>
-    <app-checkbox-input class="col pl-2" [checked]="isolate == 0" (checkedChange)="isolateOptimal($event)"
+    <label>Isolate:</label>
+    <app-checkbox-input class="ml-auto" style="width:190px;" [checked]="isolate == 0"
+                        (checkedChange)="isolateOptimal($event)"
                         [value]="'Optimal'"></app-checkbox-input>
   </div>
   <div class="row no-gutters mt-1">
-    <app-checkbox-input class="col offset-6 pl-2" [checked]="isolate == 1" (checkedChange)="isolateSelected($event)"
+    <app-checkbox-input class="ml-auto" style="width: 190px" [checked]="isolate == 1"
+                        (checkedChange)="isolateSelected($event)"
                         [value]="'Selected'"></app-checkbox-input>
   </div>
   <div class="row no-gutters mt-3">

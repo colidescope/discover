@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 from time import sleep
 
-from flask import Flask, jsonify, request, render_template, send_from_directory  # , send_file
+from flask import Flask, jsonify, request, send_from_directory  # , send_file
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
@@ -32,8 +32,18 @@ des = Design(None, None, None, client, logger)
 fetch_design = False
 
 @app.route("/")
-def index():
-	return render_template("index.html")
+def home():
+	return app.send_static_file("index.html")
+
+
+@app.route("/<path:path>")
+def serve_static(path):
+	if path.endswith("js"):
+		return send_from_directory(
+			app.static_folder, path, cache_timeout=app.get_send_file_max_age(path), mimetype='application/javascript')
+	else:
+		return send_from_directory(app.static_folder, path, cache_timeout=app.get_send_file_max_age(path))
+
 
 @app.route('/api/v1.0/connect', methods=['GET', 'POST'])
 def connect():

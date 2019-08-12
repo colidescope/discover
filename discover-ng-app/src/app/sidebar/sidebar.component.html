@@ -1,0 +1,8 @@
+<div class="row no-gutters h-100" [class.inverted]="inverted">
+  <app-sidemenu [itemSelected]="selectedItem" [menuItems]="menuItems"
+                (onItemSelected)="selectItem($event)"
+                [inverted]="inverted"></app-sidemenu>
+  <div id="sidepanel" style="max-height: 100%;overflow-y: auto;" [class.closed]="!isOpen()">
+    <ng-content></ng-content>
+  </div>
+</div>

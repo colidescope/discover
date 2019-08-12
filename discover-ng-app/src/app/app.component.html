@@ -1,0 +1,55 @@
+<app-navbar>
+  <app-load-project class="mx-auto" style="min-width: 70%" [projectName]="jobId"
+                    (projectNameChange)="updateJobId($event)"></app-load-project>
+</app-navbar>
+<div class="container-fluid" id="main-container">
+  <div class="row h-100">
+    <app-sidebar [menuItems]="getLeftMenuItems()" [selectedItem]="0" (onStausChange)="updateLeftSideBarStatus($event)">
+      <div [ngSwitch]="leftSideBarStatus.selectedIndex">
+        <ng-template [ngSwitchCase]="0">
+          <app-run-container (jobIdChange)="updateJobId($event)"
+                             [(designPerGen)]="designPerGen"
+                             [(numberGen)]="numberGen"
+                             [(mutationRate)]="mutationRate"
+                             [(jobRunning)]="jobRunning"
+                             [(elites)]="elites"></app-run-container>
+        </ng-template>
+        <ng-template [ngSwitchCase]="1">
+          <app-explore-container [(xAxis)]="xAxisLabel"
+                                 [(yAxis)]="yAxisLabel"
+                                 [(size)]="radiusLabel"
+                                 [(color)]="colorLabel"
+                                 (resetZoomClicked)="resetZoom()"
+                                 (clearSelectedClicked)="clearSelected()"
+                                 [(isolate)]="isolate">
+          </app-explore-container>
+        </ng-template>
+      </div>
+    </app-sidebar>
+    <div id="centralPanel" [ngClass]="getWidthClass()">
+      <app-scatter-chart #scatter
+                         *ngIf="jobData != null"
+                         [xAxisLabel]="xAxisLabel"
+                         [yAxisLabel]="yAxisLabel"
+                         [colorLabel]="colorLabel"
+                         [radiusLabel]="radiusLabel"
+                         [jobData]="jobData"
+                         [jobId]="jobId"
+                         [(selectedPoints)]="selectedDesigns"
+                         [isolate]="isolate"
+                         [jobHaveImages]="jobHaveImages">
+      </app-scatter-chart>
+    </div>
+    <app-sidebar [menuItems]="getRightMenuItems()"
+                 (onStausChange)="updateRightSideBarStatus($event)"
+                 [inverted]='true'>
+      <div [ngSwitch]="rightSideBarStatus.selectedIndex">
+        <ng-template [ngSwitchCase]="0">
+          <app-designs-container [jobId]="jobId"
+                                 [jobHaveImages]="jobHaveImages"
+                                 [designsList]="selectedDesigns"></app-designs-container>
+        </ng-template>
+      </div>
+    </app-sidebar>
+  </div>
+</div>

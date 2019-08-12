@@ -1,0 +1,10 @@
+<div id="header" class="row">
+  <div class="col-12"><h5 class="panel-header-text p-1">Designs</h5></div>
+</div>
+<div id="content" class="row no-gutters">
+  <div id="design-item" class="col-6 p-1" *ngFor="let design of designsList; let i = index"
+       (click)="regenerateDesign(i)">
+    <img *ngIf="jobHaveImages" [src]="design.imageUri" [alt]="'Design #'+design.index" style="max-width: 100%">
+    <div>Design #{{design.index}}</div>
+  </div>
+</div>

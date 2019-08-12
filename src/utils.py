@@ -7,6 +7,7 @@ def remap(value, min1, max1, min2, max2):
 	return float(min2) + (float(value) - float(min1)) * (float(max2) - float(min2)) / (float(max1) - float(min1))
 
 
+
 def permutation2inversion(permutation):
 
     inversion = []
@@ -42,15 +43,15 @@ def inversion2permutation(inversion):
     return permutation
 
 
-def rank(population, outputs_def):
+def rank(population, outputs):
 
     designs = []
     for i, des in enumerate(population):
         designs.append({'id': i, 'scores': des.get_objectives()})
 
-    objectiveGoals = [x["Goal"] for x in outputs_def if x["type"] == "Objective"]
+    objectiveGoals = [o.get_goal() for o in outputs if o.get_type() == "Objective"]
 
-    print("objective goals: " + ",".join(objectiveGoals), file=sys.stderr)
+    # print("objective goals: " + ",".join(objectiveGoals), file=sys.stderr)
 
     validSet = [x for x in designs if len(x['scores']) == len(objectiveGoals)]
 

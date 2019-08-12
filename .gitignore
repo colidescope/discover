@@ -1,2 +1,7 @@
 /data
 *.pyc
+static
+log.txt
+.idea/
+discover.iml
+src/__pycache__/

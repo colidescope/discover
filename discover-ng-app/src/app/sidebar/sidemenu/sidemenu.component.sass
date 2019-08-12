@@ -1,0 +1,44 @@
+@import "~src/styles"
+
+#menu-container
+  margin-top: 36px
+
+.menu-item
+  width: 100%
+  height: 60px
+  padding: 5px
+  cursor: pointer
+  align-content: center
+
+.menu-item.selected
+  background: #f9f9f9
+
+.left .menu-item
+  border-left: transparent 5px solid
+  -webkit-transition: all 0.4s
+  -moz-transition: all 0.4s
+  -ms-transition: all 0.4s
+  -o-transition: all 0.4s
+  transition: all 0.4s
+
+.left .menu-item.selected
+  border-left: $lime-green 5px solid
+
+.right .menu-item
+  border-right: transparent 5px solid
+  -webkit-transition: all 0.4s
+  -moz-transition: all 0.4s
+  -ms-transition: all 0.4s
+  -o-transition: all 0.4s
+  transition: all 0.4s
+
+.right .menu-item.selected
+  border-right: $lime-green 5px solid
+
+.menu-item:hover
+  background: #f9f9f9
+
+img
+  width: 24px
+  height: 24px
+

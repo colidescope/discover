@@ -84,15 +84,17 @@
     
     <script>
       
-      const okButton = document.getElementById('submit-form');
+      const button = document.getElementById('submit-form');
       const emailField = document.getElementById('emailField');
+      
+      button.disabled = true;
         
       $('#emailField').on('keyup', function(e) {
           isValidEmail = emailField.checkValidity();
           if ( isValidEmail ) {
-            okButton.disabled = false;
+            button.disabled = false;
           } else {
-            okButton.disabled = true;
+            button.disabled = true;
           }
           
       });
@@ -103,10 +105,10 @@
       $('#submit-form').on('click', function(e) {
         e.preventDefault();
         
-        if(!document.getElementById('emailField').checkValidity()){
-          alert("Please enter a valid email address.");
-          return("");
-        }
+//         if(!document.getElementById('emailField').checkValidity()){
+//           alert("Please enter a valid email address.");
+//           return("");
+//         }
         
         var jqxhr = $.ajax({
           url: url,

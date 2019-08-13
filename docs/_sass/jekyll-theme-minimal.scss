@@ -123,17 +123,12 @@ header {
   background: #f4f4f4;
   border-radius:5px;
   border:1px solid #e0e0e0;
-}
-
-.button:hover {
-	background: #4691A4;
+  cursor:pointer;
 }
 
 .form-style-1 {
-// 	margin:10px auto;
 	max-width: 400px;
 	padding: 0px;
-// 	font: 13px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 .form-style-1 li {
 	padding: 0;

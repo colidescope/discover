@@ -126,6 +126,10 @@ header {
   cursor:pointer;
 }
 
+.button:disabled {
+	cursor:auto;
+}
+
 .form-style-1 {
 	max-width: 400px;
 	padding: 0px;

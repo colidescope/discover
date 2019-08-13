@@ -30,11 +30,19 @@ Currently Windows does not ship with Python, so if you've never used Python or y
 
 ### Installing dependencies
 
-3. Double-click the `discover.bat` script in your Discover folder. The first time you run the script it will install any dependencies which are needed for Python. This only needs to happen once. After checking the dependencies the script will launch the Discover server and open the app in your default web browser.
+3. Double-click the `discover.bat` script in your Discover folder. The first time you run the script it will install any dependencies which are needed for Python. This only needs to happen once. After checking the dependencies the script will start the Discover server and launch the app in your default web browser.
 4. Windows may ask for admin privileges the first time you run the server. Make sure to click 'Allow access'. You should only have to do this once.
 
 ![image](/assets/img/02.png)
 
-## Running Discover
+### Installing the Grasshopper components
 
-1. Double-click the `discover.bat` script in your Discover folder.
+## Working with Discover
+
+### Starting the server
+
+Double-click the `discover.bat` script in your Discover folder. This will open a Command Prompt window, start the Discover server, and launch the app in your default web browser. Make sure to keep the Command Prompt window open while you're using Discover.
+
+### Shutting down the server
+
+When you're done using Discover, go back to the Command Prompt window and press `Ctrl+c`. It will ask you if you want to `Terminate batch job (Y/N)?`. Type `Y` and `Enter` or press `Ctrl+c` again to shut down the server and close the Command Prompt. Do not close the Command Prompt without first shutting down the server. This may cause the server to keep running in the background which can cause problems when you want to start the server again.

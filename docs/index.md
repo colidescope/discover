@@ -11,7 +11,7 @@ Discover is an optimization tool built to work with [Rhino](https://rhino3d.com)
 - [Python 3.7](https://www.python.org/downloads/windows/)
 - Web browser (such as [Chrome](https://www.google.com/chrome/b/) or [Firefox](https://www.mozilla.org/en-US/firefox/new/))
 
-## Intallation
+## Installation
 
 ### Installing Python
 

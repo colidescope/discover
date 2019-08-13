@@ -52,7 +52,7 @@
 
         <div>
           <label>Email</label>
-          <input type="email" name="Email" placeholder="" required/>
+          <input type="email" id="emailField" name="Email" placeholder="" required/>
         </div>
 
         <div>
@@ -88,6 +88,11 @@
 
       $('#submit-form').on('click', function(e) {
         e.preventDefault();
+        
+        emailField = document.getElementById('emailField')
+        const isValidEmail = emailField.checkValidity();
+        console.log(isValidEmail);
+        
         var jqxhr = $.ajax({
           url: url,
           method: "GET",

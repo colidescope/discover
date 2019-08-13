@@ -7,6 +7,7 @@ body {
   font: 14px/1.5 "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color:#727272;
   font-weight:400;
+  line-height: 24px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -37,10 +38,12 @@ h3, h4, h5, h6 {
 a {
   color:#444444;
   text-decoration:none;
+  background-color: #f2f2f2;
 }
 
 a:hover, a:focus {
   color:#282828;
+  background-color: none;
 }
 
 a small {
@@ -110,18 +113,28 @@ header {
   -webkit-font-smoothing:subpixel-antialiased;
 }
 
-form{
+.form {
     text-align: center;
+    margin: 3em;
 }
 
-input{
-  height:40px;
-  padding:0;
+.button {
+//   height:40px;
+  padding: 1em 2em;
   background: #f4f4f4;
   border-radius:5px;
   border:1px solid #e0e0e0;
-  width:120px;
+//   width:120px;
 }
+
+// input{
+//   height:40px;
+//   padding:0;
+//   background: #f4f4f4;
+//   border-radius:5px;
+//   border:1px solid #e0e0e0;
+//   width:120px;
+// }
 
 ul.downloads {
   list-style:none;

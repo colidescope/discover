@@ -1,9 +1,9 @@
 ---
-layout: default
+layout: download
 ---
 
-## Welcome to another page
+## Download Discover
 
-_yay_
+Fill out the form below and click 'Submit' to start downloading
 
 [back](./)

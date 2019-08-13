@@ -11,7 +11,9 @@
       gtag('config', 'UA-143759392-2');
     </script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
+    <script src="{{ "/assets/js/jquery.serialize-object.js" | relative_url }}"></script>
+    <script src="{{ "/assets/js/download.js" | relative_url }}"></script>
+    
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -92,7 +94,7 @@
           dataType: "json",
           data: $form.serializeObject()
         }).success(
-          // do something
+          download("https://www.dropbox.com/s/tlunwij64lbegr8/discover-190813.zip?dl=1", "discover.zip", "application/zip");
         );
       })
     </script>

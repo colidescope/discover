@@ -89,9 +89,16 @@
       $('#submit-form').on('click', function(e) {
         e.preventDefault();
         
-        emailField = document.getElementById('emailField')
-        const isValidEmail = emailField.checkValidity();
-        console.log(isValidEmail);
+        if(!document.getElementById('emailField').checkValidity()){
+          alert("email required!");
+          return("");
+        }
+        
+//         nameField = document.getElementById('emailField')
+        
+//         emailField = document.getElementById('emailField')
+//         const isValidEmail = emailField.checkValidity();
+//         console.log(isValidEmail);
         
         var jqxhr = $.ajax({
           url: url,

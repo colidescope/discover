@@ -56,7 +56,7 @@
         </div>
 
         <div>
-          <button type="submit"id="submit-form">Submit</button>
+          <button type="submit" id="submit-form">Submit</button>
         </div>
 
       </form>
@@ -83,6 +83,19 @@
     {% endif %}
     
     <script>
+      
+      const okButton = document.getElementById('submit-form');
+        
+      $('#emailField').on('keyup', function(e) {
+          isValidEmail = ;
+          if ( $('#emailField').checkValidity() ) {
+            okButton.disabled = false;
+          } else {
+            okButton.disabled = true;
+          }
+          
+      });
+      
       var $form = $('form#test-form'),
           url = 'https://script.google.com/macros/s/AKfycbzNarN33YONXPjO_kwEc8fBXzqXKfGEZ1EgDvzYu4n06quMz4U/exec'
 
@@ -90,15 +103,9 @@
         e.preventDefault();
         
         if(!document.getElementById('emailField').checkValidity()){
-          alert("email required!");
+          alert("Please enter a valid email address.");
           return("");
         }
-        
-//         nameField = document.getElementById('emailField')
-        
-//         emailField = document.getElementById('emailField')
-//         const isValidEmail = emailField.checkValidity();
-//         console.log(isValidEmail);
         
         var jqxhr = $.ajax({
           url: url,
@@ -107,7 +114,6 @@
           data: $form.serializeObject()
         }).done( function(result) {
           window.open('{{ site.release_link }}');
-//           download("https://www.dropbox.com/s/tlunwij64lbegr8/discover-190813.zip?dl=1", "discover.zip", "application/zip");
         }
         );
       })

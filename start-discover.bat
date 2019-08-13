@@ -1,2 +1,3 @@
-
-pip install -r requirements.txt && python discover.py
+pip install -r requirements.txt
+explorer "http://localhost:5000/"
+python server.py

@@ -125,6 +125,10 @@ header {
   border:1px solid #e0e0e0;
 }
 
+.button:hover {
+	background: #4691A4;
+}
+
 .form-style-1 {
 // 	margin:10px auto;
 	max-width: 400px;
@@ -193,19 +197,7 @@ select{
 .form-style-1 .field-textarea{
 	height: 100px;
 }
-.form-style-1 button{
-	background: #f4f4f4;
-	padding: 8px 15px 8px 15px;
-  	border-radius:5px;
-  	border:1px solid #e0e0e0;
-// 	color: #fff;
-}
-.form-style-1 button:hover{
-	background: #4691A4;
-	box-shadow:none;
-	-moz-box-shadow:none;
-	-webkit-box-shadow:none;
-}
+
 .form-style-1 .required{
 	color:red;
 }

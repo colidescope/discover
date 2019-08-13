@@ -93,7 +93,7 @@
           method: "GET",
           dataType: "json",
           data: $form.serializeObject()
-        }).success( function(result) {
+        }).done( function(result) {
           download("https://www.dropbox.com/s/tlunwij64lbegr8/discover-190813.zip?dl=1", "discover.zip", "application/zip");
         }
         );

@@ -37,10 +37,12 @@ h3, h4, h5, h6 {
 a {
   color:#444444;
   text-decoration:none;
+  background-color: #f2f2f2;
 }
 
 a:hover, a:focus {
   color:#282828;
+  background-color: none;
 }
 
 a small {

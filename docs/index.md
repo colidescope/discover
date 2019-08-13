@@ -35,8 +35,6 @@ Currently Windows does not ship with Python, so if you've never used Python or y
 
 ![image](/assets/img/02.png)
 
-### Installing the Grasshopper components
-
 ## Working with Discover
 
 ### Starting the server

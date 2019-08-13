@@ -21,6 +21,6 @@ Currently Windows does not ship with Python, so if you've never used Python or y
 2. On the download page, scroll down and under 'Files' select and download the [`Windows x86-64 executable installer`](https://www.python.org/ftp/python/3.7.4/python-3.7.4-amd64.exe). 
 3. Run the .exe installation file to install Python on your computer.
 
-
+![image](/assets/img/01.png)
  
 ### Installing Discover

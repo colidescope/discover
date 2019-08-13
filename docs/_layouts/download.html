@@ -12,7 +12,6 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="{{ "/assets/js/jquery.serialize-object.js" | relative_url }}"></script>
-<!--     <script src="{{ "/assets/js/download.js" | relative_url }}"></script> -->
     
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,7 +26,6 @@
   <body>
     <div class="wrapper">
       <header>
-<!--         <h1><a href="{{ "/" | absolute_url }}">{{ site.title | default: site.github.repository_name }}</a></h1> -->
         
         {% if site.logo %}
         <p><img src="{{site.logo | relative_url}}" alt="Logo" /></p>
@@ -51,37 +49,13 @@
               </li>
           </ul>
           </form>
-        
-        
-<!--       <form id="test-form">
-
-        <div>
-          <label>First</label>
-          <input type="text" name="First" placeholder="" required/>
-        </div>
-
-        <div>
-          <label>Last</label>
-          <input type="text" name="Last" placeholder="" required/>
-        </div>
-
-        <div>
-          <label>Email</label>
-          <input type="email" id="emailField" name="Email" placeholder="" required/>
-        </div>
-
-        <div>
-          <button type="submit" id="submit-form">Submit</button>
-        </div>
-
-      </form> -->
+       
+      <p>
+        <a href="{{ "/" | relative_url }}">Go back</a>
+      </p>
 
       </section>
       <footer>
-<!--         {% if site.github.is_project_page %}
-        <p>This project is maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></p>
-        {% endif %}
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p> -->
         <p>© 2019 <a href="https://colidescope.com">Colidescope</a></p>
       </footer>
     </div>

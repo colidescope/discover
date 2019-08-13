@@ -43,4 +43,4 @@ Double-click the `start-discover.bat` script in your Discover folder. This will 
 
 ### Shutting down the server
 
-When you're done using Discover, go back to the Command Prompt window and press `Ctrl+c`. It will ask you if you want to `Terminate batch job (Y/N)?`. Type `Y` and `Enter` or press `Ctrl+c` again to shut down the server and close the Command Prompt. Do not close the Command Prompt without first shutting down the server. This may cause the server to keep running in the background which can cause problems when you want to start the server again.
+When you're done using Discover, close the Command Prompt window to shut down the server.

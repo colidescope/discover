@@ -10,23 +10,6 @@
 
       gtag('config', 'UA-143759392-2');
     </script>
-    
-    <script>
-      var $form = $('form#test-form'),
-          url = 'https://script.google.com/macros/s/AKfycbzNarN33YONXPjO_kwEc8fBXzqXKfGEZ1EgDvzYu4n06quMz4U/exec'
-
-      $('#submit-form').on('click', function(e) {
-        e.preventDefault();
-        var jqxhr = $.ajax({
-          url: url,
-          method: "GET",
-          dataType: "json",
-          data: $form.serializeObject()
-        }).success(
-          // do something
-        );
-      })
-    </script>
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -95,5 +78,23 @@
       ga('send', 'pageview');
     </script>
     {% endif %}
+    
+    <script>
+      var $form = $('form#test-form'),
+          url = 'https://script.google.com/macros/s/AKfycbzNarN33YONXPjO_kwEc8fBXzqXKfGEZ1EgDvzYu4n06quMz4U/exec'
+
+      $('#submit-form').on('click', function(e) {
+        e.preventDefault();
+        var jqxhr = $.ajax({
+          url: url,
+          method: "GET",
+          dataType: "json",
+          data: $form.serializeObject()
+        }).success(
+          // do something
+        );
+      })
+    </script>
+    
   </body>
 </html>

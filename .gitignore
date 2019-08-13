@@ -5,3 +5,6 @@ log.txt
 .idea/
 discover.iml
 src/__pycache__/
+log.txt
+package-lock.json
+*.zip

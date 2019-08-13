@@ -193,14 +193,14 @@ select{
 .form-style-1 .field-textarea{
 	height: 100px;
 }
-.form-style-1 input[type=submit], .form-style-1 input[type=button]{
+.form-style-1 button{
 	background: #f4f4f4;
 	padding: 8px 15px 8px 15px;
   	border-radius:5px;
   	border:1px solid #e0e0e0;
 // 	color: #fff;
 }
-.form-style-1 input[type=submit]:hover, .form-style-1 input[type=button]:hover{
+.form-style-1 button:hover{
 	background: #4691A4;
 	box-shadow:none;
 	-moz-box-shadow:none;

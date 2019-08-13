@@ -30,7 +30,7 @@ Currently Windows does not ship with Python, so if you've never used Python or y
 
 ### Installing dependencies
 
-3. Double-click the `discover.bat` script in your Discover folder. The first time you run the script it will install any dependencies which are needed for Python. This only needs to happen once. After checking the dependencies the script will start the Discover server and launch the app in your default web browser.
+3. Double-click the `start-discover.bat` script in your Discover folder. The first time you run the script it will install any dependencies which are needed for Python. This only needs to happen once. After checking the dependencies the script will start the Discover server and launch the app in your default web browser.
 4. Windows may ask for admin privileges the first time you run the server. Make sure to click 'Allow access'. You should only have to do this once.
 
 ![image](/assets/img/02.png)
@@ -39,7 +39,7 @@ Currently Windows does not ship with Python, so if you've never used Python or y
 
 ### Starting the server
 
-Double-click the `discover.bat` script in your Discover folder. This will open a Command Prompt window, start the Discover server, and launch the app in your default web browser. Make sure to keep the Command Prompt window open while you're using Discover.
+Double-click the `start-discover.bat` script in your Discover folder. This will open a Command Prompt window, start the Discover server, and launch the app in your default web browser. Make sure to keep the Command Prompt window open while you're using Discover.
 
 ### Shutting down the server
 

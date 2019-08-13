@@ -27,7 +27,10 @@ Currently Windows does not ship with Python, so if you've never used Python or y
 
 1. Click on the download link on the left to download a zip file with the latest release of Discover
 2. Unzip the file to a new folder on your computer.
-3. Double-click the `discover.bat` script. The first time you run the script it will install any dependencies which are needed for Python. This only needs to happen once. After checking the dependencies the script will launch the Discover server and open the app in your default web browser.
+
+### Installing dependencies
+
+3. Double-click the `discover.bat` script in your Discover folder. The first time you run the script it will install any dependencies which are needed for Python. This only needs to happen once. After checking the dependencies the script will launch the Discover server and open the app in your default web browser.
 4. Windows may ask for admin privileges the first time you run the server. Make sure to click 'Allow access'. You should only have to do this once.
 
 ![image](/assets/img/02.png)

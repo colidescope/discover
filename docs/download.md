@@ -4,6 +4,4 @@ layout: download
 
 ## Download Discover
 
-Fill out the form below and click 'Submit' to start downloading
-
-[back](./)
+Fill out the form and click 'Submit' to start downloading

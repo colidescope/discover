@@ -2,6 +2,11 @@
 layout: default
 ---
 
-Discover is a free, open-source optimization tool built to work with [Rhino](https://rhino3d.com) [Grasshopper](http://grasshopper3d.com). 
+Discover is a free optimization tool built to work with [Rhino](https://rhino3d.com) [Grasshopper](http://grasshopper3d.com). It is being developed in conjunction with the [Generative Design](https://performance.thinkific.com/courses/generative-design-course?ref=a6f24f) course on [Performance Network](https://performance.thinkific.com/?ref=a6f24f). 
 
-Discover is currently undergoing a major rewrite. The next version will be released in early September 2019 in conjunction with the [Generative Design](https://performance.thinkific.com/courses/generative-design-course?ref=a6f24f) course on [Performance Network](https://performance.thinkific.com/?ref=a6f24f). You can access the current version of the app on [Github](https://github.com/colidescope/discover).
+## Requirements
+
+- PC running Windows 10
+- [Rhino 6](https://www.rhino3d.com/download) - Discover can probably be made to work with Rhino 5 as well as the OSX version but it is not supported at this time.
+- [Python 3.7](https://www.python.org/downloads/windows/)
+- Web browser (such as [Chrome](https://www.google.com/chrome/b/) or [Firefox](https://www.mozilla.org/en-US/firefox/new/))

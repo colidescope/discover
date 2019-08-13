@@ -85,10 +85,11 @@
     <script>
       
       const okButton = document.getElementById('submit-form');
+      const emailField = document.getElementById('emailField');
         
       $('#emailField').on('keyup', function(e) {
-//           isValidEmail = ;
-          if ( $('#emailField').checkValidity() ) {
+          isValidEmail = emailField.checkValidity();
+          if ( isValidEmail ) {
             okButton.disabled = false;
           } else {
             okButton.disabled = true;

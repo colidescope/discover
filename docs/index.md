@@ -4,6 +4,8 @@ layout: default
 
 Discover is an optimization tool built to work with [Rhino](https://rhino3d.com) [Grasshopper](http://grasshopper3d.com). It is being developed in conjunction with the [Generative Design](https://performance.thinkific.com/courses/generative-design-course?ref=a6f24f) course on [Performance Network](https://performance.thinkific.com/?ref=a6f24f). 
 
+![image](/assets/img/screenshot.png)
+
 ## Requirements
 
 - PC running Windows 10 64-bit

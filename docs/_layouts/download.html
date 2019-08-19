@@ -45,7 +45,7 @@
                   <input type="email" id="emailField" name="Email" class="field-long" />
               </li>
               <li>
-                  <button class="button" type="submit" id="submit-form">Submit</button><button class="button" type="download" id="download-form" style="visibility:hidden;">Download</button>
+                  <button class="button" type="submit" id="submit-form">Submit</button><button class="button" type="download" id="download-form">Download</button>
               </li>
           </ul>
           </form>
@@ -81,6 +81,7 @@
       const download_button = document.getElementById('download-form');
       
       download_button.disabled = true;
+      download_button.setAttribute("visibility", "hidden");
         
       $('#emailField').on('keyup', function(e) {
           isValidEmail = emailField.checkValidity();

@@ -35,6 +35,9 @@
       <section>
         
       {{ content }}
+
+      <p id="message">Please fill out the form below and click 'Submit' to get the latest version of Discover.</p>
+      <p id="link"><a href='{{ site.release_link }}'>Download link</a></p>
       
         
         <form id="test-form">
@@ -113,6 +116,9 @@
           // window.open('{{ site.release_link }}');
 
           document.getElementById('test-form').style.display = "none";
+          document.getElementById('message').innerHTML = "Thank you for submitting the form, your download should begin shortly. If your download does not start automatically you can find it at the following link:";
+          document.getElementById('link').style.visible = "visible";
+          window.open('{{ site.release_link }}');
 
           // download_button.disabled = false;
           // button.setAttribute("visibility", "hidden");

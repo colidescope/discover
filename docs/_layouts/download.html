@@ -110,10 +110,16 @@
           data: $form.serializeObject()
         }).done( function(result) {
           // window.open('{{ site.release_link }}');
-          $('#submit-form').setAttribute("visibility", "visible");
+          download_button.disabled = false;
+          // $('#submit-form').setAttribute("visibility", "visible");
         }
         );
       })
+
+      $('#submit-form').on('click', function(e) {
+          window.open('{{ site.release_link }}');
+        });
+
     </script>
     
   </body>

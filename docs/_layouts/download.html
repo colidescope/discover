@@ -78,10 +78,10 @@
       
       button.disabled = true;
 
-      const download_button = document.getElementById('download-form');
+      // const download_button = document.getElementById('download-form');
       
-      download_button.disabled = true;
-      download_button.setAttribute("visibility", "hidden");
+      // download_button.disabled = true;
+      // download_button.setAttribute("visibility", "hidden");
         
       $('#emailField').on('keyup', function(e) {
           isValidEmail = emailField.checkValidity();
@@ -123,9 +123,9 @@
         );
       })
 
-      $('#download-form').on('click', function(e) {
-          window.open('{{ site.release_link }}');
-        });
+      // $('#download-form').on('click', function(e) {
+      //     window.open('{{ site.release_link }}');
+      //   });
 
     </script>
     

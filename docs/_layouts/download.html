@@ -53,7 +53,7 @@
           </form>
        
       <p id="link" ><a href='{{ site.release_link }}'>Download link</a></p>
-      
+
       <p>
         <a href="{{ "/" | relative_url }}">Go back</a>
       </p>
@@ -120,7 +120,7 @@
           // window.open('{{ site.release_link }}');
 
           document.getElementById('test-form').style.display = "none";
-          document.getElementById('message').innerHTML = "Thank you for submitting the form, your download should begin shortly. If your download does not start automatically please follow this link:";
+          document.getElementById('message').innerHTML = "Thank you for submitting, your download should begin shortly. If your download does not start automatically please follow this link:";
           document.getElementById('link').style.visibility = "visible";
           window.open('{{ site.release_link }}');
 

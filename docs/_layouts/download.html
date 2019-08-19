@@ -36,7 +36,7 @@
         
       {{ content }}
 
-      <p id="message">Please fill out the form below and click 'Submit' to get the latest version of Discover.</p>
+      <p id="message">Thank you for your interest in Discover. Please fill out the form below and click 'Submit' to start downloading the latest version.</p>
       
         
         <form id="test-form">
@@ -120,7 +120,7 @@
           // window.open('{{ site.release_link }}');
 
           document.getElementById('test-form').style.display = "none";
-          document.getElementById('message').innerHTML = "Thank you for submitting, your download should begin shortly. If it does not start automatically please follow this link:";
+          document.getElementById('message').innerHTML = "Thank you for submitting, your download should begin shortly. If it does not start automatically you can follow this link:";
           document.getElementById('link').style.visibility = "visible";
           window.open('{{ site.release_link }}');
 

@@ -45,7 +45,7 @@
                   <input type="email" id="emailField" name="Email" class="field-long" />
               </li>
               <li>
-                  <button class="button" type="submit" id="submit-form">Submit</button><button class="button" type="download" id="download-form">Download</button>
+                  <button class="button" type="submit" id="submit-form">Submit</button><button class="button" type="download" id="download-form" visibility="hidden">Download</button>
               </li>
           </ul>
           </form>
@@ -105,7 +105,8 @@
           dataType: "json",
           data: $form.serializeObject()
         }).done( function(result) {
-          window.open('{{ site.release_link }}');
+          // window.open('{{ site.release_link }}');
+          $('#submit-form').setAttribute("visibility", "visible");
         }
         );
       })

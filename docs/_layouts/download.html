@@ -37,7 +37,7 @@
       {{ content }}
 
       <p id="message">Please fill out the form below and click 'Submit' to get the latest version of Discover.</p>
-      <p id="link"><a href='{{ site.release_link }}'>Download link</a></p>
+      <p id="link" ><a href='{{ site.release_link }}'>Download link</a></p>
       
         
         <form id="test-form">
@@ -76,6 +76,8 @@
     
     <script>
       
+      document.getElementById('link').style.visible = "hidden";
+      
       const button = document.getElementById('submit-form');
       const emailField = document.getElementById('emailField');
       
@@ -85,6 +87,7 @@
       
       // download_button.disabled = true;
       // download_button.setAttribute("visibility", "hidden");
+
         
       $('#emailField').on('keyup', function(e) {
           isValidEmail = emailField.checkValidity();

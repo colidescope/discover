@@ -75,7 +75,7 @@
     {% endif %}
     
     <script>
-      
+
       document.getElementById('link').style.visible = "hidden";
       
       const button = document.getElementById('submit-form');
@@ -119,7 +119,7 @@
           // window.open('{{ site.release_link }}');
 
           document.getElementById('test-form').style.display = "none";
-          document.getElementById('message').innerHTML = "Thank you for submitting the form, your download should begin shortly. If your download does not start automatically you can find it at the following link:";
+          document.getElementById('message').innerHTML = "Thank you for submitting the form, your download should begin shortly. If your download does not start automatically please follow this link:";
           document.getElementById('link').style.visible = "visible";
           window.open('{{ site.release_link }}');
 

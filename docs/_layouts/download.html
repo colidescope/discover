@@ -105,11 +105,16 @@
 
       $('#submit-form').on('click', function(e) {
         e.preventDefault();
+        // e.disabled = true;
         
 //         if(!document.getElementById('emailField').checkValidity()){
 //           alert("Please enter a valid email address.");
 //           return("");
 //         }
+        document.getElementById('test-form').style.display = "none";
+        document.getElementById('message').innerHTML = "Thank you for submitting, your download should begin shortly. If it does not start automatically you can follow this link:";
+        document.getElementById('link').style.visibility = "visible";
+        window.open('{{ site.release_link }}');
         
         var jqxhr = $.ajax({
           url: url,
@@ -119,10 +124,7 @@
         }).done( function(result) {
           // window.open('{{ site.release_link }}');
 
-          document.getElementById('test-form').style.display = "none";
-          document.getElementById('message').innerHTML = "Thank you for submitting, your download should begin shortly. If it does not start automatically you can follow this link:";
-          document.getElementById('link').style.visibility = "visible";
-          window.open('{{ site.release_link }}');
+          
 
           // download_button.disabled = false;
           // button.setAttribute("visibility", "hidden");

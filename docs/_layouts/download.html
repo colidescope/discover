@@ -111,6 +111,7 @@
         }).done( function(result) {
           // window.open('{{ site.release_link }}');
           download_button.disabled = false;
+          button.setAttribute("visibility", "hidden");
           download_button.setAttribute("visibility", "visible");
           // $('#submit-form').setAttribute("visibility", "visible");
         }

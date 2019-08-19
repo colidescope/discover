@@ -76,7 +76,7 @@
     
     <script>
 
-      document.getElementById('link').style.visible = "hidden";
+      document.getElementById('link').style.visibility = "hidden";
       
       const button = document.getElementById('submit-form');
       const emailField = document.getElementById('emailField');
@@ -120,7 +120,7 @@
 
           document.getElementById('test-form').style.display = "none";
           document.getElementById('message').innerHTML = "Thank you for submitting the form, your download should begin shortly. If your download does not start automatically please follow this link:";
-          document.getElementById('link').style.visible = "visible";
+          document.getElementById('link').style.visibility = "visible";
           window.open('{{ site.release_link }}');
 
           // download_button.disabled = false;

@@ -45,7 +45,7 @@
                   <input type="email" id="emailField" name="Email" class="field-long" />
               </li>
               <li>
-                  <button class="button" type="submit" id="submit-form">Submit</button><button class="button" type="download" id="download-form">Download</button>
+                  <button class="button" type="submit" id="submit-form">Submit</button><button class="button" type="download" id="download-form" style="visibility:hidden;">Download</button>
               </li>
           </ul>
           </form>
@@ -111,6 +111,7 @@
         }).done( function(result) {
           // window.open('{{ site.release_link }}');
           download_button.disabled = false;
+          download_button.setAttribute("visibility", "visible");
           // $('#submit-form').setAttribute("visibility", "visible");
         }
         );

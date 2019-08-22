@@ -5,6 +5,8 @@ xcopy .\src .\discover-release\src
 
 mkdir discover-release\static
 xcopy .\static .\discover-release\static
+mkdir discover-release\static\assets
+xcopy .\static\assets .\discover-release\static\assets
 
 copy start-discover.bat .\discover-release\discover.bat
 copy LICENSE.txt .\discover-release\LICENSE.txt

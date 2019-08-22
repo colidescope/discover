@@ -42,7 +42,7 @@ Discover currently supports Python 3.7, which is the latest version at the time 
 
 ### Installing the Grasshopper components
 
-1. Go to https://www.food4rhino.com/app/discover.
+1. Go to [https://www.food4rhino.com/app/discover](https://www.food4rhino.com/app/discover).
 2. Download the latest release under the 'Downloads' section. You will need a Food4Rhino account to do this.
 3. Follow the installation instructions on Food4Rhino to install the components.
 

@@ -1,8 +1,11 @@
-import urllib, os, sys, random, math, json, string
+import math
+import os
+import random
 from time import localtime, strftime
-from pathlib import Path
-from src.utils import remap, rank, permutation2inversion, inversion2permutation
+
 from src.test import Test
+from src.utils import remap
+
 
 class Input:
 
@@ -160,12 +163,15 @@ class Client:
 	def set_ss_connection(self, _id):
 		self.ss_connection_id = _id
 		return self.get_dir(["temp"]) / ".".join([self.file_name, self.ss_connection_id])
-	def ping_ss(self):
+
+	def ping_ss(self, socketio):
+		socketio.emit('execute post-job')
 		with open(self.get_dir(["temp"]) / ".".join([self.file_name, self.ss_connection_id]), 'w') as f:
 			# f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
 			pass
 
-	def ping_model(self):
+	def ping_model(self, socketio):
+		socketio.emit('execute job', {})
 		with open(self.get_dir(["temp"]) / ".".join([self.file_name, self.get_connection()]), 'w') as f:
 			# f.write(strftime("%a, %d %b %Y %H:%M:%S", localtime()))
 			pass

@@ -44,12 +44,10 @@ Discover is built on Python 3.7.4, which is the latest version at the time of wr
 Discover includes a Grasshopper library of custom components which allows the optimization server to communicate with your Grasshopper model. To install the components:
 
 1. Open Grasshopper and go to `File -> Special Folders -> Components Folder`. This will open the folder where Grasshopper stores its custom plugin files.
-2. Copy all the files in the `/Grasshopper Plugin` folder of the Discover zip file ]to Grasshopper's `Components Folder`. 
-
-![image](/assets/img/03.png)
-
+2. Copy all the files in the `/Grasshopper Plugin` folder of the Discover zip file to Grasshopper's `Components Folder`. 
 3. Restart Grasshopper. You should now see a new tab in the ribbon called 'Discover' with the 7 Discover components loaded.
 
+![image](/assets/img/03.png)
 ![image](/assets/img/04.png)
 
 ## Working with the Discover server

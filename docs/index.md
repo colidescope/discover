@@ -2,9 +2,9 @@
 layout: default
 ---
 
-Discover is an optimization tool built to work with [Rhino](https://rhino3d.com) [Grasshopper](http://grasshopper3d.com). It is being developed in parallel with the [Generative Design](https://performance.thinkific.com/courses/generative-design-course?ref=a6f24f) course on [Performance Network](https://performance.thinkific.com/?ref=a6f24f). 
+Discover is an optimization tool built to work with [Rhino](https://rhino3d.com) [Grasshopper](http://grasshopper3d.com). It is being developed by [Colidescope](https://colidescope.com/) as free software with the goal of promoting performance-driven automated design workflows in the architecture, engineering, and construction industries.
 
-![image](/assets/img/screenshot.png)
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/mrXOuiudzQA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Requirements
 

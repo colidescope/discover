@@ -103,8 +103,8 @@ th {
   color:#444;
 }
 
-ol {
-	
+ul {
+	padding: 0px;	
 }
 
 img {
@@ -214,7 +214,7 @@ strong {
 }
 
 section {
-  width:600px;
+  width:550px;
   float:right;
   padding-bottom:50px;
 }
@@ -241,7 +241,7 @@ footer {
 @media print, screen and (max-width: 960px) {
 
   div.wrapper {
-    width:auto;
+    //width:auto;
     margin:0;
   }
 
@@ -266,7 +266,7 @@ footer {
     display:inline;
   }
 
-  header ol {
+  header ul {
     position:absolute;
     right:50px;
     top:52px;
@@ -282,7 +282,7 @@ footer {
     padding:0;
   }
 
-  header ol, header p.view {
+  header ul, header p.view {
     position:static;
   }
 

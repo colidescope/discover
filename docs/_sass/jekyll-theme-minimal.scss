@@ -36,9 +36,9 @@ h3, h4, h5, h6 {
 }
 
 a {
-  color:#a698c9;
+  color:#282828;
   text-decoration:none;
-  font-weight: bold;
+  //font-weight: bold;
   //background-color: #f2f2f2;
 }
 
@@ -122,8 +122,9 @@ header {
 .button {
   padding: 8px 15px 8px 15px;
   margin-right: 10px;
-  background: #f4f4f4;
-  border-radius:5px;
+  //background: #f4f4f4;
+  background: #a698c9;
+  //border-radius:5px;
   border:1px solid #e0e0e0;
   cursor:pointer;
 }
@@ -233,40 +234,40 @@ footer {
   -webkit-font-smoothing:subpixel-antialiased;
 }
 
-// @media print, screen and (max-width: 800px) {
+@media print, screen and (max-width: 960px) {
 
-//   div.wrapper {
-//     width:auto;
-//     margin:0;
-//   }
+  div.wrapper {
+    width:auto;
+    margin:0;
+  }
 
-//   header, section, footer {
-//     float:none;
-//     position:static;
-//     width:auto;
-//   }
+  header, section, footer {
+    float:none;
+    position:static;
+    width:auto;
+  }
 
-//   header {
-//     padding-right:320px;
-//   }
+  header {
+    padding-right:320px;
+  }
 
-//   section {
-//     border:1px solid #e5e5e5;
-//     border-width:1px 0;
-//     padding:20px 0;
-//     margin:0 0 20px;
-//   }
+  section {
+    border:1px solid #e5e5e5;
+    border-width:1px 0;
+    padding:20px 0;
+    margin:0 0 20px;
+  }
 
-//   header a small {
-//     display:inline;
-//   }
+  header a small {
+    display:inline;
+  }
 
-//   header ul {
-//     position:absolute;
-//     right:50px;
-//     top:52px;
-//   }
-// }
+  header ul {
+    position:absolute;
+    right:50px;
+    top:52px;
+  }
+}
 
 @media print, screen and (max-width: 720px) {
   body {

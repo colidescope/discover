@@ -241,8 +241,9 @@ footer {
 @media print, screen and (max-width: 1000px) {
 
   div.wrapper {
-    width:600;
-    margin:0;
+    width:600px;
+    //margin:0;
+    margin:0 auto;
   }
 
   header, section, footer {

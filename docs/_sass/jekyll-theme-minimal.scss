@@ -47,7 +47,7 @@ a {
 }
 
 a:hover, a:focus {
-  color:#926bae;
+  color:#ea8169;
   background-color: none;
 }
 
@@ -108,6 +108,10 @@ th {
 }
 
 img {
+  max-width:100%;
+}
+
+#logo {
   max-width:300px;
 }
 

@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-<p><div class="shadow-box"><div class="resp-container"><iframe class="resp-iframe" src="https://www.youtube.com/embed/tazRo4mMBm4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div></p>
+<div class="shadow-box"><div class="resp-container"><iframe class="resp-iframe" src="https://www.youtube.com/embed/tazRo4mMBm4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
 
 ## 👋 Hi there, welcome to Discover! 💡
 

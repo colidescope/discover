@@ -21,7 +21,7 @@ If you'd like to tinker with the source code and test the latest build of Discov
 ### Compiling the front-end app
 
 1. Instal Node JS (https://nodejs.org/dist/v10.16.0/node-v10.16.0-x64.msi).
-2. Open a commonad prompt and run `npm install -g @angular/cli` to install the Angular CLI (command line iterface).
+2. Open a command prompt and run `npm install -g @angular/cli` to install the Angular CLI (command line iterface).
 3. `cd` into the root folder of the Angular app (`/discover-ng-app`). 
 4. Run `npm install` to compile the app.
 4. Run `ng serve` to run the app.

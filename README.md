@@ -8,7 +8,7 @@ To get started with Discover, please download the latest stable release and foll
 
 ## Build instructions
 
-If you'd like to tinker with the source code and test the latest build of Discover, you can compile it yourself from the source code hosted here. To start, clone, fork, or download a .zip file of the `master` branch of this repository. Discover is developed on Windows 10 using [Python 3.7.x](https://www.python.org/downloads/release/python-375/). It may work on other systems but has not been tested.
+If you'd like to tinker with the source code and test the latest build of Discover, you can compile it yourself from the source code hosted here. To start, clone, fork, or download a .zip file of the `master` branch of this repository.
 
 ### Running the server
 
@@ -25,3 +25,7 @@ If you'd like to tinker with the source code and test the latest build of Discov
 3. Run `npm install` from command window, in the root folder of the angular app.
 4. Run `ng serve` from command line, in the root folder of command window.
 5. Open a web browser and go to http://localhost:4200
+
+### Notes
+
+- Discover is developed on Windows 10 using [Python 3.7.x](https://www.python.org/downloads/release/python-375/). It may work on other systems but has not been tested.

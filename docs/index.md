@@ -26,7 +26,7 @@ Discover is built on Python 3.7.4, which is the latest version at the time of wr
 2. On the download page, scroll down and under 'Files' select and download the [Windows x86-64 executable installer](https://www.python.org/ftp/python/3.7.4/python-3.7.4-amd64.exe). 
 3. Run the .exe installation file to install Python on your computer. **IMPORTANT: make sure you select the option to "Add Python 3.7 to PATH". Discover will not work if this is not checked.**
 
-<div class="shadow-box"><img src="/assets/img/01.png"></div>
+<div class="shadow-box"><img src="/discover/assets/img/01.png"></div>
  
 ### Downloading Discover
 

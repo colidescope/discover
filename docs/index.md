@@ -26,7 +26,7 @@ Discover is built on Python 3.7.4, which is the latest version at the time of wr
 2. On the download page, scroll down and under 'Files' select and download the [Windows x86-64 executable installer](https://www.python.org/ftp/python/3.7.4/python-3.7.4-amd64.exe). 
 3. Run the .exe installation file to install Python on your computer. **IMPORTANT: make sure you select the option to "Add Python 3.7 to PATH". Discover will not work if this is not checked.**
 
-<p><div class="shadow-box"><img src="/discover/assets/img/01.png"></div></p>
+<div class="shadow-box"><img src="/discover/assets/img/01.png"></div>
  
 ### Downloading Discover
 
@@ -38,7 +38,7 @@ Discover is built on Python 3.7.4, which is the latest version at the time of wr
 3. Double-click the `discover.bat` script in the folder where you unzipped Discover. The first time you run the script it will install any dependencies which are needed for Python. This only needs to happen once. After checking the dependencies the script will start the Discover server and launch the app in your default web browser.
 4. Windows may ask for admin privileges the first time you run the server. Make sure to click 'Allow access'. You should only have to do this once.
 
-<p><div class="shadow-box"><img src="/discover/assets/img/02.png"></div></p>
+<div class="shadow-box"><img src="/discover/assets/img/02.png"></div>
 
 ### Installing the Grasshopper components
 
@@ -48,8 +48,8 @@ Discover includes a Grasshopper library of custom components which allows the op
 2. Copy all the files in the `/Grasshopper Plugin` folder of the Discover zip file to Grasshopper's `Components Folder`. 
 3. Restart Grasshopper. You should now see a new tab in the ribbon called 'Discover' with the 7 Discover components loaded.
 
-<p><div class="shadow-box"><img src="/discover/assets/img/03.png"></div></p>
-<p><div class="shadow-box"><img src="/discover/assets/img/04.png"></div></p>
+<div class="shadow-box"><img src="/discover/assets/img/03.png"></div>
+<div class="shadow-box"><img src="/discover/assets/img/04.png"></div>
 
 ## Working with Discover
 

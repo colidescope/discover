@@ -8,7 +8,7 @@ To get started with Discover, please download the latest stable release and foll
 
 ## Build instructions
 
-If you'd like to tinker with the source code and test the latest build of Discover, you can compile it yourself from the source code hosted here. Discover is developed on Windows 10 using [https://www.python.org/downloads/release/python-375/](Python 3.7.x). It may work on other systems but has not been tested.
+If you'd like to tinker with the source code and test the latest build of Discover, you can compile it yourself from the source code hosted here. Discover is developed on Windows 10 using [Python 3.7.x](https://www.python.org/downloads/release/python-375/). It may work on other systems but has not been tested.
 
 ### Running the server
 

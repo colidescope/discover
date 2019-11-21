@@ -64,3 +64,7 @@ When you're done using Discover, close the Command Prompt window to shut down th
 ## Known issues
 
 - During the optimization process, Discover writes certain files to a local directory for each computed design. The location of this directory is based on the location of the `.gh` file. There is a known issue where if your `.gh` file is in a folder which is hosted on a network or a cloud sharing service like Dropbox, the writing process can take too long, causing the components and server to get out of sync. This can result in the optimization process stopping or many of the same designs being generated at once. If you experience these issues make sure your `.gh` file is located in a local folder on your computer and is not being shared over any network.
+
+## Support
+
+This program is distributed for free in the hope that it will be useful, but without any warranty or guarantee that it will work the way it's described or work at all. That being said, if you'd like to get in touch please email us at support(at)colidescope.com or submit a bug using the link below:

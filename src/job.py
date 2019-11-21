@@ -163,9 +163,9 @@ class Job:
 				des = self.design_queue.pop(0)
 				self.design_log.append(des)
 
-				return True, "Starting generation {}".format(self.gen)
+				return True, "- Starting generation {}/{}".format(self.gen, self.max_gen)
 			else:
-				return False, "Job finished."
+				return False, "- Job finished."
 
 	def init_data_file(self):
 

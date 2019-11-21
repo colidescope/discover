@@ -120,8 +120,8 @@ class Design:
 
 				for _input in input_set:
 					if random.random() < mutation_rate:
-						# new_input = int(math.floor(random.random() * 0.9999 * float(inputs_def[i]["Num options"])))
-						new_input = int(math.floor(random.random() * 0.9999 * float(inputs_def[i].get_max()-inputs_def[i].get_min()) + inputs_def[i].get_min()))
+						new_input = int(math.floor(random.random() * 0.9999 * float(inputs_def[i].get_opt())))
+						# new_input = int(math.floor(random.random() * 0.9999 * float(inputs_def[i].get_max()-inputs_def[i].get_min()) + inputs_def[i].get_min()))
 						new_input_set.append(new_input)
 						mutation.append(1)
 					else:
@@ -172,14 +172,6 @@ class Design:
 		return ",".join(["[{}]".format(",".join([str(_i) for _i in _input])) for _input in self.inputs])
 
 	def set_output(self, _o):
-
-		# for _o in outputs:
-
-		# if _o is None:
-		# 	self.penalty += 1
-		# 	self.feasible = False
-		# 	continue
-
 		value = float(_o["value"])
 
 		if _o["type"] == "Objective":
@@ -188,19 +180,20 @@ class Design:
 		elif _o["type"] == "Constraint":
 
 			goal = _o["goal"]
-			goal_type = (" ").join(goal.split(" ")[:-1])
-			goal_val = float(goal.split(" ")[-1])
+			target = float(_o["target"])
+			# goal_type = (" ").join(goal.split(" ")[:-1])
+			# goal_val = float(goal.split(" ")[-1])
 
-			if goal_type == "Less than":
-				if value >= goal_val:
+			if goal == "Less than":
+				if value >= target:
 					self.penalty += 1
 					self.feasible = False
-			elif goal_type == "Greater than":
-				if value <= goal_val:
+			elif goal == "Greater than":
+				if value <= target:
 					self.penalty += 1
 					self.feasible = False
-			elif goal_type == "Equals":
-				if value != goal_val:
+			elif goal == "Equals":
+				if value != target:
 					self.penalty += 1
 					self.feasible = False
 

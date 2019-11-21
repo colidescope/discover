@@ -4,18 +4,18 @@ import os
 import sys
 from pathlib import Path
 from time import sleep
+import configparser
 
-from flask import Flask, jsonify, request, send_from_directory  # , send_file
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
 from src.design import Design
 from src.job import Job
-from src.objects import Client, Logger
+from src.client import Client
+from src.logger import Logger
 
 # from src.test import Test
-
-testing = False
 
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:4200"}})
@@ -31,6 +31,11 @@ job = None
 des = Design(None, None, None, client, logger)
 fetch_design = False
 
+config = configparser.ConfigParser()
+config.read("config.ini")
+
+SLEEP_TIMER = float(config.get('SETTINGS', 'SLEEP_TIMER'))
+TEST_MODE = bool(int(config.get('SETTINGS', 'TEST_MODE')))
 
 @app.route("/")
 def home():
@@ -61,7 +66,7 @@ def connect():
 	client.connect(local_dir, file_name, connection_id)
 
 	# logger.init(local_dir)
-	message = "Connected to Grasshopper file: {}".format(file_name)
+	message = "\nConnected to GH file: {}.gh".format(file_name)
 	socketio.emit('server message', {"message": message})
 	logger.log(message)
 
@@ -74,7 +79,6 @@ def start():
 
 	if not client.is_connected():
 		client.connect(local_path / "data", "test-model", None)
-	# return jsonify({"status": "fail"})
 
 	job_spec = request.json
 	options = job_spec["options"]
@@ -82,12 +86,11 @@ def start():
 	job = Job(options, client, logger)
 	header = job.init_data_file()
 	socketio.emit('job header', header)
-	# client.set_job(job)
 
 	logger.log(
 		"Job started, connected to inputs {} and outputs {}".format(client.get_input_ids(), client.get_output_ids()))
 
-	message = "Optimization started: {} designs / {} generations".format(job.num_designs, job.max_gen)
+	message = "\nOptimization started: {} designs / {} generations".format(job.num_designs, job.max_gen)
 	socketio.emit('server message', {"message": message})
 
 	if client.get_ss_connection() is not None:
@@ -95,7 +98,6 @@ def start():
 		os.makedirs(ss_path, exist_ok=True)
 
 	if client.get_connection():
-		# client.create_connection_file()
 		do_next()
 	else:
 		run_local()
@@ -106,14 +108,12 @@ def start():
 def do_next():
 	run, message = job.run_next()
 
-	# sleep(1)
-
 	if message is not None:
 		socketio.emit('server message', {"message": message})
 
 	if run:
 		client.set_block()
-		client.ping_model(socketio)
+		client.ping_model()
 		return jsonify({'status': 'Job running...'})
 	else:
 		job.running = False
@@ -165,7 +165,7 @@ def stop():
 	return jsonify({"status": "success", "job_id": job.job_id})
 
 
-@app.route("/api/v1.0/input_ack", methods=['GET', 'POST'])
+@app.route("/api/v1.0/input-ack", methods=['GET', 'POST'])
 def input_ack():
 	input_def = request.json
 
@@ -175,11 +175,14 @@ def input_ack():
 
 	elif job is None or not job.is_running():
 		input_object = client.add_input(input_def)
+		input_vals = input_object.generate_random()
 
 		status = "Success: registered input {} with Discover".format(input_object.get_id())
-		input_vals = input_object.generate_random()
-	# elif :
-	# self.design_queue = self.init_designs(self.client)
+
+		message = "- Input {}: {}".format(len(client.get_inputs()), input_object.get_type())
+		socketio.emit('server message', {"message": message})
+		logger.log(message)
+
 	else:
 		input_vals = job.get_design_input(input_def["id"])
 		status = "Success: values for input {}".format(input_def["id"])
@@ -187,23 +190,17 @@ def input_ack():
 	return jsonify({'status': status, 'input_vals': input_vals})
 
 
-@app.route('/api/v1.0/send_output', methods=['GET', 'POST'])
+@app.route('/api/v1.0/send-output', methods=['GET', 'POST'])
 def send_output():
 	global fetch_design
 
 	output_def = request.json
-
+	
 	if fetch_design:
 		pos = client.lift_block(output_def["id"])
 
 		if client.check_block():
-			# data = job.write_des_data()
-			# socketio.emit('server message', data)
-			# socketio.emit('job data', data)
-			# return jsonify({'status': 'run next'})
-
 			fetch_design = False
-
 			return jsonify({'status': 'reinstated design'})
 		else:
 			return jsonify({'status': 'reinstating design'})
@@ -212,6 +209,11 @@ def send_output():
 		output_object = client.add_output(output_def)
 
 		status = "Success: registered output {} with Discover".format(output_object.get_id())
+
+		message = "- Output {}: [{}] {}".format(len(client.get_outputs()), output_object.get_type(), output_object.get_name())
+		socketio.emit('server message', {"message": message})
+		logger.log(message)
+
 		return jsonify({'status': status})
 
 	else:
@@ -220,7 +222,6 @@ def send_output():
 
 		if client.check_block():
 			data = job.write_des_data()
-			# socketio.emit('server message', data)
 			socketio.emit('job data', data)
 			return jsonify({'status': 'run next'})
 		else:
@@ -229,19 +230,14 @@ def send_output():
 
 @app.route('/api/v1.0/next', methods=['GET', 'POST'])
 def next():
-	sleep(0.1)
+	sleep(SLEEP_TIMER)
 
 	if client.get_ss_connection() is None:
 		return do_next()
 	else:
-		client.ping_ss(socketio)
+		client.ping_ss()
 		return jsonify({'status': 'done'})
 
-
-# @app.route('/api/v1.0/sleep', methods=['GET', 'POST'])
-# def sleep_function():
-# 	sleep(1.0)
-# 	return jsonify({'status': None})
 
 ###
 
@@ -251,29 +247,16 @@ def ss_register_id():
 	ss_id = request.json["id"]
 	path = client.set_ss_connection(ss_id)
 	status = "Success: registered screenshot id {} with Discover".format(ss_id)
+
+	message = "- Screenshots enabled"
+	socketio.emit('server message', {"message": message})
+	logger.log(message)
+
 	return jsonify({"status": status, "path": str(path)})
-
-
-# status = "Success: registered input {} with Discover".format(input_object.get_id())
-# input_vals = input_object.generate_random()
-
-# if job is not None and job.is_running():
-# 	des = job.get_latest_des()
-# 	des_id = des.get_id()
-
-# 	path = client.get_dir(["jobs", job.get_id(), "images"])
-# 	os.makedirs(path, exist_ok=True)
-
-# 	img_path = path / str(des_id)
-
-# 	# ss_path = "\\".join([local_path, , "images", str(des_id)])
-# 	return jsonify({"status": "success", "file_path": str(img_path)})
-# else:
-# 	return jsonify({"status": "No job running.", "file_path": ""})
-
 
 @app.route("/api/v1.0/ss-get-path", methods=['GET', 'POST'])
 def ss_get_path():
+
 	ss_id = request.json["id"]
 
 	if job is not None and job.is_running():
@@ -281,25 +264,14 @@ def ss_get_path():
 		des_id = des.get_id()
 
 		path = client.get_dir(["jobs", job.get_id(), "images"])
-
 		img_path = path / str(des_id)
 
-		# ss_path = "\\".join([local_path, , "images", str(des_id)])
 		return jsonify({"status": "success", "path": str(img_path)})
 	else:
 		return jsonify({"status": "No job running.", "path": ""})
 
-
-# @app.route("/api/v1.0/job_running", methods=['GET'])
-# def job_running():
-# 	if job is not None and job.is_running():
-# 		return jsonify(True)
-# 	else:
-# 		return jsonify(False)
-
-@app.route('/api/v1.0/ss-done', methods=['GET', 'POST'])
+@app.route('/api/v1.0/ss-done', methods=['GET'])
 def ss_done():
-	ss_id = request.json["id"]
 	return do_next()
 
 
@@ -322,7 +294,7 @@ def get_data(job_path):
 		d = line.split("\t")
 		json_out.append({header[i]: d[i] for i in range(len(d))})
 
-	message = "Loaded data from server: {}".format(job_path)
+	message = "\nLoaded data from server: {}".format(job_path)
 	socketio.emit('server message', {"message": message})
 
 	return json.dumps({"status": "success", "load_images": image_path.exists(), "data": json_out})
@@ -330,8 +302,6 @@ def get_data(job_path):
 
 @app.route('/api/v1.0/get_design/<string:job_path>/<string:des_id>', methods=['GET'])
 def get_design(job_path, des_id):
-	# if not client.is_connected():
-	# return jsonify({"status": "no-gh"})
 
 	global job
 	global fetch_design
@@ -357,12 +327,13 @@ def get_design(job_path, des_id):
 	inputs = [json.loads(d[i]) for i in range(len(d)) if
 			  "[Continuous]" in header[i] or "[Categorical]" in header[i] or "[Sequence]" in header[i]]
 
+
 	des.set_inputs(inputs)
 	fetch_design = True
 	client.set_block()
-	client.ping_model(socketio)
+	client.ping_model()
 
-	message = "Reinstated design {} from {}".format(des_id, job_path)
+	message = "\nReinstated design {} from {}".format(des_id, job_path)
 	socketio.emit('server message', {"message": message})
 
 	return jsonify({"status": "success"})
@@ -380,21 +351,18 @@ def get_image(job_path, des_id):
 	return send_from_directory(image_path, des_id + '.png')
 
 
-# SOCKET-IO
+#SOCKET-IO
 def ack():
 	print('message was received!', file=sys.stderr)
-
-
 @socketio.on('client message')
 def handle_my_custom_event(json):
 	print('received json: ' + str(json), file=sys.stderr)
 	emit('server message', json, callback=ack)
 
-
-# FLASK
+#FLASK
 if __name__ == '__main__':
 
-	if testing:
+	if TEST_MODE:
 		with app.test_client() as c:
 
 			options = {

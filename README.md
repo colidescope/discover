@@ -25,4 +25,4 @@ If you'd like to tinker with the source code and test the latest build of Discov
 3. Install angular CLI (Run `npm install -g @angular/cli` from command window).
 4. Run `npm install` from command window, in the root folder of the angular app.
 5. Run `ng serve` from command line, in the root folder of command window.
-6. Open a web browser and go to `http://localhost:4200`
+6. Open a web browser and go to http://localhost:4200

@@ -51,7 +51,7 @@ Discover includes a Grasshopper library of custom components which allows the op
 ![image](/assets/img/03.png)
 ![image](/assets/img/04.png)
 
-## Working with the Discover server
+## Working with Discover
 
 ### Starting the server
 
@@ -61,3 +61,6 @@ Double-click the `discover.bat` script in the folder where you unzipped Discover
 
 When you're done using Discover, close the Command Prompt window to shut down the server.
 
+## Known issues
+
+- During the optimization process, Discover writes certain files to a local directory for each computed design. The location of this directory is based on the location of the `.gh` file. There is a known issue where if your `.gh` file is in a folder which is hosted on a network or a cloud sharing service like Dropbox, the writing process can take too long, causing the components and server to get out of sync. This can result in the optimization process stopping or many of the same designs being generated at once. If you experience these issues make sure your `.gh` file is located in a local folder on your computer and is not being shared over any network.

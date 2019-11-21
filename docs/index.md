@@ -38,7 +38,7 @@ Discover is built on Python 3.7.4, which is the latest version at the time of wr
 3. Double-click the `discover.bat` script in the folder where you unzipped Discover. The first time you run the script it will install any dependencies which are needed for Python. This only needs to happen once. After checking the dependencies the script will start the Discover server and launch the app in your default web browser.
 4. Windows may ask for admin privileges the first time you run the server. Make sure to click 'Allow access'. You should only have to do this once.
 
-![image](/assets/img/02.png)
+<p><div class="shadow-box"><img src="/discover/assets/img/02.png"></div></p>
 
 ### Installing the Grasshopper components
 
@@ -48,8 +48,8 @@ Discover includes a Grasshopper library of custom components which allows the op
 2. Copy all the files in the `/Grasshopper Plugin` folder of the Discover zip file to Grasshopper's `Components Folder`. 
 3. Restart Grasshopper. You should now see a new tab in the ribbon called 'Discover' with the 7 Discover components loaded.
 
-![image](/assets/img/03.png)
-![image](/assets/img/04.png)
+<p><div class="shadow-box"><img src="/discover/assets/img/03.png"></div></p>
+<p><div class="shadow-box"><img src="/discover/assets/img/04.png"></div></p>
 
 ## Working with Discover
 

@@ -14,6 +14,7 @@ class Test:
 		self.outputs = []
 		self.outputs.append({"id": "out-1", "name": "f1", "type": "Objective", "goal": "Minimize"})
 		self.outputs.append({"id": "out-2", "name": "f2", "type": "Objective", "goal": "Minimize"})
+		self.outputs.append({"id": "out-3", "name": "c1", "type": "Constraint", "goal": "Greater than", "target": "5"})
 
 	def get_inputs(self):
 		return self.inputs
@@ -30,7 +31,9 @@ class Test:
 
 		f1 = 4 * x ** 2 + 4 * y ** 2
 		f2 = (x-5) ** 2 + (y-5) ** 2 
-		output_vals = [f1, f2]
+		c1 = x * y
+
+		output_vals = [f1, f2, c1]
 
 		outputs_out = []
 

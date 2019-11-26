@@ -123,11 +123,11 @@ export class ScatterChartComponent implements OnChanges, OnInit {
           if (tooltip.body) {
             let index = tooltip.dataPoints[0].index;
             let innerHtml = '';
+            innerHtml += '<div> Design #' + index;
+            innerHtml += '</div>';
             if (this.jobHaveImages) {
               innerHtml += '<img style="max-width: 200px" src="http://localhost:5000/api/v1.0/get_image/' + encodeURI(this.jobId) + '/' + index + '"/>';
             }
-            innerHtml += '<div> Design #' + index;
-            innerHtml += '</div>';
 
             const tableRoot = tooltipEl.querySelector('table');
             tableRoot.innerHTML = innerHtml;

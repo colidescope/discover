@@ -291,7 +291,8 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   }
 
   getBorderColor(idx: number): string {
-    if (this.isSelected(idx)) return '#222';
+    if (this.isSelected(idx))
+      return '#222';
     if (this.jobData.isFeasible(idx)) {
       return '#0222';
     } else if (this.isIsolated(idx)) {
@@ -306,7 +307,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     if (this.isIsolated(idx)) {
       return this.jobData.getChartColors()[idx];
     } else {
-      return chroma(this.jobData.getChartColors()[idx]).alpha(0.05).hex()
+      return chroma(this.jobData.getChartColors()[idx]).alpha(0.02).hex()
     }
   }
 

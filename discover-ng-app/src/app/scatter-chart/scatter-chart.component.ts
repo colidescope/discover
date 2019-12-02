@@ -291,7 +291,8 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   }
 
   getBorderColor(idx: number): string {
-    if (this.isSelected(idx)) return '#222';
+    if (this.isSelected(idx))
+      return '#222';
     if (this.jobData.isFeasible(idx)) {
       return '#0222';
     } else if (this.isIsolated(idx)) {

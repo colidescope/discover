@@ -112,13 +112,11 @@ export class ScatterChartComponent implements OnChanges, OnInit {
             tooltipEl.innerHTML = '<table></table>';
             canvas.parentNode.appendChild(tooltipEl);
           }
-
           // Hide if no tooltip
-          if (tooltip.opacity === 0 || !this.isMouseInsideChart()||!this.isIsolated(tooltip.dataPoints[0].index)) {
+          if (tooltip.opacity === 0 || !this.isMouseInsideChart()|| !this.isIsolated(tooltip.dataPoints[0].index)) {
             tooltipEl.style.opacity = 0;
             return;
           }
-
           // Set Text
           if (tooltip.body) {
             let index = tooltip.dataPoints[0].index;

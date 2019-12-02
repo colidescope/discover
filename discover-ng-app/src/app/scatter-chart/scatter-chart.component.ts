@@ -114,7 +114,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
           }
 
           // Hide if no tooltip
-          if (tooltip.opacity === 0 || !this.isMouseInsideChart()) {
+          if (tooltip.opacity === 0 || !this.isMouseInsideChart()||!this.isIsolated(tooltip.dataPoints[0].index)) {
             tooltipEl.style.opacity = 0;
             return;
           }

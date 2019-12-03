@@ -113,7 +113,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
             canvas.parentNode.appendChild(tooltipEl);
           }
           // Hide if no tooltip
-          if (tooltip.opacity === 0 || !this.isMouseInsideChart()|| !this.isIsolated(tooltip.dataPoints[0].index)) {
+          if (tooltip.opacity === 0 || !this.isMouseInsideChart() || !this.isIsolated(tooltip.dataPoints[0].index)) {
             tooltipEl.style.opacity = 0;
             return;
           }
@@ -289,13 +289,14 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   }
 
   getBorderColor(idx: number): string {
-    if (this.isSelected(idx))
+     if (this.isSelected(idx))
       return '#222';
-    if (this.jobData.isFeasible(idx)) {
+     if (this.jobData.isFeasible(idx) && this.isIsolated(idx)) {
       return '#0222';
-    } else if (this.isIsolated(idx)) {
-      return this.jobData.getChartColors()[idx]
-    } else {
+    }
+    if (!this.isIsolated(idx))
+      return chroma(this.jobData.getChartColors()[idx]).alpha(0.001).hex();
+    else {
       return '#0222';
     }
   }
@@ -305,7 +306,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     if (this.isIsolated(idx)) {
       return this.jobData.getChartColors()[idx];
     } else {
-      return chroma(this.jobData.getChartColors()[idx]).alpha(0.02).hex()
+      return chroma(this.jobData.getChartColors()[idx]).alpha(0.05).hex()
     }
   }
 

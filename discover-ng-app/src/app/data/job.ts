@@ -142,7 +142,10 @@ export class JobData {
       const transformedRow = {};
       for (let h of optHeader) {
         let indexOf = this.getHeader().indexOf(h);
-        transformedRow[h] = row[indexOf];
+        if (!this.isFeasible(indexOf)) {
+        } else {
+          transformedRow[h] = row[indexOf];
+        }
       }
       transformedData.push(transformedRow);
     }

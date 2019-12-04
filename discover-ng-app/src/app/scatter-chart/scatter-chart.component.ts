@@ -305,7 +305,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     if (this.isIsolated(idx)) {
       return this.jobData.getChartColors()[idx];
     } else {
-      return chroma(this.jobData.getChartColors()[idx]).alpha(0.02).hex()
+      return chroma(this.jobData.getChartColors()[idx]).alpha(0.05).hex()
     }
   }
 

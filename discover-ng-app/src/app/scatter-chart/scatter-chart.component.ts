@@ -45,7 +45,6 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     });
   }
 
-
   ngOnInit(): void {
     Chart.pluginService.register(clipper); //Custom clipper to avoid points getting put of grid area.
   }
@@ -54,10 +53,10 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     if (this.jobData) {
       this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
       this.isolatePoints(this.isolate);
-
       let chartData = this.jobData.getChartData();
       let borderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
-      let hoverBorderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
+      let hoverBorderWidth = chartData.map((v, idx) =>{ return 2 });
+      let hoverBorderColor = chartData.map((v, idx) =>{ return '#000' });
       let borderColor = chartData.map((v, idx) => this.getBorderColor(idx));
       let pointStyles: PointStyle[] = chartData.map((v, idx) => this.getStyle(idx));
       let chartColors = chartData.map((v, idx) => this.getBackgroundColor(idx));
@@ -65,9 +64,11 @@ export class ScatterChartComponent implements OnChanges, OnInit {
         data: chartData,
         borderWidth: borderWidth,
         hoverBorderWidth: hoverBorderWidth,
+        hoverBorderColor: hoverBorderColor,
         borderColor: borderColor,
         backgroundColor: chartColors,
-        pointStyle: pointStyles
+        pointStyle: pointStyles,
+        hoverRadius:0
       }];
       this.bubbleChartOptions = this.getChartOptions();
     }
@@ -76,26 +77,6 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.jobData) {
       this.chagesPoint();
-      // if (this.jobData) {
-      //   this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
-      //   this.isolatePoints(this.isolate);
-      //
-      //   let chartData = this.jobData.getChartData();
-      //   let borderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
-      //   let hoverBorderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
-      //   let borderColor = chartData.map((v, idx) => this.getBorderColor(idx));
-      //   let pointStyles: PointStyle[] = chartData.map((v, idx) => this.getStyle(idx));
-      //   let chartColors = chartData.map((v, idx) => this.getBackgroundColor(idx));
-      //   this.bubbleChartData = [{
-      //     data: chartData,
-      //     borderWidth: borderWidth,
-      //     hoverBorderWidth: hoverBorderWidth,
-      //     borderColor: borderColor,
-      //     backgroundColor: chartColors,
-      //     pointStyle: pointStyles
-      //   }];
-      //   this.bubbleChartOptions = this.getChartOptions();
-      // }
     } else if (changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel || changes.colorLabel) {
       if (this.jobData) {
         this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
@@ -233,6 +214,8 @@ export class ScatterChartComponent implements OnChanges, OnInit {
         onHover: (event, activeElements) => {
           this.lastMousePosition = [event.layerX, event.layerY];
           this._chart.chart.canvas.style.cursor = this.isMouseInsideChart() && activeElements[0] ? 'pointer' : 'default';
+          this._chart.chart.canvas.style.borderColor = this.isMouseInsideChart() && activeElements[0] ? '#000' : '';
+          this._chart.chart.canvas.style.borderWidth = this.isMouseInsideChart() && activeElements[0] ? '3' : 'default';
         }
       }
     };
@@ -251,7 +234,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
       }
       this.isolatePoints(this.isolate);
       this.bubbleChartData[0].borderWidth[point._index] = selected ? 1 : 2;
-      this.bubbleChartData[0].hoverBorderWidth[point._index] = selected ? 1 : 2;
+      this.bubbleChartData[0].hoverBorderWidth[point._index] =  selected ? 1 : 2;
       this.bubbleChartData[0].borderColor[point._index] = this.getBorderColor(point._index);
       this.bubbleChartData[0].backgroundColor[point._index] = this.getBackgroundColor(point._index);
 

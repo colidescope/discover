@@ -39,7 +39,8 @@ export class ScatterChartComponent implements OnChanges, OnInit {
         this.isolatePoints(this.isolate);
         this.bubbleChartData[0].borderColor = this.jobData.getChartData().map((v, idx) => this.getBorderColor(idx));
         this.bubbleChartData[0].backgroundColor = this.jobData.getChartData().map((v, idx) => this.getBackgroundColor(idx));
-        this.chagesPoint();
+        this.bubbleChartData[0].pointStyle = this.jobData.getChartData().map((v, idx) => this.getStyle(idx));
+        this.bubbleChartData[0].hoverBorderColor = this.jobData.getData().map((v, idx) => '#000');
         this._chart.chart.update();
       }
     });
@@ -55,11 +56,17 @@ export class ScatterChartComponent implements OnChanges, OnInit {
       this.isolatePoints(this.isolate);
       let chartData = this.jobData.getChartData();
       let borderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
-      let hoverBorderWidth = chartData.map((v, idx) =>{ return 2 });
-      let hoverBorderColor = chartData.map((v, idx) =>{ return '#000' });
+      let hoverBorderWidth = chartData.map((v, idx) => {
+        return 2
+      });
+      let hoverBorderColor = chartData.map((v, idx) => {
+        return '#000'
+      });
       let borderColor = chartData.map((v, idx) => this.getBorderColor(idx));
       let pointStyles: PointStyle[] = chartData.map((v, idx) => this.getStyle(idx));
       let chartColors = chartData.map((v, idx) => this.getBackgroundColor(idx));
+
+
       this.bubbleChartData = [{
         data: chartData,
         borderWidth: borderWidth,
@@ -68,7 +75,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
         borderColor: borderColor,
         backgroundColor: chartColors,
         pointStyle: pointStyles,
-        hoverRadius:0
+        hoverRadius: 0
       }];
       this.bubbleChartOptions = this.getChartOptions();
     }
@@ -214,8 +221,6 @@ export class ScatterChartComponent implements OnChanges, OnInit {
         onHover: (event, activeElements) => {
           this.lastMousePosition = [event.layerX, event.layerY];
           this._chart.chart.canvas.style.cursor = this.isMouseInsideChart() && activeElements[0] ? 'pointer' : 'default';
-          this._chart.chart.canvas.style.borderColor = this.isMouseInsideChart() && activeElements[0] ? '#000' : '';
-          this._chart.chart.canvas.style.borderWidth = this.isMouseInsideChart() && activeElements[0] ? '3' : 'default';
         }
       }
     };
@@ -234,7 +239,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
       }
       this.isolatePoints(this.isolate);
       this.bubbleChartData[0].borderWidth[point._index] = selected ? 1 : 2;
-      this.bubbleChartData[0].hoverBorderWidth[point._index] =  selected ? 1 : 2;
+      this.bubbleChartData[0].hoverBorderWidth[point._index] = selected ? 1 : 2;
       this.bubbleChartData[0].borderColor[point._index] = this.getBorderColor(point._index);
       this.bubbleChartData[0].backgroundColor[point._index] = this.getBackgroundColor(point._index);
 
@@ -264,7 +269,9 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     if (mode == 0) {
       const optimal: any[] = this.jobData.computeOptimal();
       this.jobData.getData().forEach((v, idx) => {
-        if (optimal.find((optim) => { return optim.id == idx })) {
+        if (optimal.find((optim) => {
+          return optim.id == idx
+        })) {
           this.isolatedPoints.push({index: idx});
         }
       });
@@ -296,12 +303,15 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   getBorderColor(idx: number): string {
     if (this.isSelected(idx))
       return '#222';
-    if (this.jobData.isFeasible(idx) && this.isIsolated(idx)) {
+
+    if (!this.isIsolated(idx) && (!this.jobData.isFeasible(idx) || this.jobData.isFeasible(idx)))
+      return chroma(this.jobData.getChartColors()[idx]).alpha(0.01).hex();
+
+    if (this.jobData.isFeasible(idx)) {
       return '#0222';
-    }
-    if (!this.isIsolated(idx))
-      return chroma(this.jobData.getChartColors()[idx]).alpha(0.001).hex();
-    else {
+    } else if (this.isIsolated(idx)) {
+      return this.jobData.getChartColors()[idx]
+    } else {
       return '#0222';
     }
   }

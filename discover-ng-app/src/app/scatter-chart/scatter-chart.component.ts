@@ -39,7 +39,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
         this.isolatePoints(this.isolate);
         this.bubbleChartData[0].borderColor = this.jobData.getChartData().map((v, idx) => this.getBorderColor(idx));
         this.bubbleChartData[0].backgroundColor = this.jobData.getChartData().map((v, idx) => this.getBackgroundColor(idx));
-
+        this.chagesPoint();
         this._chart.chart.update();
       }
     });
@@ -50,28 +50,52 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     Chart.pluginService.register(clipper); //Custom clipper to avoid points getting put of grid area.
   }
 
+  chagesPoint() {
+    if (this.jobData) {
+      this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
+      this.isolatePoints(this.isolate);
+
+      let chartData = this.jobData.getChartData();
+      let borderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
+      let hoverBorderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
+      let borderColor = chartData.map((v, idx) => this.getBorderColor(idx));
+      let pointStyles: PointStyle[] = chartData.map((v, idx) => this.getStyle(idx));
+      let chartColors = chartData.map((v, idx) => this.getBackgroundColor(idx));
+      this.bubbleChartData = [{
+        data: chartData,
+        borderWidth: borderWidth,
+        hoverBorderWidth: hoverBorderWidth,
+        borderColor: borderColor,
+        backgroundColor: chartColors,
+        pointStyle: pointStyles
+      }];
+      this.bubbleChartOptions = this.getChartOptions();
+    }
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.jobData) {
-      if (this.jobData) {
-        this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
-        this.isolatePoints(this.isolate);
-
-        let chartData = this.jobData.getChartData();
-        let borderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
-        let hoverBorderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
-        let borderColor = chartData.map((v, idx) => this.getBorderColor(idx));
-        let pointStyles: PointStyle[] = chartData.map((v, idx) => this.getStyle(idx));
-        let chartColors = chartData.map((v, idx) => this.getBackgroundColor(idx));
-        this.bubbleChartData = [{
-          data: chartData,
-          borderWidth: borderWidth,
-          hoverBorderWidth: hoverBorderWidth,
-          borderColor: borderColor,
-          backgroundColor: chartColors,
-          pointStyle: pointStyles
-        }];
-        this.bubbleChartOptions = this.getChartOptions();
-      }
+      this.chagesPoint();
+      // if (this.jobData) {
+      //   this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
+      //   this.isolatePoints(this.isolate);
+      //
+      //   let chartData = this.jobData.getChartData();
+      //   let borderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
+      //   let hoverBorderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
+      //   let borderColor = chartData.map((v, idx) => this.getBorderColor(idx));
+      //   let pointStyles: PointStyle[] = chartData.map((v, idx) => this.getStyle(idx));
+      //   let chartColors = chartData.map((v, idx) => this.getBackgroundColor(idx));
+      //   this.bubbleChartData = [{
+      //     data: chartData,
+      //     borderWidth: borderWidth,
+      //     hoverBorderWidth: hoverBorderWidth,
+      //     borderColor: borderColor,
+      //     backgroundColor: chartColors,
+      //     pointStyle: pointStyles
+      //   }];
+      //   this.bubbleChartOptions = this.getChartOptions();
+      // }
     } else if (changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel || changes.colorLabel) {
       if (this.jobData) {
         this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
@@ -257,9 +281,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     if (mode == 0) {
       const optimal: any[] = this.jobData.computeOptimal();
       this.jobData.getData().forEach((v, idx) => {
-        if (optimal.find((optim) => {
-          return optim.id == idx
-        })) {
+        if (optimal.find((optim) => { return optim.id == idx })) {
           this.isolatedPoints.push({index: idx});
         }
       });
@@ -289,9 +311,9 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   }
 
   getBorderColor(idx: number): string {
-     if (this.isSelected(idx))
+    if (this.isSelected(idx))
       return '#222';
-     if (this.jobData.isFeasible(idx) && this.isIsolated(idx)) {
+    if (this.jobData.isFeasible(idx) && this.isIsolated(idx)) {
       return '#0222';
     }
     if (!this.isIsolated(idx))
@@ -302,7 +324,9 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   }
 
   getBackgroundColor(idx: number): string {
-    if (!this.jobData.isFeasible(idx)) return '#0000';
+    if (!this.jobData.isFeasible(idx)) {
+      return '#0000';
+    }
     if (this.isIsolated(idx)) {
       return this.jobData.getChartColors()[idx];
     } else {

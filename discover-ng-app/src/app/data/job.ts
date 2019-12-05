@@ -1,5 +1,6 @@
 import {ChartPoint} from "chart.js";
 import * as chroma from 'chroma-js';
+import {log} from "util";
 
 declare const getDominantSet;
 
@@ -139,15 +140,14 @@ export class JobData {
     const optHeader = JobData.filterForOptimal(this.getHeader());
     const transformedData: any[] = [];
     for (let row of this.getData()) {
-      const transformedRow = {};
-      for (let h of optHeader) {
-        let indexOf = this.getHeader().indexOf(h);
-        if (!this.isFeasible(indexOf)) {
-        } else {
+      if (row[this.feasibleIndex] === "True") {
+        const transformedRow = {};
+        for (let h of optHeader) {
+          let indexOf = this.getHeader().indexOf(h);
           transformedRow[h] = row[indexOf];
         }
+        transformedData.push(transformedRow);
       }
-      transformedData.push(transformedRow);
     }
     if (transformedData.length > 0) {
       return getDominantSet(transformedData);
@@ -155,7 +155,6 @@ export class JobData {
       return [];
     }
   }
-
 
   private computeRanges() {
     const positions = this.getPositions(this.xSelector, this.ySelector, this.rSelector);

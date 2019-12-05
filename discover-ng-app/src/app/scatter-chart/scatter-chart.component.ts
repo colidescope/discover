@@ -110,6 +110,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
 
   getChartOptions(): ChartOptions {
     return {
+
       responsive: true,
       maintainAspectRatio: false,
       tooltips: {
@@ -216,6 +217,10 @@ export class ScatterChartComponent implements OnChanges, OnInit {
             speed: 0.05
           }
         }
+      },
+      animation: {
+        easing: 'linear',
+        duration: 0
       },
       hover: {
         onHover: (event, activeElements) => {

@@ -23,6 +23,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
         this.bubbleChartData[0].backgroundColor = this.jobData.getChartData().map((v, idx) => this.getBackgroundColor(idx));
         this.bubbleChartData[0].pointStyle = this.jobData.getChartData().map((v, idx) => this.getStyle(idx));
         this.bubbleChartData[0].hoverBorderColor = this.jobData.getData().map((v, idx) => '#000');
+        this.bubbleChartData[0].hoverBorderWidth = this.jobData.getData().map((v, idx) => 2);
         this._chart.chart.update();
       }
     });
@@ -65,8 +66,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
       this.isolatePoints(this.isolate);
       const chartData = this.jobData.getChartData();
       const borderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
-      const hoverBorderWidth = chartData.map((v, idx) => {
-        return 2;
+      const hoverBorderWidth = chartData.map((v, idx) => {return 2;
       });
       const hoverBorderColor = chartData.map((v, idx) => {
         return '#000';

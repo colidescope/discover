@@ -66,7 +66,8 @@ export class ScatterChartComponent implements OnChanges, OnInit {
       this.isolatePoints(this.isolate);
       const chartData = this.jobData.getChartData();
       const borderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
-      const hoverBorderWidth = chartData.map((v, idx) => {return 2;
+      const hoverBorderWidth = chartData.map((v, idx) => {
+        return 2;
       });
       const hoverBorderColor = chartData.map((v, idx) => {
         return '#000';
@@ -198,6 +199,10 @@ export class ScatterChartComponent implements OnChanges, OnInit {
             display: true,
             labelString: this.yAxisLabel
           },
+          gridLines: {
+            display: true, drawTicks: true,
+            lineWidth: 1
+          },
           beforeFit: (scale?: any) => {
             scale.options.ticks.suggestedMax = this.jobData.getMaxY();
             scale.options.ticks.suggestedMin = this.jobData.getMinY();
@@ -229,7 +234,6 @@ export class ScatterChartComponent implements OnChanges, OnInit {
         }
       },
       animation: {
-        easing: 'linear',
         duration: 0
       },
       hover: {

@@ -56,6 +56,11 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     scale.ticksAsNumbers[scale.ticksAsNumbers.length - 1] = null;
   }
 
+  public updateAnimation( ) {
+    this._chart.chart.config.options.animation = {duration:  300};
+  }
+
+
   ngOnInit(): void {
     Chart.pluginService.register(clipper); // Custom clipper to avoid points getting put of grid area.
   }
@@ -95,7 +100,9 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     if (changes.jobData) {
       this.chagesPoint();
     } else if (changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel || changes.colorLabel) {
+
       if (this.jobData) {
+        this.updateAnimation();
         this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
         this.isolatePoints(this.isolate);
         if (changes.xAxisLabel || changes.yAxisLabel) {
@@ -234,7 +241,8 @@ export class ScatterChartComponent implements OnChanges, OnInit {
         }
       },
       animation: {
-        duration: 0
+        duration:  0,
+        easing: "linear"
       },
       hover: {
         onHover: (event, activeElements) => {

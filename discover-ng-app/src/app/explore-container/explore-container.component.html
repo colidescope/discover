@@ -2,11 +2,18 @@
   <div class="col-12"><h5 class="panel-header-text">Explore</h5></div>
 </div>
 <div id="content">
-  <app-select-input [label]="'X Axis'" [options]="getOptions()" [value]="xAxis"
-                    (valueChange)="xAxisChanged($event)"></app-select-input>
   <app-select-input
-    [label]="'Y Axis'" [options]="getOptions()" [value]="yAxis"
-                    (valueChange)="yAxisChanged($event)">
+    [label]="'X Axis'"
+    [options]="getOptions()"
+    [value]="xAxis"
+    (valueChange)="xAxisChanged($event)">
+
+  </app-select-input>
+  <app-select-input
+    [label]="'Y Axis'"
+    [options]="getOptions()"
+    [value]="yAxis"
+    (valueChange)="yAxisChanged($event)">
 
   </app-select-input>
   <app-select-input [label]="'Size'" [options]="getOptions(true)" [value]="size"

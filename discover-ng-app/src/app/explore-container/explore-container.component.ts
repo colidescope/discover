@@ -23,6 +23,7 @@ export class ExploreContainerComponent {
   private jobData: JobData = null;
 
   constructor(private realTimeService: RealTimeService) {
+
     this.realTimeService.jobData.subscribe((data) => {
       this.jobData = data;
     })

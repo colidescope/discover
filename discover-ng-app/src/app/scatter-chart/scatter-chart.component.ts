@@ -52,8 +52,8 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     scale.ticks[0] = null;
     scale.ticks[scale.ticks.length - 1] = null;
 
-    scale.ticksAsNumbers[0] = null;
-    scale.ticksAsNumbers[scale.ticksAsNumbers.length - 1] = null;
+    // scale.ticksAsNumbers[0] = null;
+    // scale.ticksAsNumbers[scale.ticksAsNumbers.length - 1] = null;
   }
 
   public updateAnimation( ) {
@@ -190,11 +190,11 @@ export class ScatterChartComponent implements OnChanges, OnInit {
       },
       scales: {
         xAxes: [{
-          afterTickToLabelConversion: ScatterChartComponent.minMaxTickRemover,
+          afterTickToLabelConversion: ScatterChartComponent.minMaxTickRemover,         
           scaleLabel: {
             display: true,
             labelString: this.xAxisLabel
-          },
+          },     
           beforeFit: (scale?: any) => {
             scale.options.ticks.suggestedMax = this.jobData.getMaxX();
             scale.options.ticks.suggestedMin = this.jobData.getMinX();
@@ -205,10 +205,6 @@ export class ScatterChartComponent implements OnChanges, OnInit {
           scaleLabel: {
             display: true,
             labelString: this.yAxisLabel
-          },
-          gridLines: {
-            display: true, drawTicks: true,
-            lineWidth: 1
           },
           beforeFit: (scale?: any) => {
             scale.options.ticks.suggestedMax = this.jobData.getMaxY();

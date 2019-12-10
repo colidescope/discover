@@ -1,12 +1,12 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
-import * as Chart from "chart.js";
-import {ChartDataSets, ChartOptions, ChartType, PointStyle} from "chart.js";
-import {BaseChartDirective} from "ng2-charts";
-import {JobData} from "../data/job";
-import {Design} from "../designs-container/designs-container.component";
+import * as Chart from 'chart.js';
+import {ChartDataSets, ChartOptions, ChartType, PointStyle} from 'chart.js';
+import {BaseChartDirective} from 'ng2-charts';
+import {JobData} from '../data/job';
+import {Design} from '../designs-container/designs-container.component';
 import * as chroma from 'chroma-js';
-import {clipper} from "./custom-clipper";
-import {RealTimeService} from "../real-time.service";
+import {clipper} from './custom-clipper';
+import {RealTimeService} from '../real-time.service';
 
 @Component({
   selector: 'app-scatter-chart',
@@ -14,15 +14,30 @@ import {RealTimeService} from "../real-time.service";
   styleUrls: ['./scatter-chart.component.sass']
 })
 export class ScatterChartComponent implements OnChanges, OnInit {
-  @Input() xAxisLabel: string = '';
-  @Input() yAxisLabel: string = '';
-  @Input() radiusLabel: string = '';
-  @Input() colorLabel: string = '';
+
+  constructor(private realTimeService: RealTimeService) {
+    realTimeService.newRowAdded.subscribe(() => {
+      if (this.jobData) {
+        this.isolatePoints(this.isolate);
+        this.bubbleChartData[0].borderColor = this.jobData.getChartData().map((v, idx) => this.getBorderColor(idx));
+        this.bubbleChartData[0].backgroundColor = this.jobData.getChartData().map((v, idx) => this.getBackgroundColor(idx));
+        this.bubbleChartData[0].pointStyle = this.jobData.getChartData().map((v, idx) => this.getStyle(idx));
+        this.bubbleChartData[0].hoverBorderColor = this.jobData.getData().map((v, idx) => '#000');
+        this.bubbleChartData[0].hoverBorderWidth = this.jobData.getData().map((v, idx) => 2);
+        this._chart.chart.update();
+      }
+    });
+  }
+
+  @Input() xAxisLabel = '';
+  @Input() yAxisLabel = '';
+  @Input() radiusLabel = '';
+  @Input() colorLabel = '';
   @Input() jobData: JobData = null;
-  @Input() jobId: string = '';
+  @Input() jobId = '';
   @Input() isolate: number;
   @Input() selectedPoints: Design[] = [];
-  @Input() jobHaveImages: boolean = false;
+  @Input() jobHaveImages = false;
   isolatedPoints: Design[] = [];
 
   @Output() selectedPointsChange: EventEmitter<Design[]> = new EventEmitter();
@@ -33,51 +48,65 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   public bubbleChartData: ChartDataSets[] = [];
   private lastMousePosition: number[];
 
-  constructor(private realTimeService: RealTimeService) {
-    realTimeService.newRowAdded.subscribe(() => {
-      if (this.jobData) {
-        this.isolatePoints(this.isolate);
-        this.bubbleChartData[0].borderColor = this.jobData.getChartData().map((v, idx) => this.getBorderColor(idx));
-        this.bubbleChartData[0].backgroundColor = this.jobData.getChartData().map((v, idx) => this.getBackgroundColor(idx));
+  private static minMaxTickRemover(scale) {
+    scale.ticks[0] = null;
+    scale.ticks[scale.ticks.length - 1] = null;
 
-        this._chart.chart.update();
-      }
-    });
+    // scale.ticksAsNumbers[0] = null;
+    // scale.ticksAsNumbers[scale.ticksAsNumbers.length - 1] = null;
+  }
+
+  public updateAnimation( ) {
+    this._chart.chart.config.options.animation = {duration:  300};
   }
 
 
   ngOnInit(): void {
-    Chart.pluginService.register(clipper); //Custom clipper to avoid points getting put of grid area.
+    Chart.pluginService.register(clipper); // Custom clipper to avoid points getting put of grid area.
+  }
+
+  chagesPoint() {
+    if (this.jobData) {
+      this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
+      this.isolatePoints(this.isolate);
+      const chartData = this.jobData.getChartData();
+      const borderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
+      const hoverBorderWidth = chartData.map((v, idx) => {
+        return 2;
+      });
+      const hoverBorderColor = chartData.map((v, idx) => {
+        return '#000';
+      });
+      const borderColor = chartData.map((v, idx) => this.getBorderColor(idx));
+      const pointStyles: PointStyle[] = chartData.map((v, idx) => this.getStyle(idx));
+      const chartColors = chartData.map((v, idx) => this.getBackgroundColor(idx));
+
+
+      this.bubbleChartData = [{
+        data: chartData,
+        borderWidth,
+        hoverBorderWidth,
+        hoverBorderColor,
+        borderColor,
+        backgroundColor: chartColors,
+        pointStyle: pointStyles,
+        hoverRadius: 0
+      }];
+      this.bubbleChartOptions = this.getChartOptions();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.jobData) {
-      if (this.jobData) {
-        this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
-        this.isolatePoints(this.isolate);
-
-        let chartData = this.jobData.getChartData();
-        let borderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
-        let hoverBorderWidth = chartData.map((v, idx) => this.isSelected(idx) ? 2 : 1);
-        let borderColor = chartData.map((v, idx) => this.getBorderColor(idx));
-        let pointStyles: PointStyle[] = chartData.map((v, idx) => this.getStyle(idx));
-        let chartColors = chartData.map((v, idx) => this.getBackgroundColor(idx));
-        this.bubbleChartData = [{
-          data: chartData,
-          borderWidth: borderWidth,
-          hoverBorderWidth: hoverBorderWidth,
-          borderColor: borderColor,
-          backgroundColor: chartColors,
-          pointStyle: pointStyles
-        }];
-        this.bubbleChartOptions = this.getChartOptions();
-      }
+      this.chagesPoint();
     } else if (changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel || changes.colorLabel) {
+
       if (this.jobData) {
+        this.updateAnimation();
         this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
         this.isolatePoints(this.isolate);
         if (changes.xAxisLabel || changes.yAxisLabel) {
-          let options = this._chart.chart.config.options;
+          const options = this._chart.chart.config.options;
           options.scales.xAxes[0].scaleLabel.labelString = this.xAxisLabel;
           options.scales.yAxes[0].scaleLabel.labelString = this.yAxisLabel;
         }
@@ -99,29 +128,29 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   getChartOptions(): ChartOptions {
     return {
       responsive: true,
+      showLines: true,
       maintainAspectRatio: false,
       tooltips: {
         enabled: false,
+        intersect: true,
         custom: (tooltip) => {
           let tooltipEl: any = document.getElementById('chartjs-tooltip');
 
-          let canvas = this._chart.chart.canvas;
+          const canvas = this._chart.chart.canvas;
           if (!tooltipEl) {
             tooltipEl = document.createElement('div');
             tooltipEl.id = 'chartjs-tooltip';
             tooltipEl.innerHTML = '<table></table>';
             canvas.parentNode.appendChild(tooltipEl);
           }
-
           // Hide if no tooltip
-          if (tooltip.opacity === 0 || !this.isMouseInsideChart()) {
+          if (tooltip.opacity === 0 || !this.isMouseInsideChart() || !this.isIsolated(tooltip.dataPoints[0].index)) {
             tooltipEl.style.opacity = 0;
             return;
           }
-
           // Set Text
           if (tooltip.body) {
-            let index = tooltip.dataPoints[0].index;
+            const index = tooltip.dataPoints[0].index;
             let innerHtml = '';
             innerHtml += '<div> Design #' + index;
             innerHtml += '</div>';
@@ -138,7 +167,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
 
           // Display, position, and set styles for font
           tooltipEl.style.opacity = 1;
-          let left = positionX + tooltip.caretX;
+          const left = positionX + tooltip.caretX;
           if (left < 100) {
             tooltipEl.style.left = '100px';
           } else if (left > canvas.width - 100) {
@@ -151,21 +180,21 @@ export class ScatterChartComponent implements OnChanges, OnInit {
           tooltipEl.style.fontSize = tooltip.bodyFontSize + 'px';
           tooltipEl.style.fontStyle = tooltip._bodyFontStyle;
           tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
-          //Above or below
+          // Above or below
           if (positionY + tooltip.caretY < 180) {
             tooltipEl.classList.add('below');
           } else {
-            tooltipEl.classList.remove('below')
+            tooltipEl.classList.remove('below');
           }
         }
       },
       scales: {
         xAxes: [{
-          afterTickToLabelConversion: ScatterChartComponent.minMaxTickRemover,
+          afterTickToLabelConversion: ScatterChartComponent.minMaxTickRemover,         
           scaleLabel: {
             display: true,
             labelString: this.xAxisLabel
-          },
+          },     
           beforeFit: (scale?: any) => {
             scale.options.ticks.suggestedMax = this.jobData.getMaxX();
             scale.options.ticks.suggestedMin = this.jobData.getMinX();
@@ -192,20 +221,24 @@ export class ScatterChartComponent implements OnChanges, OnInit {
           zoom: {
             enabled: true,
             mode: () => {
-              let yMode = this.lastMousePosition[0] < this._chart.chart.chartArea.left;
-              let xMode = this.lastMousePosition[1] > this._chart.chart.chartArea.bottom;
+              const yMode = this.lastMousePosition[0] < this._chart.chart.chartArea.left;
+              const xMode = this.lastMousePosition[1] > this._chart.chart.chartArea.bottom;
               if (xMode && yMode) {
-                return "xy";
+                return 'xy';
               } else if (xMode) {
-                return "x";
+                return 'x';
               } else if (yMode) {
-                return "y"
+                return 'y';
               }
-              return "xy";
+              return 'xy';
             },
             speed: 0.05
           }
         }
+      },
+      animation: {
+        duration:  0,
+        easing: "linear"
       },
       hover: {
         onHover: (event, activeElements) => {
@@ -217,15 +250,15 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   }
 
   onClick(event: { event?: MouseEvent; active: any[] }) {
-    for (let point of event.active) {
+    for (const point of event.active) {
       const selected: Design = this.selectedPoints.find((design => design && design.index == point._index));
       if (!selected) {
         this.selectedPoints.push({
           index: point._index,
-          imageUri: "http://localhost:5000/api/v1.0/get_image/" + encodeURI(this.jobId) + "/" + point._index
+          imageUri: 'http://localhost:5000/api/v1.0/get_image/' + encodeURI(this.jobId) + '/' + point._index
         });
       } else {
-        this.selectedPoints.splice(this.selectedPoints.findIndex((design) => design === selected), 1)
+        this.selectedPoints.splice(this.selectedPoints.findIndex((design) => design === selected), 1);
       }
       this.isolatePoints(this.isolate);
       this.bubbleChartData[0].borderWidth[point._index] = selected ? 1 : 2;
@@ -239,7 +272,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   }
 
   public resetZoom() {
-    (this._chart.chart as any).resetZoom(); //Method available only trough plugin
+    (this._chart.chart as any).resetZoom(); // Method available only trough plugin
   }
 
   public clearSelected() {
@@ -260,7 +293,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
       const optimal: any[] = this.jobData.computeOptimal();
       this.jobData.getData().forEach((v, idx) => {
         if (optimal.find((optim) => {
-          return optim.id == idx
+          return optim.id == idx;
         })) {
           this.isolatedPoints.push({index: idx});
         }
@@ -282,31 +315,32 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     return this.isolate < 0 || this.isolatedPoints.find((design) => design.index === idx) != undefined;
   }
 
-  private static minMaxTickRemover(scale) {
-    scale.ticks[0] = null;
-    scale.ticks[scale.ticks.length - 1] = null;
-
-    scale.ticksAsNumbers[0] = null;
-    scale.ticksAsNumbers[scale.ticksAsNumbers.length - 1] = null;
-  }
-
   getBorderColor(idx: number): string {
-    if (this.isSelected(idx)) return '#222';
+    if (this.isSelected(idx)) {
+      return '#222';
+    }
+
+    if (!this.isIsolated(idx) && (!this.jobData.isFeasible(idx) || this.jobData.isFeasible(idx))) {
+      return chroma(this.jobData.getChartColors()[idx]).alpha(0.01).hex();
+    }
+
     if (this.jobData.isFeasible(idx)) {
       return '#0222';
     } else if (this.isIsolated(idx)) {
-      return this.jobData.getChartColors()[idx]
+      return this.jobData.getChartColors()[idx];
     } else {
       return '#0222';
     }
   }
 
   getBackgroundColor(idx: number): string {
-    if (!this.jobData.isFeasible(idx)) return '#0000';
+    if (!this.jobData.isFeasible(idx)) {
+      return '#0000';
+    }
     if (this.isIsolated(idx)) {
       return this.jobData.getChartColors()[idx];
     } else {
-      return chroma(this.jobData.getChartColors()[idx]).alpha(0.05).hex()
+      return chroma(this.jobData.getChartColors()[idx]).alpha(0.05).hex();
     }
   }
 
@@ -319,3 +353,4 @@ export class ScatterChartComponent implements OnChanges, OnInit {
       && this.lastMousePosition[1] > this._chart.chart.chartArea.top && this.lastMousePosition[1] < this._chart.chart.chartArea.bottom;
   }
 }
+

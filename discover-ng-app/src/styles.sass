@@ -59,11 +59,21 @@ canvas
   font-size: 1rem !important
   //border-radius: 6px
   //border: 1px solid black
-  filter: drop-shadow(0 0 6px #ddd)
   pointer-events: none
   -webkit-transform: translate(-50%, calc(-100% - 10px))
   transform: translate(-50%, calc(-100% - 10px))
   z-index: 10000
+
+  &::before
+    box-shadow: 0.5pt 0.5pt 0 1.5px #262626
+    mix-blend-mode: multiply
+    content: " "
+    position: absolute
+    top: 0
+    right: 0
+    left: 0
+    bottom: 0
+
 
 #chartjs-tooltip.below
   -webkit-transform: translate(-50%, 18px)

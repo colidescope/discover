@@ -51,15 +51,11 @@ export class ScatterChartComponent implements OnChanges, OnInit {
   private static minMaxTickRemover(scale) {
     scale.ticks[0] = null;
     scale.ticks[scale.ticks.length - 1] = null;
-
-    // scale.ticksAsNumbers[0] = null;
-    // scale.ticksAsNumbers[scale.ticksAsNumbers.length - 1] = null;
   }
 
-  public updateAnimation( ) {
-    this._chart.chart.config.options.animation = {duration:  300};
+  public updateAnimation() {
+    this._chart.chart.config.options.animation = {duration: 300};
   }
-
 
   ngOnInit(): void {
     Chart.pluginService.register(clipper); // Custom clipper to avoid points getting put of grid area.
@@ -80,8 +76,6 @@ export class ScatterChartComponent implements OnChanges, OnInit {
       const borderColor = chartData.map((v, idx) => this.getBorderColor(idx));
       const pointStyles: PointStyle[] = chartData.map((v, idx) => this.getStyle(idx));
       const chartColors = chartData.map((v, idx) => this.getBackgroundColor(idx));
-
-
       this.bubbleChartData = [{
         data: chartData,
         borderWidth,
@@ -100,7 +94,6 @@ export class ScatterChartComponent implements OnChanges, OnInit {
     if (changes.jobData) {
       this.chagesPoint();
     } else if (changes.xAxisLabel || changes.yAxisLabel || changes.radiusLabel || changes.colorLabel) {
-
       if (this.jobData) {
         this.updateAnimation();
         this.jobData.updateSelectors(this.xAxisLabel, this.yAxisLabel, this.radiusLabel, this.colorLabel);
@@ -190,11 +183,11 @@ export class ScatterChartComponent implements OnChanges, OnInit {
       },
       scales: {
         xAxes: [{
-          afterTickToLabelConversion: ScatterChartComponent.minMaxTickRemover,         
+          afterTickToLabelConversion: ScatterChartComponent.minMaxTickRemover,
           scaleLabel: {
             display: true,
             labelString: this.xAxisLabel
-          },     
+          },
           beforeFit: (scale?: any) => {
             scale.options.ticks.suggestedMax = this.jobData.getMaxX();
             scale.options.ticks.suggestedMin = this.jobData.getMinX();
@@ -237,7 +230,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
         }
       },
       animation: {
-        duration:  0,
+        duration: 0,
         easing: "linear"
       },
       hover: {

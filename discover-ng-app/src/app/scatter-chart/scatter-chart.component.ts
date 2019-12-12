@@ -225,7 +225,7 @@ export class ScatterChartComponent implements OnChanges, OnInit {
               }
               return 'xy';
             },
-            speed: 0.05
+            speed: 0.5
           }
         }
       },

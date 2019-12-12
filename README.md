@@ -10,22 +10,22 @@ To get started with Discover, please download the latest stable release and foll
 
 If you'd like to tinker with the source code and test the latest build of Discover, you can compile it yourself from the source code hosted here. To start, clone, fork, or download a .zip file of the `master` branch of this repository.
 
+### Building the front-end app
+
+1. Instal Node JS (https://nodejs.org/dist/v10.16.0/node-v10.16.0-x64.msi).
+2. Open a command prompt and run `npm install -g @angular/cli` to install the Angular CLI (command line iterface).
+3. `cd` into the root folder of the Angular app (`/discover-ng-app`). 
+4. Run `npm install` to install the components of the app.
+5. In `\discover\discover-ng-app\node_modules\@types\chart.js\`, replace the file `index.d.ts` with version found in `\discover\discover-ng-app\utils\`
+6. Run `ng build` to build the app. This will create a new folder in the root directory called `static` that contains a compiled version of the front-end.
+
 ### Running the server
 
 1. Open a command prompt and `cd` into the root folder of Discover.
 2. Run `python -m venv env` to create a new virtual environment.
 3. Run `.\env\Scripts\activate.bat` to activate the virtual environment.
 4. Run `pip install -r requirements.txt` to install all Python dependencies.
-5. Run `python server.py` to start the server.
-
-### Compiling the front-end app
-
-1. Instal Node JS (https://nodejs.org/dist/v10.16.0/node-v10.16.0-x64.msi).
-2. Open a command prompt and run `npm install -g @angular/cli` to install the Angular CLI (command line iterface).
-3. `cd` into the root folder of the Angular app (`/discover-ng-app`). 
-4. Run `npm install` to compile the app.
-4. Run `ng serve` to run the app.
-5. The app should now be running at http://localhost:4200.
+5. Run `python server.py` to start the server. The app should now be running at `http://localhost:5000`
 
 ### Notes
 

@@ -46,11 +46,17 @@ export class ExploreContainerComponent {
   }
 
   xAxisChanged(event: string) {
-    this.xAxisChange.emit(event)
+    this.xAxisChange.emit(event);
+    setTimeout(() => {
+      this.resetZoom();
+    }, 5);
   }
 
   yAxisChanged(event: string) {
-    this.yAxisChange.emit(event)
+    this.yAxisChange.emit(event);
+    setTimeout(() => {
+      this.resetZoom();
+    }, 5);
   }
 
   colorChanged(event: string) {

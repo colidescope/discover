@@ -97,4 +97,7 @@ export class AppComponent {
     }
     this.selectedDesigns = [];
   }
+   changeanimation(b: boolean) {
+    this.jobData
+  }
 }

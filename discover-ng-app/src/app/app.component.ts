@@ -24,7 +24,6 @@ export class AppComponent {
   designPerGen: number = 5;
   numberGen: number = 5;
   mutationRate: number = 0.05;
-  elites: number = 1;
 
   //Explore Panel State
   xAxisLabel: string = undefined;

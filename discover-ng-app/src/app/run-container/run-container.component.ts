@@ -11,7 +11,6 @@ export class RunContainerComponent {
   designPerGenLabel: string = "Designs per generation";
   numberGenLabel: string = "Number of generations";
   mutationRateLabel: string = "Mutation rate";
-  elitesLabel: string = "Elites";
   @Input() jobRunning: boolean = false;
   @Output() jobRunningChange: EventEmitter<boolean> = new EventEmitter();
   @Output() jobIdChange: EventEmitter<string> = new EventEmitter<string>();
@@ -21,11 +20,9 @@ export class RunContainerComponent {
   @Input() designPerGen: number = 0;
   @Input() numberGen: number = 0;
   @Input() mutationRate: number = 0.0;
-  @Input() elites: number = 0.0;
   @Output() designPerGenChange: EventEmitter<number> = new EventEmitter<number>();
   @Output() numberGenChange: EventEmitter<number> = new EventEmitter<number>();
   @Output() mutationRateChange: EventEmitter<number> = new EventEmitter<number>();
-  @Output() elitesChange: EventEmitter<number> = new EventEmitter<number>();
 
   constructor(logService: RealTimeService, private http: HttpClient) {
     logService.getLog().subscribe(value => {
@@ -46,7 +43,6 @@ export class RunContainerComponent {
         'Designs per generation': this.designPerGen,
         'Number of generations': this.numberGen,
         'Mutation rate': this.mutationRate,
-        'Elites': this.elites,
       }
     };
     this.http.post("http://localhost:5000/api/v1.0/start", body).subscribe((response: any) => {

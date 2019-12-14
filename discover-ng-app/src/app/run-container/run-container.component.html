@@ -9,8 +9,6 @@
   <app-stepper-input [(value)]="mutationRate" (valueChange)="mutationRateChange.emit($event)" [min]="0" [max]="1"
                      [step]=".01"
                      [label]="mutationRateLabel"></app-stepper-input>
-  <app-stepper-input [(value)]="elites" (valueChange)="elitesChange.emit($event)" [min]="0" [max]="9999"
-                     [label]="elitesLabel"></app-stepper-input>
   <div class="row no-gutters mt-3">
     <button (click)="startJob()" class="btn btn-sm btn-secondary btn-play col" [class.btn-success]="!jobRunning"
             [disabled]="jobRunning">RUN

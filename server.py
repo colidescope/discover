@@ -198,16 +198,11 @@ def get_input():
 	elif job is None or not job.is_running():
 		input_object = client.create_input(input_def)
 		input_vals = input_object.generate_random()
-
-		status = "Success: created dummy input {} in Discover".format(input_object.get_id())
-
-		# message = "- Input {}: {}".format(len(client.get_inputs()), input_object.get_type())
-		# socketio.emit('server message', {"message": message})
-		# logger.log(message)
+		status = "Success: created new random values for input {}".format(input_object.get_id())
 
 	else:
 		input_vals = job.get_design_input(input_def["id"])
-		status = "Success: values for input {}".format(input_def["id"])
+		status = "Success: received values for input {}".format(input_def["id"])
 
 	return jsonify({'status': status, 'input_id': input_def["id"], 'input_vals': input_vals})
 
@@ -226,10 +221,8 @@ def send_output():
 		if client.check_block():
 			fetch_design = False
 			status = "reinstated design"
-			#return jsonify({'status': 'reinstated design'})
 		else:
 			status = "reinstating design"
-			#return jsonify({'status': 'reinstating design'})
 
 	elif job is None or not job.is_running():
 		output_object = client.add_output(output_def)
@@ -250,10 +243,8 @@ def send_output():
 			data = job.write_des_data()
 			socketio.emit('job data', data)
 			status = "run next"
-			#return jsonify({'status': 'run next'})
 		else:
 			status = "process blocked"
-			#return jsonify({'status': 'process blocked'})
 
 	return jsonify({'status': status, 'output_id': output_id})
 
@@ -355,8 +346,7 @@ def get_design(job_path, des_id):
 	d = lines[des_loc].split("\t")
 
 	inputs = [json.loads(d[i]) for i in range(len(d)) if
-			  "[Continuous]" in header[i] or "[Categorical]" in header[i] or "[Sequence]" in header[i]]
-
+		"[Continuous]" in header[i] or "[Categorical]" in header[i] or "[Sequence]" in header[i]]
 
 	des.set_inputs(inputs)
 	fetch_design = True
@@ -398,7 +388,6 @@ if __name__ == '__main__':
 			options = {
 				"Designs per generation": 4,
 				"Number of generations": 4,
-				"Elites": 1,
 				"Mutation rate": 0.05
 			}
 

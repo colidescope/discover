@@ -179,7 +179,7 @@ class Job:
 		header.append("feasible")
 
 		for _i in self.client.get_inputs():
-			header.append("[{}] {}".format(_i.get_type(), _i.get_id()) )
+			header.append("[{}] {}".format(_i.get_type(), _i.get_name()) )
 		
 		for _o in self.client.get_outputs():
 			if _o.get_type() == "Objective":

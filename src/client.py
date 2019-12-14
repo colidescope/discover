@@ -52,22 +52,30 @@ class Client:
 	def get_connection(self):
 		return self.connection_id
 
+	def create_input(self, input_def, input_id=None):
+		if input_def["type"] == "Continuous":
+			new_input = Continuous(input_def, input_id)
+		elif input_def["type"] == "Categorical":
+			new_input = Categorical(input_def, input_id)
+		elif input_def["type"] == "Sequence":
+			new_input = Sequence(input_def, input_id)
+
+		return new_input
+
 	def add_input(self, input_def):
 		input_id = input_def["id"]
 
 		if input_id in self.get_input_ids():
-			old_input = self.get_inputs()[self.get_input_ids().index(input_id)]
-			old_input.update_def(input_def)
-			return old_input
-		else:
-			if input_def["type"] == "Continuous":
-				new_input = Continuous(input_def)
-			elif input_def["type"] == "Categorical":
-				new_input = Categorical(input_def)
-			elif input_def["type"] == "Sequence":
-				new_input = Sequence(input_def)
-			self.inputs.append(new_input)
-			return new_input
+			# old_input = self.get_inputs()[self.get_input_ids().index(input_id)]
+			# old_input.update_def(input_def)
+			# return old_input
+			input_id = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(8))
+
+		new_input = self.create_input(input_def, input_id)
+
+		self.inputs.append(new_input)
+
+		return new_input
 
 	def get_inputs(self):
 		return self.inputs
@@ -78,14 +86,18 @@ class Client:
 		output_id = output_def["id"]
 
 		if output_id in self.get_output_ids():
-			return self.get_outputs()[self.get_output_ids().index(output_id)]
-		else:
-			if output_def["type"] == "Objective":
-				new_output = Objective(output_def)
-			elif output_def["type"] == "Constraint":
-				new_output = Constraint(output_def)
-			self.outputs.append(new_output)
-			return new_output
+			# return self.get_outputs()[self.get_output_ids().index(output_id)]
+			output_id = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(8))
+		# else:
+
+		if output_def["type"] == "Objective":
+			new_output = Objective(output_def, output_id)
+		elif output_def["type"] == "Constraint":
+			new_output = Constraint(output_def, output_id)
+
+		self.outputs.append(new_output)
+
+		return new_output
 
 	def get_outputs(self):
 		return self.outputs
@@ -96,8 +108,11 @@ class Client:
 		self.block = [0 for i in self.get_outputs()]
 	def lift_block(self, _id):
 		_ids = self.get_output_ids()
-		pos = _ids.index(_id)
-		self.block[pos] = 1
+		if _id in _ids:
+			pos = _ids.index(_id)
+			self.block[pos] = 1
+		else:
+			pos = None
 		return pos
 	def check_block(self):
 		return sum(self.block) == len(self.block)

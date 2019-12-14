@@ -65,6 +65,8 @@ def connect():
 
 	client.connect(local_dir, file_name, connection_id)
 
+	fetch_design = False
+
 	# logger.init(local_dir)
 	message = "\nConnected to GH file: {}.gh".format(file_name)
 	socketio.emit('server message', {"message": message})
@@ -165,29 +167,49 @@ def stop():
 	return jsonify({"status": "success", "job_id": job.job_id})
 
 
-@app.route("/api/v1.0/input-ack", methods=['GET', 'POST'])
-def input_ack():
+@app.route("/api/v1.0/register-input", methods=['GET', 'POST'])
+def register_input():
+	input_def = request.json
+
+	input_object = client.add_input(input_def)
+	input_vals = input_object.generate_random()
+
+	status = "Success: registered input {} with Discover".format(input_object.get_id())
+
+	message = "- Input {}: {}".format(len(client.get_inputs()), input_object.get_type())
+	socketio.emit('server message', {"message": message})
+	logger.log(message)
+
+	return jsonify({'status': status, 'input_id': input_object.get_id(), 'input_vals': input_vals})
+
+@app.route("/api/v1.0/get-input", methods=['GET', 'POST'])
+def get_input():
 	input_def = request.json
 
 	if fetch_design:
 		input_vals = des.get_input(input_def["id"])
-		status = "Success: regenerated values for input {}".format(input_def["id"])
+		if input_vals is not None:
+			status = "Success: regenerated values for input {}".format(input_def["id"])
+		else:
+			input_object = client.create_input(input_def)
+			input_vals = input_object.generate_random()
+			status = "Warning: input {} not found, generating random values".format(input_def["id"])
 
 	elif job is None or not job.is_running():
-		input_object = client.add_input(input_def)
+		input_object = client.create_input(input_def)
 		input_vals = input_object.generate_random()
 
-		status = "Success: registered input {} with Discover".format(input_object.get_id())
+		status = "Success: created dummy input {} in Discover".format(input_object.get_id())
 
-		message = "- Input {}: {}".format(len(client.get_inputs()), input_object.get_type())
-		socketio.emit('server message', {"message": message})
-		logger.log(message)
+		# message = "- Input {}: {}".format(len(client.get_inputs()), input_object.get_type())
+		# socketio.emit('server message', {"message": message})
+		# logger.log(message)
 
 	else:
 		input_vals = job.get_design_input(input_def["id"])
 		status = "Success: values for input {}".format(input_def["id"])
 
-	return jsonify({'status': status, 'input_vals': input_vals})
+	return jsonify({'status': status, 'input_id': input_def["id"], 'input_vals': input_vals})
 
 
 @app.route('/api/v1.0/send-output', methods=['GET', 'POST'])
@@ -195,15 +217,19 @@ def send_output():
 	global fetch_design
 
 	output_def = request.json
+	output_id = output_def["id"]
+	status = ""
 	
 	if fetch_design:
-		pos = client.lift_block(output_def["id"])
+		pos = client.lift_block(output_id)
 
 		if client.check_block():
 			fetch_design = False
-			return jsonify({'status': 'reinstated design'})
+			status = "reinstated design"
+			#return jsonify({'status': 'reinstated design'})
 		else:
-			return jsonify({'status': 'reinstating design'})
+			status = "reinstating design"
+			#return jsonify({'status': 'reinstating design'})
 
 	elif job is None or not job.is_running():
 		output_object = client.add_output(output_def)
@@ -214,7 +240,7 @@ def send_output():
 		socketio.emit('server message', {"message": message})
 		logger.log(message)
 
-		return jsonify({'status': status})
+		output_id = output_object.get_id()
 
 	else:
 		pos = client.lift_block(output_def["id"])
@@ -223,9 +249,13 @@ def send_output():
 		if client.check_block():
 			data = job.write_des_data()
 			socketio.emit('job data', data)
-			return jsonify({'status': 'run next'})
+			status = "run next"
+			#return jsonify({'status': 'run next'})
 		else:
-			return jsonify({'status': 'Process blocked'})
+			status = "process blocked"
+			#return jsonify({'status': 'process blocked'})
+
+	return jsonify({'status': status, 'output_id': output_id})
 
 
 @app.route('/api/v1.0/next', methods=['GET', 'POST'])

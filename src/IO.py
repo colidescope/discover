@@ -8,8 +8,11 @@ from src.test import Test
 
 class Continuous:
 
-	def __init__(self, input_def):
-		self.id = input_def["id"]
+	def __init__(self, input_def, input_id=None):
+		if input_id is None:
+			self.id = input_def["id"]
+		else:
+			self.id = input_id
 		self.name = input_def["name"]
 		self.type = input_def["type"]
 		self.min = float(input_def["min"])
@@ -43,8 +46,11 @@ class Continuous:
 
 class Categorical:
 
-	def __init__(self, input_def):
-		self.id = input_def["id"]
+	def __init__(self, input_def, input_id=None):
+		if input_id is None:
+			self.id = input_def["id"]
+		else:
+			self.id = input_id
 		self.name = input_def["name"]
 		self.type = input_def["type"]
 		self.opt = float(input_def["opt"])
@@ -74,8 +80,11 @@ class Categorical:
 
 class Sequence:
 
-	def __init__(self, input_def):
-		self.id = input_def["id"]
+	def __init__(self, input_def, input_id=None):
+		if input_id is None:
+			self.id = input_def["id"]
+		else:
+			self.id = input_id
 		self.name = input_def["name"]
 		self.type = input_def["type"]
 		self.num = int(input_def["num"])
@@ -105,8 +114,11 @@ class Sequence:
 
 class Objective:
 
-	def __init__(self, output_def):
-		self.id = output_def["id"]
+	def __init__(self, output_def, output_id=None):
+		if output_id is None:
+			self.id = output_def["id"]
+		else:
+			self.id = output_id
 		self.name = output_def["name"]
 		self.type = output_def["type"]
 		self.goal = output_def["goal"]
@@ -122,8 +134,11 @@ class Objective:
 
 class Constraint:
 
-	def __init__(self, output_def):
-		self.id = output_def["id"]
+	def __init__(self, output_def, output_id=None):
+		if output_id is None:
+			self.id = output_def["id"]
+		else:
+			self.id = output_id
 		self.name = output_def["name"]
 		self.type = output_def["type"]
 		self.goal = output_def["goal"]

@@ -163,7 +163,10 @@ class Design:
 
 	def get_input(self, input_id):
 		input_names = [i.get_id() for i in self.client.get_inputs()]
-		return self.inputs[input_names.index(input_id)]
+		if input_id in input_names:
+			return self.inputs[input_names.index(input_id)]
+		else:
+			return None
 
 	def get_inputs(self):
 		return self.inputs

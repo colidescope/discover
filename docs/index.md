@@ -20,7 +20,7 @@ Discover is an optimization tool built to work with [Rhino](https://rhino3d.com)
 
 Currently Windows does not ship with Python, so if you've never used Python or you're not sure, you will need to install a version of Python on your computer. 
 
-Discover is built on Python 3.7.4, which is the latest version at the time of writing, ~~but any version of Python 3 should work~~ (12/14/19: Due to compatibility issues with some of its libraries, Discover will not work with Python 3.8. Please use Python 3.7 instead). If you'd like to use Python 2 it can probably be made to work but it is not supported at this time. If you already have Python 3.7 installed you can skip to the next step.
+Discover is built on Python 3.7.4, which is the latest version at the time of writing, ~~but any version of Python 3 should work~~ **12/14/19: Due to compatibility issues with some of its libraries, Discover will not work with Python 3.8. Please use Python 3.7 instead**. If you'd like to use Python 2 it can probably be made to work but it is not supported at this time. If you already have Python 3.7 installed you can skip to the next step.
 
 1. Go to the [Python download page](https://www.python.org/downloads/windows/) and select the latest Python 3.7 release ([3.7.4](https://www.python.org/downloads/release/python-374/) at time of writing).
 2. On the download page, scroll down and under 'Files' select and download the [Windows x86-64 executable installer](https://www.python.org/ftp/python/3.7.4/python-3.7.4-amd64.exe). 

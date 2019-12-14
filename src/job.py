@@ -17,7 +17,7 @@ class Job:
 		self.gen = 0
 		self.max_gen = int(options["Number of generations"])
 
-		self.save_elites = int(options["Elites"])
+		# self.save_elites = int(options["Elites"])
 		self.mutation_rate = float(options["Mutation rate"])
 
 		self.job_id = "_" + client.get_file_name() + "_" + strftime("%y%m%d_%H%M%S", localtime())
@@ -33,7 +33,7 @@ class Job:
 
 		self.design_queue = self.init_designs(self.client)
 		self.design_log = []
-		# self.design_log = [self.design_queue.pop(0)]
+		self.parents = []
 
 		self.running = True
 
@@ -51,8 +51,9 @@ class Job:
 
 		return designs
 
-	def next_generation(self, population):
+	def next_generation(self, grand_parents, parents):
 		
+		population = grand_parents + parents
 		children = []
 
 		ranking, crowding, penalties = rank(population, self.client.get_outputs())
@@ -66,22 +67,26 @@ class Job:
 		self.logger.log("Generation {}".format(self.gen))
 		self.logger.log("-----")
 
-		# carry over elite to next generation
-		if self.save_elites > 0:
-			# get elites from sorted list of ranking and crowding
-			elites = [i[0] for i in sorted(enumerate(stats), key=lambda x: (x[1][0], -x[1][1], -x[1][2]))][:self.save_elites]
+		elites = [i[0] for i in sorted(enumerate(stats), key=lambda x: (x[1][0], -x[1][1], -x[1][2]))][:len(parents)]
+		population = [population[e] for e in elites]
 
-			# add elites to next generation
-			for i, eliteNum in enumerate(elites):
-				child = Design(self.des_count, i, self.gen, self.client, self.logger)
-				child.set_inputs(population[eliteNum].get_inputs())
-				child.set_elite()
-				child.set_parents(population[eliteNum].get_id(), None)
-				children.append(child)
-				self.logger.log("Elitism: [{}] --> [{}]".format(population[eliteNum].get_id(), child.get_id()))
-				self.des_count += 1
+		# # carry over elite to next generation
+		# if self.save_elites > 0:
+		# 	# get elites from sorted list of ranking and crowding
+		# 	elites = [i[0] for i in sorted(enumerate(stats), key=lambda x: (x[1][0], -x[1][1], -x[1][2]))][:self.save_elites]
 
-		childNum = self.save_elites
+		# 	# add elites to next generation
+		# 	for i, eliteNum in enumerate(elites):
+		# 		child = Design(self.des_count, i, self.gen, self.client, self.logger)
+		# 		child.set_inputs(population[eliteNum].get_inputs())
+		# 		child.set_elite()
+		# 		child.set_parents(population[eliteNum].get_id(), None)
+		# 		children.append(child)
+		# 		self.logger.log("Elitism: [{}] --> [{}]".format(population[eliteNum].get_id(), child.get_id()))
+		# 		self.des_count += 1
+
+		# childNum = self.save_elites
+		childNum = 0
 		while childNum < len(population):
 			# choose two parents through two binary tournaments
 			pool = list(range(len(population)))
@@ -157,7 +162,8 @@ class Job:
 		else:
 			if self.gen < self.max_gen:
 				self.gen += 1
-				self.design_queue = self.next_generation(self.design_log)
+				self.design_queue = self.next_generation(self.parents, self.design_log)
+				self.parents = list(self.design_log)
 				self.design_log = []
 
 				des = self.design_queue.pop(0)
@@ -174,8 +180,6 @@ class Job:
 		header.append("generation")
 		header.append("parent1")
 		header.append("parent2")
-
-		# if usingConstraints:
 		header.append("feasible")
 
 		for _i in self.client.get_inputs():

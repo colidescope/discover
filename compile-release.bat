@@ -12,3 +12,4 @@ copy start-discover.bat .\discover-release\discover.bat
 copy LICENSE.txt .\discover-release\LICENSE.txt
 copy requirements.txt .\discover-release\requirements.txt
 copy server.py .\discover-release\server.py
+copy config.ini .\discover-release\config.ini

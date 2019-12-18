@@ -42,7 +42,7 @@ Discover is built using Python 3.7.4 but any version of Python 3.7 should work. 
 
 You should now see the Discover interface appear in the launched browser window. To make sure everything is working, run a default test optimization by clicking "Run". You should see the scatter plot populate with test data similar to this:
 
-<div class="shadow-box"><img src="/discover/assets/img/02.png"></div>
+<div class="shadow-box"><img src="/discover/assets/img/05.png"></div>
 
 If you initially get a blank page or a "site not found" error, wait a few moments for the server to boot up and then try to refresh the page. If the interface still does not appear, check the Command Prompt window. If you see any errors, take a screenshot of the Command Prompt window and send it to the email address provided in the [support section](#support) of this page. If the Command Prompt window is no longer running, follow the instructions in the [support section](#support) of this page.
 
@@ -79,10 +79,10 @@ If you have trouble installing Discover or getting it to run, please follow thes
 
 - Go to the folder where you unzipped Discover. This is where the 'discover.bat' file is.
 - While holding SHIFT, right click anywhere in the folder (not on a file) and select 'Open Command Prompt window here' or 'Open PowerShell window here'
-- Type this command and hit Enter: 'python -m venv env'
-- Type this command and hit Enter: '.\env\Scripts\activate.bat'
-- Type this command and hit Enter: 'pip install -r requirements.txt'
-- Type this command and hit Enter: 'python server.py'
+- Type this command and hit Enter: `python -m venv env`
+- Type this command and hit Enter: `.\env\Scripts\activate.bat`
+- Type this command and hit Enter: `pip install -r requirements.txt`
+- Type this command and hit Enter: `python server.py`
 - If you see an error in the Command Prompt at any point during this process, take a screenshot of the command prompt and send it to support@colidescope.com with a description of the steps you took during installation.
 
 If you find a bug in Discover, you can submit it to the development team using the link below. If you include an email address we will notify you when we release a fix.

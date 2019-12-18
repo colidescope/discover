@@ -42,7 +42,7 @@ Discover is built using Python 3.7.4 but any version of Python 3.7 should work. 
 
 You should now see the Discover interface appear in the launched browser window. To make sure everything is working, run a default test optimization by clicking "Run". You should see the scatter plot populate with test data similar to this:
 
-<div class="shadow-box"><img src="/discover/assets/img/05.png"></div>
+<div class="shadow-box"><img src="/discover/assets/img/06.png"></div>
 
 If you initially get a blank page or a "site not found" error, wait a few moments for the server to boot up and then try to refresh the page. If the interface still does not appear, check the Command Prompt window. If you see any errors, take a screenshot of the Command Prompt window and send it to the email address provided in the [support section](#support) of this page. If the Command Prompt window is no longer running, follow the instructions in the [support section](#support) of this page.
 

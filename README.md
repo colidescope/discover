@@ -1,4 +1,4 @@
-## 👋 Hi there, welcome to Discover! 💡
+## 👋 Hi there, welcome to Discover!
 
 Discover is an optimization tool built to work with Rhino Grasshopper. It is being developed by [Colidescope](https://colidescope.com) as free software with the goal of promoting performance-driven automated design workflows in the architecture, engineering, and construction industries.
 
@@ -12,16 +12,16 @@ If you'd like to tinker with the source code and test the latest build of Discov
 
 ### Building the front-end app
 
-1. Instal Node JS (https://nodejs.org/dist/v10.16.0/node-v10.16.0-x64.msi).
-2. Open a command prompt and run `npm install -g @angular/cli` to install the Angular CLI (command line iterface).
+1. Install Node JS by going to https://nodejs.org/ and downloading the installer for the latest stable build ([v12.14.0](https://nodejs.org/dist/v12.14.0/node-v12.14.0-x64.msi) at the time of writing).
+2. Open a new Command Prompt window and run `npm install -g @angular/cli` to install the Angular CLI (command line iterface).
 3. `cd` into the root folder of the Angular app (`/discover-ng-app`). 
 4. Run `npm install` to install the components of the app.
 5. In `\discover\discover-ng-app\node_modules\@types\chart.js\`, replace the file `index.d.ts` with version found in `\discover\discover-ng-app\utils\`
-6. Run `ng build` to build the app. This will create a new folder in the root directory called `static` that contains a compiled version of the front-end.
+6. In the same Command Prompt window, run `ng build` to build the app. This will create a new folder in the root directory called `static` that contains a compiled version of the front-end.
 
 ### Running the server
 
-1. Open a command prompt and `cd` into the root folder of Discover.
+1. Open a new Command Prompt window and `cd` into the root folder of Discover.
 2. Run `python -m venv env` to create a new virtual environment.
 3. Run `.\env\Scripts\activate.bat` to activate the virtual environment.
 4. Run `pip install -r requirements.txt` to install all Python dependencies.

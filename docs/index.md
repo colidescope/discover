@@ -78,7 +78,7 @@ When you're done using Discover, close the Command Prompt window to shut down th
 If you have trouble installing Discover or getting it to run, please follow these instructions:
 
 1. Go to the folder where you unzipped Discover. This is where the 'discover.bat' file is.
-2. While holding SHIFT, right click anywhere in the folder (not on a file) and select 'Open Command Prompt window here' or 'Open PowerShell window here'
+2. While holding SHIFT, right click anywhere in the folder (not on a file) and select 'Open Command Prompt window here' or ~~'Open PowerShell window here'~~ **(12/24/2019: There seem to be issues with running the virtual environment commands from PowerShell. If you don't see 'Open Command Prompt window here' open Command Prompt manually by searching for it in the Windows Start menu. Then navigate to the local Discover folder by typing 'cd ' followed by the path - for example 'cd C:\Downloads\Discover'**
 3. Type this command and hit Enter: `python -m venv env`
 4. Type this command and hit Enter: `.\env\Scripts\activate.bat`
 5. Type this command and hit Enter: `pip install -r requirements.txt`

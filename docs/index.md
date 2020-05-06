@@ -2,7 +2,7 @@
 layout: default
 ---
 
-<div class="shadow-box"><smartvideo src="https://www.dropbox.com/s/mrdjg0h6kyw9x9y/Discover-2.mp4?dl=1" width="1280" height="720" class="swarm-fluid" poster="https://www.dropbox.com/s/rf2bft8twsojahi/Discover_poster.png" controls loop muted></smartvideo></div>
+<div class="shadow-box"><smartvideo src="https://www.dropbox.com/s/mrdjg0h6kyw9x9y/Discover-2.mp4?dl=1" width="1280" height="720" class="swarm-fluid" poster="https://previews.dropbox.com/p/thumb/AAywh4Ey9sWRgY65vSI-C3upbJYfgCo-R8W45MZznCxNNYz_e7fBIOL9xhMLoAjkINrRpCaIbqgMIl0pkmquEL3-K9HLHVgvAL1YSUQfdWxee8bT_e_4wO8oEn37oi7wqtdedRihBDicWfUrVVokGujov1aGZsDyXcCQGnTpfa3xBe96uwe_Er1dN9cHCEp9Nwji9HpqVI8vm4HLQX0boNKnTq80YdJbO_BU4t7RIfk3v3f05XgvxypfdaLVH6wfyi4w_D4MZexxvcIRE5aho5BOqq3CFhWebJfV0JBggIBWrpYMep0D2Shf1lMWYbK2x6PY9wMWVm95_cYS71wJQBO2fToe83hjS8YbH7SbqgO4UJuXoxXi8CI3nSJC9iLSwz62SIzsHE0gamjFgK5p5Crz4wfin2iIHT13XsBfexsxdA/p.png" controls loop muted></smartvideo></div>
 
 ## 👋 Hi there, welcome to Discover!
 

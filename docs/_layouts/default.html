@@ -94,7 +94,20 @@
       ga('send', 'pageview');
     </script>
     {% endif %}
-    
+    <script data-cfasync="false">
+    var swarmoptions = {
+        swarmcdnkey: "68f9693f-4651-4ab6-9a03-2760ae3024f3",
+        iframeReplacement: "iframe",
+        autoreplace: {
+            youtube: true
+        },
+        theme: {
+            button: "circle",
+            primaryColor: "#328ac6"
+        }
+    };
+</script>
+<script async data-cfasync="false" src="https://assets.swarmcdn.com/cross/swarmdetect.js"></script>
     <script>
 BugTracker = {
 	group_project: "https://colidescope.freedcamp.com/Colidescope_BuJ/Push_to_producti_trO/bugtracker/bugtracker_public",

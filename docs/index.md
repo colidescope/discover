@@ -1,7 +1,8 @@
 ---
 layout: default
 ---
-<div class="shadow-box"><div class="resp-container"><iframe class="resp-iframe" src="https://www.youtube.com/embed/tazRo4mMBm4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+
+<div class="shadow-box"><div class="resp-container"><smartvideo src="https://www.dropbox.com/s/mrdjg0h6kyw9x9y/Discover-2.mp4?dl=1" width="1280" height="720" class="swarm-fluid" poster="https://www.dropbox.com/s/rf2bft8twsojahi/Discover_poster.png" controls loop muted autoplay></smartvideo></div></div>
 
 ## 👋 Hi there, welcome to Discover!
 

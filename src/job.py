@@ -68,7 +68,9 @@ class Job:
 		self.logger.log("-----")
 
 		elites = [i[0] for i in sorted(enumerate(stats), key=lambda x: (x[1][0], -x[1][1], -x[1][2]))][:len(parents)]
+
 		population = [population[e] for e in elites]
+		stats = [stats[e] for e in elites]
 
 		# # carry over elite to next generation
 		# if self.save_elites > 0:
@@ -101,6 +103,9 @@ class Job:
 				# take second candidate out of pool
 				pool.pop(pool.index(candidate2))
 
+				self.logger.log("Candidate 1: {}".format(population[candidate1].get_id()))
+				self.logger.log("Candidate 2: {}".format(population[candidate2].get_id()))
+
 				candidates = [[x, stats[x]] for x in [candidate1, candidate2]]
 				standings = sorted( candidates, key=lambda x: (x[1][0], -x[1][1], -x[1][2]) )
 
@@ -108,6 +113,9 @@ class Job:
 				parents.append(standings[0][0])
 				# add loser back to pool
 				pool.append(standings[1][0])
+
+				self.logger.log("Chosen candidate: {}".format(population[parents[-1]].get_id()))
+
 
 			child = population[parents[0]].crossover(population[parents[1]], self.client.get_inputs(), self.gen, childNum, self.des_count)
 			child.mutate(self.client.get_inputs(), self.mutation_rate)

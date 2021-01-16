@@ -1,5 +1,5 @@
 flask-cors==3.0.8
 werkzeug==0.15.3
 Flask
-flask-socketio
+flask-socketio==4.3.2
 eventlet

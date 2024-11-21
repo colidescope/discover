@@ -2,7 +2,7 @@
 layout: default
 ---
 
-<div class="shadow-box"><smartvideo src="https://www.dropbox.com/s/mrdjg0h6kyw9x9y/Discover-2.mp4?dl=1" width="1280" height="720" class="swarm-fluid" poster="https://previews.dropbox.com/p/thumb/AAywh4Ey9sWRgY65vSI-C3upbJYfgCo-R8W45MZznCxNNYz_e7fBIOL9xhMLoAjkINrRpCaIbqgMIl0pkmquEL3-K9HLHVgvAL1YSUQfdWxee8bT_e_4wO8oEn37oi7wqtdedRihBDicWfUrVVokGujov1aGZsDyXcCQGnTpfa3xBe96uwe_Er1dN9cHCEp9Nwji9HpqVI8vm4HLQX0boNKnTq80YdJbO_BU4t7RIfk3v3f05XgvxypfdaLVH6wfyi4w_D4MZexxvcIRE5aho5BOqq3CFhWebJfV0JBggIBWrpYMep0D2Shf1lMWYbK2x6PY9wMWVm95_cYS71wJQBO2fToe83hjS8YbH7SbqgO4UJuXoxXi8CI3nSJC9iLSwz62SIzsHE0gamjFgK5p5Crz4wfin2iIHT13XsBfexsxdA/p.png" controls loop muted autoplay></smartvideo></div>
+<div class="shadow-box"><smartvideo src="https://www.dropbox.com/scl/fi/vp66rosnxmildbvwzhuzw/Discover-2.mp4?rlkey=p24x76gixeii356wl4w2xwdoy&st=rguc3qa9&dl=1" width="1280" height="720" class="swarm-fluid" poster="https://previews.dropbox.com/p/thumb/AAywh4Ey9sWRgY65vSI-C3upbJYfgCo-R8W45MZznCxNNYz_e7fBIOL9xhMLoAjkINrRpCaIbqgMIl0pkmquEL3-K9HLHVgvAL1YSUQfdWxee8bT_e_4wO8oEn37oi7wqtdedRihBDicWfUrVVokGujov1aGZsDyXcCQGnTpfa3xBe96uwe_Er1dN9cHCEp9Nwji9HpqVI8vm4HLQX0boNKnTq80YdJbO_BU4t7RIfk3v3f05XgvxypfdaLVH6wfyi4w_D4MZexxvcIRE5aho5BOqq3CFhWebJfV0JBggIBWrpYMep0D2Shf1lMWYbK2x6PY9wMWVm95_cYS71wJQBO2fToe83hjS8YbH7SbqgO4UJuXoxXi8CI3nSJC9iLSwz62SIzsHE0gamjFgK5p5Crz4wfin2iIHT13XsBfexsxdA/p.png" controls loop muted autoplay></smartvideo></div>
 
 ## 👋 Hi there, welcome to Discover!
 
@@ -21,12 +21,12 @@ You can find a general overview of Discover's features on the Colidescope [produ
 
 ### Installing Python
 
-Currently Windows does not ship with Python, so if you've never used Python or you're not sure, you will need to install a version of Python on your computer. 
+Currently Windows does not ship with Python, so if you've never used Python or you're not sure, you will need to install a version of Python on your computer.
 
 Discover has been tested using Python 3.9.6 but any version of Python 3 should work. If you'd like to use Python 2 it can probably be made to work but it is not supported at this time. If you already have Python 3 installed you can skip to the next step.
 
 1. Go to the [Python download page](https://www.python.org/downloads/windows/) and select the latest Python 3 release ([3.9.6](https://www.python.org/downloads/release/python-396/) at time of writing).
-2. On the download page, scroll down and under 'Files' select and download the [Windows x86-64 executable installer](https://www.python.org/ftp/python/3.9.6/python-3.9.6-amd64.exe). 
+2. On the download page, scroll down and under 'Files' select and download the [Windows x86-64 executable installer](https://www.python.org/ftp/python/3.9.6/python-3.9.6-amd64.exe).
 3. Run the .exe installation file to install Python on your computer. **IMPORTANT: make sure you select the option to "Add Python 3.X to PATH". Discover will not work if this is not checked.**
 
 <div class="shadow-box"><img src="/discover/assets/img/01.png"></div>
@@ -54,7 +54,7 @@ If you initially get a blank page or a "site not found" error, wait a few moment
 Discover includes a Grasshopper library of custom components which allows the Discover server to communicate with your Grasshopper model. To install the components:
 
 1. Open Grasshopper and go to `File -> Special Folders -> Components Folder`. This will open the folder where Grasshopper stores its custom plugin files.
-2. Copy all the files in the `/Grasshopper Plugin` folder of the Discover zip file to Grasshopper's `Components Folder`. 
+2. Copy all the files in the `/Grasshopper Plugin` folder of the Discover zip file to Grasshopper's `Components Folder`.
 3. Restart Rhino and Grasshopper. You should now see a new tab in the ribbon called 'Discover' with the 7 Discover components loaded.
 
 <div class="shadow-box"><img src="/discover/assets/img/03.png"></div>
@@ -71,12 +71,13 @@ Double-click the `discover.bat` script in the folder where you unzipped Discover
 When you're done using Discover, close the Command Prompt window to shut down the server.
 
 ## Known issues
+
 - If you're having issues with the Discover tab not appearing when you start Grasshopper, this may be due to the Discover.gha file being blocked by Windows. This is a security feature of Windows when downloading unfamiliar file types. It should not happen if you download the ZIP file on this site, but may happen if you download the Discover.gha file directly from [Food4Rhino](https://www.food4rhino.com/app/discover) or another source. To fix this issue, right-click on the Discover.gha file in your Components Folder, go to 'Properties', and click the 'Unblock' button in the lower right corner. If you don't see this button the file is not blocked and you are having a different issue.
 - During the optimization process, Discover writes certain files to a local directory for each computed design. The location of this directory is based on the location of the Grasshopper (.gh) file. There is a known issue where if your Grasshopper file is in a folder which is hosted on a network or a cloud sharing service like Dropbox, the writing process can take too long, causing the components and server to get out of sync. This can result in the optimization process stopping or many of the same designs being generated at once. If you experience these issues, make sure your Grasshopper file is located in a local folder on your computer and is not being shared over any network.
 
 ## Support
 
-*Disclaimer: This program is distributed for free in the hope that it will be useful, but without any warranty or guarantee that it will work the way it's described or work at all.*
+_Disclaimer: This program is distributed for free in the hope that it will be useful, but without any warranty or guarantee that it will work the way it's described or work at all._
 
 If you have trouble installing Discover or getting it to run, please follow these instructions:
 

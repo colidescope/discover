@@ -60,9 +60,13 @@
 
       </section>
       <footer>
-        <p>© 2019 <a href="https://colidescope.com">Colidescope</a></p>
+        <p>© <span id="current-year"></span> <a href="https://colidescope.com">Colidescope</a></p>
       </footer>
     </div>
+    <script>
+      // Dynamically set the current year in the footer
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
     <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>
     {% if site.google_analytics %}
     <script>

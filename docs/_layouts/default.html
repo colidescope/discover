@@ -71,18 +71,22 @@
       <section>
 
       {{ content }}
-	      <p class="center">
-	      <a href="#" id="bug_tracker">Report Bug</a>
-	      </p>
+	      <!-- <p class="center"> -->
+	      <!-- <a href="#" id="bug_tracker">Report Bug</a> -->
+	      <!-- </p> -->
       </section>
       <footer>
 <!--         {% if site.github.is_project_page %}
         <p>This project is maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></p>
         {% endif %}
         <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p> -->
-        <p>© 2021 <a href="https://colidescope.com">Colidescope</a></p>
+        <p>© <span id="current-year"></span> <a href="https://colidescope.com">Colidescope</a></p>
       </footer>
     </div>
+    <script>
+      // Dynamically set the current year in the footer
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
     <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>
     {% if site.google_analytics %}
     <script>
@@ -108,12 +112,12 @@
     };
 </script>
 <script async data-cfasync="false" src="https://assets.swarmcdn.com/cross/swarmdetect.js"></script>
-    <script>
+    <!-- <script>
 BugTracker = {
 	group_project: "https://colidescope.freedcamp.com/Colidescope_BuJ/Push_to_producti_trO/bugtracker/bugtracker_public",
 	Button: [document.getElementById('bug_tracker')]
 }
-</script>
+</script> -->
 <script src="https://cdn.freedcamp.com/project_apps/bugtracker/js/bugtracker_public.js"></script>
 
   </body>

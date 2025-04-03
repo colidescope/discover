@@ -8,13 +8,13 @@ layout: default
 
 Discover is an optimization tool built to work with [Rhino](https://rhino3d.com) [Grasshopper](http://grasshopper3d.com). It is being developed by [Colidescope](https://colidescope.com/) as free software with the goal of promoting performance-driven automated design workflows in the architecture, engineering, and construction industries.
 
-You can find a general overview of Discover's features on the Colidescope [product page](https://colidescope.com/products/). You can also find step by step video tutorials for installing Discover and connecting it to your Rhino Grasshopper models on the [Colidescope Live](https://live.colidescope.com/courses/generative-design-2020/lesson/getting-started-with-discover/) learning platform.
+You can find a general overview of Discover's features on its [product page](https://getdiscover.app). You can also find step by step video tutorials for installing Discover and connecting it to your Rhino Grasshopper models on the [Colidescope](https://colide.co/live/intro-to-generative-design#getting-started-with-discover) learning platform.
 
 ## Requirements
 
 - PC running Windows 10 64-bit
-- [Rhino 6](https://www.rhino3d.com/download) - Discover can probably be made to work with Rhino 5 as well as the OSX version but it is not supported at this time.
-- [Python 3](https://www.python.org/downloads/windows/)
+- [Rhino 6/7/8](https://www.rhino3d.com/download) - Discover can probably be made to work with Rhino 5 as well as the OSX version but it is not supported at this time.
+- [Python 3.9](https://www.python.org/downloads/windows/)
 - Web browser (such as [Chrome](https://www.google.com/chrome/b/) or [Firefox](https://www.mozilla.org/en-US/firefox/new/))
 
 ## Installation
@@ -23,9 +23,9 @@ You can find a general overview of Discover's features on the Colidescope [produ
 
 Currently Windows does not ship with Python, so if you've never used Python or you're not sure, you will need to install a version of Python on your computer.
 
-Discover has been tested using Python 3.9.6 but any version of Python 3 should work. If you'd like to use Python 2 it can probably be made to work but it is not supported at this time. If you already have Python 3 installed you can skip to the next step.
+Discover has been tested using Python 3.9.6 and is not guaranteed to be compatibile with more recent versions of Python due to possible compatibility issues with some of the Python libraries Discover uses. If you'd like to use Python 2 it can probably be made to work but it is not supported at this time. If you already have Python 3 version 3.9 or lower installed you can skip to the next step.
 
-1. Go to the [Python download page](https://www.python.org/downloads/windows/) and select the latest Python 3 release ([3.9.6](https://www.python.org/downloads/release/python-396/) at time of writing).
+1. Go to the [Python download page](https://www.python.org/downloads/windows/) and select the latest Python 3.9 release ([3.9.6](https://www.python.org/downloads/release/python-396/) at time of writing).
 2. On the download page, scroll down and under 'Files' select and download the [Windows x86-64 executable installer](https://www.python.org/ftp/python/3.9.6/python-3.9.6-amd64.exe).
 3. Run the .exe installation file to install Python on your computer. **IMPORTANT: make sure you select the option to "Add Python 3.X to PATH". Discover will not work if this is not checked.**
 

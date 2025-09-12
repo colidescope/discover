@@ -8,7 +8,7 @@ layout: default
 
 Discover is an optimization tool built to work with [Rhino](https://rhino3d.com) [Grasshopper](http://grasshopper3d.com). It is being developed by [Colidescope](https://colidescope.com/) as free software with the goal of promoting performance-driven automated design workflows in the architecture, engineering, and construction industries.
 
-You can find a general overview of Discover's features on its [product page](https://getdiscover.app). You can also find step by step video tutorials for installing Discover and connecting it to your Rhino Grasshopper models on the [Colidescope](https://colide.co/live/intro-to-generative-design#getting-started-with-discover) learning platform.
+You can find a general overview of Discover's features on its [product page](https://getdiscover.app). You can also find step by step video tutorials for installing Discover and connecting it to your Rhino Grasshopper models on the [Colidescope](https://colide.co/webinars/intro-to-generative-design#getting-started-with-discover) learning platform.
 
 ## Requirements
 
